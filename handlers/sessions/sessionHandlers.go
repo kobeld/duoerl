@@ -2,6 +2,7 @@ package sessions
 
 import (
 	"github.com/kobeld/duoerl/models/accounts"
+	sSessions "github.com/kobeld/duoerl/services/sessions"
 	. "github.com/paulbellamy/mango"
 	"github.com/sunfmin/formdata"
 	"github.com/sunfmin/govalidations"
@@ -10,8 +11,8 @@ import (
 )
 
 type SessionData struct {
-	Account *accounts.Account
-	Errors  govalidations.Errors
+	Account   *accounts.Account
+	Validated *govalidations.Validated
 }
 
 func LoginPage(env Env) (status Status, headers Headers, body Body) {
@@ -21,13 +22,19 @@ func LoginPage(env Env) (status Status, headers Headers, body Body) {
 
 func LoginAction(env Env) (status Status, headers Headers, body Body) {
 	account := accounts.NewAccount()
-	formdata.UnmarshalByNames(env.Request().Request, account, []string{"Email", "Name"})
+	formdata.UnmarshalByNames(env.Request().Request, account, []string{"Email", "Password"})
 
-	errors := account.ValidateLogin()
-	if errors != nil {
-		mangotemplate.ForRender(env, "sessions/signup", &SessionData{Account: account, Errors: errors})
+	if validated := account.ValidateLoginForm(); validated.HasError() {
+		mangotemplate.ForRender(env, "sessions/login", &SessionData{Account: account, Validated: validated})
 		return
 	}
+
+	if validated := account.ValidateLoginAccount(); validated.HasError() {
+		mangotemplate.ForRender(env, "sessions/login", &SessionData{Account: account, Validated: validated})
+		return
+	}
+
+	sSessions.PutUserIdToSession(env, account.Id.Hex())
 
 	return Redirect(http.StatusFound, "/")
 }
@@ -45,11 +52,22 @@ func SignupAction(env Env) (status Status, headers Headers, body Body) {
 	formdata.UnmarshalByNames(env.Request().Request, account,
 		[]string{"Email", "Name", "Password", "ConfirmPassword"})
 
-	errors := account.ValidateSignup()
-	if errors != nil {
-		mangotemplate.ForRender(env, "sessions/signup", &SessionData{Account: account, Errors: errors})
+	if validated := account.ValidateSignupForm(); validated.HasError() {
+		mangotemplate.ForRender(env, "sessions/signup", &SessionData{Account: account, Validated: validated})
 		return
 	}
+
+	if validated := account.ValidateEmailExist(); validated.HasError() {
+		mangotemplate.ForRender(env, "sessions/signup", &SessionData{Account: account, Validated: validated})
+		return
+	}
+
+	if err := account.Signup(); err != nil {
+		panic(err)
+		return
+	}
+
+	sSessions.PutUserIdToSession(env, account.Id.Hex())
 
 	return Redirect(http.StatusFound, "/")
 }

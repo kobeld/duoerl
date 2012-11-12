@@ -3,7 +3,9 @@ package accounts
 import (
 	// "github.com/sunfmin/mgodb"
 	// "labix.org/v2/mgo"
+	"code.google.com/p/go.crypto/bcrypt"
 	"labix.org/v2/mgo/bson"
+	"time"
 )
 
 type Account struct {
@@ -11,6 +13,7 @@ type Account struct {
 	Name            string
 	Email           string
 	Password        string
+	CreatedAt       time.Time
 	ConfirmPassword string `bson:"-"`
 }
 
@@ -23,4 +26,22 @@ func (this *Account) MakeId() interface{} {
 
 func NewAccount() *Account {
 	return &Account{}
+}
+
+func (this *Account) IsPwdMatch(pwd string) bool {
+	if bcrypt.CompareHashAndPassword([]byte(this.Password), []byte(pwd)) != nil {
+		return false
+	}
+	return true
+}
+
+func (this *Account) Signup() (err error) {
+	this.CreatedAt = time.Now()
+	this.encryptPwd()
+	return this.Save()
+}
+
+func (this *Account) encryptPwd() {
+	hp, _ := bcrypt.GenerateFromPassword([]byte(this.Password), 0)
+	this.Password = string(hp)
 }

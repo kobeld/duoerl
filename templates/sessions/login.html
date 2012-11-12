@@ -4,9 +4,9 @@
 	<h3>Please login</h3>
 	<ul class="unstyled">
 		<li><input type="email" name="Email" placeholder="Email address" value="{{.Account.Email}}">
-			{{errorOn .Errors "Email"}}</li>
+			{{errorOn .Validated "Email"}}</li>
 		<li><input type="password" name="Password" placeholder="Password">
-			{{errorOn .Errors "Password"}}</li>
+			{{errorOn .Validated "Password"}}</li>
 	</ul>
 	<button class="btn btn-primary" type="submit">Login</button>
 </form>

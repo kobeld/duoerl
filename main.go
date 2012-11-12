@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-	//Database initialize
 	mgodb.Setup(configs.DBUrl, configs.Database)
 	rand.Seed(time.Now().UnixNano())
 	configs.AssetsVersion = rand.Intn(100000)

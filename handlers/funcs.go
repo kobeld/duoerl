@@ -11,19 +11,23 @@ var FuncMap = template.FuncMap{
 }
 
 type ErrorData struct {
-	Errors    *govalidations.Errors
+	Errors    govalidations.Errors
 	FieldName string
 }
 
-func errorOn(errors *govalidations.Errors, fieldName string) (r template.HTML) {
-	if errors == nil {
+func errorOn(validated *govalidations.Validated, fieldName string) (r template.HTML) {
+	if validated == nil {
 		return
 	}
-	if !errors.Has(fieldName) {
+
+	if !validated.HasError() {
+		return
+	}
+	if !validated.Errors.Has(fieldName) {
 		return
 	}
 	r = template.HTML(mangotemplate.RenderToString("errors", &ErrorData{
-		Errors:    errors,
+		Errors:    validated.Errors,
 		FieldName: fieldName,
 	}))
 	return
