@@ -2,7 +2,8 @@ package routes
 
 import (
 	"github.com/bmizerany/pat"
-	hFeeds "github.com/kobeld/duoerl/handlers/feeds"
+	"github.com/kobeld/duoerl/handlers/feeds"
+	"github.com/kobeld/duoerl/handlers/sessions"
 	"github.com/kobeld/duoerl/middlewares"
 	"github.com/kobeld/mangogzip"
 	"github.com/paulbellamy/mango"
@@ -21,7 +22,13 @@ func Mux() (mux *http.ServeMux) {
 	mainStack := new(mango.Stack)
 	mainStack.Middleware(mangogzip.Zipper, mangolog.Logger, sessionMW, mainLayoutMW, rendererMW, rHtml)
 
-	p.Get("/", mainStack.HandlerFunc(hFeeds.Index))
+	p.Get("/login", mainStack.HandlerFunc(sessions.LoginPage))
+	p.Get("/signup", mainStack.HandlerFunc(sessions.SignupPage))
+
+	p.Post("/login", mainStack.HandlerFunc(sessions.LoginAction))
+	p.Post("/signup", mainStack.HandlerFunc(sessions.SignupAction))
+
+	p.Get("/", mainStack.HandlerFunc(feeds.Index))
 
 	mux = http.NewServeMux()
 	mux.HandleFunc("/favicon.ico", filterUrl)

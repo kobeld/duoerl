@@ -1,0 +1,16 @@
+{{ define "sessions/signup" }}
+	<form action="/signup" method="post">
+		<h3>Please Signup</h3>
+		<ul class="unstyled">
+			<li><input type="text" name="Email" placeholder="Email address" value="{{.Account.Email}}">
+				{{errorOn .Errors "Email"}}</li>
+			<li><input type="text" name="Name" placeholder="Name" value="{{.Account.Name}}">
+				{{errorOn .Errors "Name"}}</li>
+			<li><input type="password" name="Password" placeholder="Password">
+				{{errorOn .Errors "Password"}}</li>
+			<li><input type="password" name="ConfirmPassword" placeholder="Confirm Password">
+				{{errorOn .Errors "ConfirmPassword"}}</li>
+		</ul>
+		<button class="btn btn-primary" type="submit">Sign up</button>
+	</form>
+{{ end }}

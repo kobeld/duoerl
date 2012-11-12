@@ -1,11 +1,23 @@
 {{define "main"}}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+	<title>Duoerl</title>
+    <link href="/public/css/bootstrap.min.css?v={{.Layout.AssetsVersion}}" rel="stylesheet" media="screen">
 </head>
 
-<body>
-	{{.Body}}
+<body style="padding-top: 60px">
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		{{ template "header" . }}
+    </div>
+
+
+	<div class="container">
+		{{ .Body }}
+	</div>
+
+	<script src="/public/js/jquery-1.8.min.js?v={{.Layout.AssetsVersion}}"></script>
+    <script src="/public/js/bootstrap.min.js?v={{.Layout.AssetsVersion}}"></script>
 </body>
 
 </html>
