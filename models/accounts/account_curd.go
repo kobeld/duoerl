@@ -13,6 +13,10 @@ func (this *Account) Save() error {
 	return mgodb.Save(ACCOUNTS, this)
 }
 
+func FindById(id bson.ObjectId) (*Account, error) {
+	return FindOne(bson.M{"_id": id})
+}
+
 func FindByEmail(email string) (*Account, error) {
 	return FindOne(bson.M{"email": strings.ToLower(email)})
 }

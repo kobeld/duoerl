@@ -34,7 +34,7 @@ func LoginAction(env Env) (status Status, headers Headers, body Body) {
 		return
 	}
 
-	sSessions.PutUserIdToSession(env, account.Id.Hex())
+	sSessions.PutAccountIdToSession(env, account.Id.Hex())
 
 	return Redirect(http.StatusFound, "/")
 }
@@ -67,7 +67,7 @@ func SignupAction(env Env) (status Status, headers Headers, body Body) {
 		return
 	}
 
-	sSessions.PutUserIdToSession(env, account.Id.Hex())
+	sSessions.PutAccountIdToSession(env, account.Id.Hex())
 
 	return Redirect(http.StatusFound, "/")
 }

@@ -1,8 +1,8 @@
 package accounts
 
 import (
+	"github.com/kobeld/duoerl/configs"
 	"github.com/sunfmin/govalidations"
-	"github.com/theplant/qortex/configs"
 	"regexp"
 )
 
