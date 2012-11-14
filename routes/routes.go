@@ -13,17 +13,19 @@ import (
 
 func Mux() (mux *http.ServeMux) {
 	p := pat.New()
-	sessionMW := mango.Sessions("f908b1c425062e95d30b8d30de7123457", "qortex",
+	sessionMW := mango.Sessions("f908b1c425062e95d30b8d30de7123458", "duoerl",
 		&mango.CookieOptions{Path: "/", MaxAge: 3600 * 24 * 7})
 	rendererMW := middlewares.ProduceRenderer()
+	authenMW := middlewares.AuthenticateAccount()
 	rHtml, _ := middlewares.RespondHtml(), middlewares.RespondJson()
 
 	mainLayoutMW := middlewares.ProduceLayout(middlewares.MAIN_LAYOUT)
 	mainStack := new(mango.Stack)
-	mainStack.Middleware(mangogzip.Zipper, mangolog.Logger, sessionMW, mainLayoutMW, rendererMW, rHtml)
+	mainStack.Middleware(mangogzip.Zipper, mangolog.Logger, sessionMW, authenMW, mainLayoutMW, rendererMW, rHtml)
 
 	p.Get("/login", mainStack.HandlerFunc(sessions.LoginPage))
 	p.Get("/signup", mainStack.HandlerFunc(sessions.SignupPage))
+	p.Get("/logout", mainStack.HandlerFunc(sessions.Logout))
 
 	p.Post("/login", mainStack.HandlerFunc(sessions.LoginAction))
 	p.Post("/signup", mainStack.HandlerFunc(sessions.SignupAction))

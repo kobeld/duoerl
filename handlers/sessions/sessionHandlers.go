@@ -16,6 +16,10 @@ type SessionData struct {
 }
 
 func LoginPage(env Env) (status Status, headers Headers, body Body) {
+	account := sSessions.FetchAccountFromEnv(env)
+	if account != nil {
+		return Redirect(http.StatusFound, "/")
+	}
 	mangotemplate.ForRender(env, "sessions/login", &SessionData{Account: accounts.NewAccount()})
 	return
 }
@@ -24,24 +28,29 @@ func LoginAction(env Env) (status Status, headers Headers, body Body) {
 	account := accounts.NewAccount()
 	formdata.UnmarshalByNames(env.Request().Request, account, []string{"Email", "Password"})
 
-	if validated := account.ValidateLoginForm(); validated.HasError() {
+	validated := account.ValidateLoginForm()
+	if validated.HasError() {
 		mangotemplate.ForRender(env, "sessions/login", &SessionData{Account: account, Validated: validated})
 		return
 	}
 
-	if validated := account.ValidateLoginAccount(); validated.HasError() {
+	loginAccount := accounts.LoginWith(account.Email, account.Password)
+	if loginAccount == nil {
+		validated.AddError("Password", "Account and password do not match!")
 		mangotemplate.ForRender(env, "sessions/login", &SessionData{Account: account, Validated: validated})
 		return
 	}
 
-	sSessions.PutAccountIdToSession(env, account.Id.Hex())
-
+	sSessions.PutAccountIdToSession(env, loginAccount.Id.Hex())
 	return Redirect(http.StatusFound, "/")
 }
 
 func SignupPage(env Env) (status Status, headers Headers, body Body) {
-	account := new(accounts.Account)
-	mangotemplate.ForRender(env, "sessions/signup", &SessionData{Account: account})
+	account := sSessions.FetchAccountFromEnv(env)
+	if account != nil {
+		return Redirect(http.StatusFound, "/")
+	}
+	mangotemplate.ForRender(env, "sessions/signup", &SessionData{Account: accounts.NewAccount()})
 
 	return
 }
@@ -70,4 +79,9 @@ func SignupAction(env Env) (status Status, headers Headers, body Body) {
 	sSessions.PutAccountIdToSession(env, account.Id.Hex())
 
 	return Redirect(http.StatusFound, "/")
+}
+
+func Logout(env Env) (status Status, headers Headers, body Body) {
+	sSessions.DeleteAccountInSession(env)
+	return Redirect(http.StatusFound, "/login")
 }

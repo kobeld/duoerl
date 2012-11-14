@@ -9,11 +9,10 @@ import (
 
 func AuthenticateAccount() Middleware {
 	return func(env Env, app App) (status Status, headers Headers, body Body) {
-
-		accountId, exist := sSessions.FetchAccountIdFromSession(env)
-		if exist {
+		accountId := sSessions.FetchAccountIdFromSession(env)
+		if accountId != "" {
 			if account, _ := accounts.FindById(bson.ObjectIdHex(accountId)); account != nil {
-				sSessions.PutAccountToSession(env, account)
+				sSessions.PutAccountToEnv(env, account)
 			}
 		}
 

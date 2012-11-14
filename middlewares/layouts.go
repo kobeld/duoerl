@@ -3,6 +3,8 @@ package middlewares
 import (
 	"github.com/kobeld/duoerl/configs"
 	"github.com/kobeld/duoerl/handlers"
+	"github.com/kobeld/duoerl/models/accounts"
+	sSessions "github.com/kobeld/duoerl/services/sessions"
 	. "github.com/paulbellamy/mango"
 	"github.com/sunfmin/mangotemplate"
 	"html/template"
@@ -14,7 +16,8 @@ const (
 )
 
 type Header struct {
-	AssetsVersion int
+	AssetsVersion  int
+	CurrentAccount *accounts.Account
 }
 
 type provider struct{}
@@ -22,7 +25,8 @@ type provider struct{}
 func (h *provider) LayoutData(env Env) interface{} {
 
 	header := &Header{
-		AssetsVersion: configs.AssetsVersion,
+		AssetsVersion:  configs.AssetsVersion,
+		CurrentAccount: sSessions.FetchAccountFromEnv(env),
 	}
 
 	return header

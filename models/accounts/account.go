@@ -1,8 +1,6 @@
 package accounts
 
 import (
-	// "github.com/sunfmin/mgodb"
-	// "labix.org/v2/mgo"
 	"code.google.com/p/go.crypto/bcrypt"
 	"labix.org/v2/mgo/bson"
 	"time"
@@ -33,6 +31,18 @@ func (this *Account) IsPwdMatch(pwd string) bool {
 		return false
 	}
 	return true
+}
+
+func LoginWith(email string, pwd string) (account *Account) {
+	a, _ := FindByEmail(email)
+	if a == nil {
+		return
+	}
+	if a.IsPwdMatch(pwd) {
+		account = a
+	}
+
+	return
 }
 
 func (this *Account) Signup() (err error) {

@@ -41,7 +41,8 @@ func (this *Account) ValidateLoginAccount() *govalidations.Validated {
 }
 
 func (agk *AccountGateKeeper) AddPasswordMatchValidator(a *Account) {
-	account, _ := FindByEmail(a.Email)
+	email, password := a.Email, a.Password
+	account, _ := FindByEmail(email)
 	errorText := "Account and password do not match!"
 	agk.Add(govalidations.Custom(func(object interface{}) bool {
 		if account == nil {
@@ -51,12 +52,13 @@ func (agk *AccountGateKeeper) AddPasswordMatchValidator(a *Account) {
 	}, "Password", errorText))
 
 	agk.Add(govalidations.Custom(func(object interface{}) bool {
-		if account != nil && !account.IsPwdMatch(a.Password) {
+		if account != nil && !account.IsPwdMatch(password) {
 			return false
 		}
 		return true
 	}, "Password", errorText))
 
+	a = account
 	return
 }
 
