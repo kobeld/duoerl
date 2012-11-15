@@ -8,7 +8,7 @@
 			</ul>
 			<ul class="nav pull-right">
 				{{ if .Layout.CurrentAccount }}
-					<li><a href="javascript:void(0);">
+					<li><a href="/profile/{{.Layout.CurrentAccount.Id.Hex}}">
 						<strong>{{ .Layout.CurrentAccount.Name }}</strong></a></li>
 					<li><a href="/logout">Logout</a></li>
 				{{ else }}

@@ -1,0 +1,76 @@
+{{ define "accounts/edit_profile" }}
+
+<form class="form-horizontal">
+	<fieldset>
+		<div>
+			<legend><strong>{{ .Account.Name }}</strong>
+				<small><span class="muted">({{ .Account.Email }})</span></small>
+			</legend>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Gender</label>
+			<div class="controls">
+				<label class="radio inline">
+					<input type="radio" name="Gender" value="false" checked> Female
+				</label>
+				<label class="radio inline">
+					<input type="radio" name="Gender" value="true"> Male
+				</label>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Birthday</label>
+			<div class="controls">
+				<select name="Year" class="input-small">
+					<option>1986</option>
+					<option>1985</option>
+					<option>1984</option>
+				</select>
+				<select name="Month" class="input-mini">
+					<option>03</option>
+					<option>04</option>
+				</select>
+				<select name="Day" class="input-mini">
+					<option>11</option>
+					<option>20</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Location</label>
+			<div class="controls">
+				<input type="text" name="Location" class="input-large">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Hair Texture</label>
+			<div class="controls">
+				<select name="HairTexture" class="input-large">
+					<option>Dry</option>
+					<option>Wet</option>
+					<option>Yellow</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Description</label>
+			<div class="controls">
+				<div class="textare">
+					<textarea name="Description"></textarea>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary">Save changes</button>
+			<button type="button" class="btn">Cancel</button>
+		</div>
+	</fieldset>
+</form>
+
+{{ end }}

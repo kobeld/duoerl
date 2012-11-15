@@ -10,4 +10,6 @@ var (
 
 const (
 	EMAIL_REGEXP = `(^([^@\s]+)@((?:[-A-z0-9]+\.)+[A-z]{2,})$)|^$`
+
+	DATE_BIRTHDAY = "2006-01-02"
 )

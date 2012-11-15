@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/bmizerany/pat"
+	"github.com/kobeld/duoerl/handlers/accounts"
 	"github.com/kobeld/duoerl/handlers/feeds"
 	"github.com/kobeld/duoerl/handlers/sessions"
 	"github.com/kobeld/duoerl/middlewares"
@@ -24,11 +25,13 @@ func Mux() (mux *http.ServeMux) {
 	mainStack.Middleware(mangogzip.Zipper, mangolog.Logger, sessionMW, authenMW, mainLayoutMW, rendererMW, rHtml)
 
 	p.Get("/login", mainStack.HandlerFunc(sessions.LoginPage))
+	p.Post("/login", mainStack.HandlerFunc(sessions.LoginAction))
 	p.Get("/signup", mainStack.HandlerFunc(sessions.SignupPage))
+	p.Post("/signup", mainStack.HandlerFunc(sessions.SignupAction))
 	p.Get("/logout", mainStack.HandlerFunc(sessions.Logout))
 
-	p.Post("/login", mainStack.HandlerFunc(sessions.LoginAction))
-	p.Post("/signup", mainStack.HandlerFunc(sessions.SignupAction))
+	p.Get("/profile/edit", mainStack.HandlerFunc(accounts.EditProfile))
+	p.Get("/profile/:id", mainStack.HandlerFunc(accounts.ShowProfile))
 
 	p.Get("/", mainStack.HandlerFunc(feeds.Index))
 

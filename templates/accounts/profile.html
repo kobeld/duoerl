@@ -1,0 +1,29 @@
+{{ define "accounts/profile" }}
+
+<h4>{{ .Account.Name }}</h4>
+
+{{ if .IsCurrentAccount }}
+	<a href="/profile/edit">Edit Profile</a>
+{{ end }}
+
+<dl class="dl-horizontal">
+	<dt>Email:</dt>
+	<dd>{{ .Account.Email }}</dd>
+
+	<dt>Gender:</dt>
+	<dd>{{ .Account.Gender }}</dd>
+
+	<dt>Birthday:</dt>
+	<dd>{{ .Account.Birthday }}</dd>
+
+	<dt>Location:</dt>
+	<dd>{{ .Account.Profile.Location }} </dd>
+
+	<dt>Hair texture:</dt>
+	<dd>{{ .Account.Profile.HairTexture }}</dd>
+
+	<dt>Description:</dt>
+	<dd>{{ .Account.Profile.Description }}</dd>
+</dl>
+
+{{ end }}

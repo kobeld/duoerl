@@ -2,7 +2,7 @@ package sessions
 
 import (
 	"github.com/kobeld/duoerl/models/accounts"
-	sSessions "github.com/kobeld/duoerl/services/sessions"
+	"github.com/kobeld/duoerl/services"
 	. "github.com/paulbellamy/mango"
 	"github.com/sunfmin/formdata"
 	"github.com/sunfmin/govalidations"
@@ -16,7 +16,7 @@ type SessionData struct {
 }
 
 func LoginPage(env Env) (status Status, headers Headers, body Body) {
-	account := sSessions.FetchAccountFromEnv(env)
+	account := services.FetchAccountFromEnv(env)
 	if account != nil {
 		return Redirect(http.StatusFound, "/")
 	}
@@ -41,12 +41,12 @@ func LoginAction(env Env) (status Status, headers Headers, body Body) {
 		return
 	}
 
-	sSessions.PutAccountIdToSession(env, loginAccount.Id.Hex())
+	services.PutAccountIdToSession(env, loginAccount.Id.Hex())
 	return Redirect(http.StatusFound, "/")
 }
 
 func SignupPage(env Env) (status Status, headers Headers, body Body) {
-	account := sSessions.FetchAccountFromEnv(env)
+	account := services.FetchAccountFromEnv(env)
 	if account != nil {
 		return Redirect(http.StatusFound, "/")
 	}
@@ -76,12 +76,12 @@ func SignupAction(env Env) (status Status, headers Headers, body Body) {
 		return
 	}
 
-	sSessions.PutAccountIdToSession(env, account.Id.Hex())
+	services.PutAccountIdToSession(env, account.Id.Hex())
 
 	return Redirect(http.StatusFound, "/")
 }
 
 func Logout(env Env) (status Status, headers Headers, body Body) {
-	sSessions.DeleteAccountInSession(env)
+	services.DeleteAccountInSession(env)
 	return Redirect(http.StatusFound, "/login")
 }

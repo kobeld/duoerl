@@ -4,7 +4,7 @@ import (
 	"github.com/kobeld/duoerl/configs"
 	"github.com/kobeld/duoerl/handlers"
 	"github.com/kobeld/duoerl/models/accounts"
-	sSessions "github.com/kobeld/duoerl/services/sessions"
+	"github.com/kobeld/duoerl/services"
 	. "github.com/paulbellamy/mango"
 	"github.com/sunfmin/mangotemplate"
 	"html/template"
@@ -26,7 +26,7 @@ func (h *provider) LayoutData(env Env) interface{} {
 
 	header := &Header{
 		AssetsVersion:  configs.AssetsVersion,
-		CurrentAccount: sSessions.FetchAccountFromEnv(env),
+		CurrentAccount: services.FetchAccountFromEnv(env),
 	}
 
 	return header

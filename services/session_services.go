@@ -1,4 +1,4 @@
-package sessions
+package services
 
 import (
 	"github.com/kobeld/duoerl/models/accounts"
@@ -9,6 +9,13 @@ const (
 	ACCOUNT_ID    = "duoerl_id"
 	LOGIN_ACCOUNT = "login_account"
 )
+
+func IsCurrentAccountWithId(env Env, id string) bool {
+	if id == FetchAccountIdFromSession(env) {
+		return true
+	}
+	return false
+}
 
 func PutAccountIdToSession(env Env, id string) {
 	env.Session()[ACCOUNT_ID] = id

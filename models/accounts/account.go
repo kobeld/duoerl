@@ -2,8 +2,16 @@ package accounts
 
 import (
 	"code.google.com/p/go.crypto/bcrypt"
+	"github.com/kobeld/duoerl/configs"
 	"labix.org/v2/mgo/bson"
 	"time"
+)
+
+const (
+	TEXT_GENDER_MALE     = "Male"
+	TEXT_GENDER_FEMALE   = "Female"
+	TEXT_BIRTHDAY_SECRET = "Secret"
+	TEXT_LOCATION_SECRET = "Secret"
 )
 
 type Account struct {
@@ -13,6 +21,29 @@ type Account struct {
 	Password        string
 	CreatedAt       time.Time
 	ConfirmPassword string `bson:"-"`
+	Profile         Profile
+}
+
+type Profile struct {
+	Gender      bool
+	Description string
+	Location    string
+	Birthday    time.Time
+	HairTexture string
+}
+
+func (this *Account) Birthday() string {
+	if this.Profile.Birthday.IsZero() {
+		return TEXT_BIRTHDAY_SECRET
+	}
+	return this.Profile.Birthday.Format(configs.DATE_BIRTHDAY)
+}
+
+func (this *Account) Gender() string {
+	if !this.Profile.Gender {
+		return TEXT_GENDER_FEMALE
+	}
+	return TEXT_GENDER_MALE
 }
 
 func (this *Account) MakeId() interface{} {
