@@ -18,11 +18,15 @@ func Mux() (mux *http.ServeMux) {
 		&mango.CookieOptions{Path: "/", MaxAge: 3600 * 24 * 7})
 	rendererMW := middlewares.ProduceRenderer()
 	authenMW := middlewares.AuthenticateAccount()
+	hardAuthenMW := middlewares.HardAuthenAccount()
 	rHtml, _ := middlewares.RespondHtml(), middlewares.RespondJson()
 
 	mainLayoutMW := middlewares.ProduceLayout(middlewares.MAIN_LAYOUT)
 	mainStack := new(mango.Stack)
 	mainStack.Middleware(mangogzip.Zipper, mangolog.Logger, sessionMW, authenMW, mainLayoutMW, rendererMW, rHtml)
+
+	hardAuthenStack := new(mango.Stack)
+	hardAuthenStack.Middleware(mangogzip.Zipper, mangolog.Logger, sessionMW, hardAuthenMW, mainLayoutMW, rendererMW, rHtml)
 
 	p.Get("/login", mainStack.HandlerFunc(sessions.LoginPage))
 	p.Post("/login", mainStack.HandlerFunc(sessions.LoginAction))
@@ -30,7 +34,8 @@ func Mux() (mux *http.ServeMux) {
 	p.Post("/signup", mainStack.HandlerFunc(sessions.SignupAction))
 	p.Get("/logout", mainStack.HandlerFunc(sessions.Logout))
 
-	p.Get("/profile/edit", mainStack.HandlerFunc(accounts.EditProfile))
+	p.Post("/profile/edit", hardAuthenStack.HandlerFunc(accounts.EditProfileAction))
+	p.Get("/profile/edit", hardAuthenStack.HandlerFunc(accounts.EditProfile))
 	p.Get("/profile/:id", mainStack.HandlerFunc(accounts.ShowProfile))
 
 	p.Get("/", mainStack.HandlerFunc(feeds.Index))

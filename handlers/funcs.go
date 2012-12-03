@@ -7,7 +7,7 @@ import (
 )
 
 var FuncMap = template.FuncMap{
-	"errorOn": errorOn,
+	"ErrorOn": errorOn,
 }
 
 type ErrorData struct {

@@ -1,6 +1,8 @@
 {{ define "accounts/edit_profile" }}
 
-<form class="form-horizontal">
+{{ $profile := .Account.Profile }}
+
+<form action="/profile/edit" method="post" class="form-horizontal">
 	<fieldset>
 		<div>
 			<legend><strong>{{ .Account.Name }}</strong>
@@ -12,10 +14,10 @@
 			<label class="control-label">Gender</label>
 			<div class="controls">
 				<label class="radio inline">
-					<input type="radio" name="Gender" value="false" checked> Female
+					<input type="radio" name="Profile.Gender" value="false" {{ if not $profile.Gender }}checked{{end}}> Female
 				</label>
 				<label class="radio inline">
-					<input type="radio" name="Gender" value="true"> Male
+					<input type="radio" name="Profile.Gender" value="true" {{ if $profile.Gender }}checked{{end}}> Male
 				</label>
 			</div>
 		</div>
@@ -23,16 +25,17 @@
 		<div class="control-group">
 			<label class="control-label">Birthday</label>
 			<div class="controls">
-				<select name="Year" class="input-small">
-					<option>1986</option>
-					<option>1985</option>
-					<option>1984</option>
+				<select name="Profile.Year" class="input-small">
+					<option>please select</option>
+					<option value="1986">1986</option>
+					<option value="1985">1985</option>
+					<option value="1984">1984</option>
 				</select>
-				<select name="Month" class="input-mini">
+				<select name="Profile.Month" class="input-mini">
 					<option>03</option>
 					<option>04</option>
 				</select>
-				<select name="Day" class="input-mini">
+				<select name="Profile.Day" class="input-mini">
 					<option>11</option>
 					<option>20</option>
 				</select>
@@ -42,26 +45,28 @@
 		<div class="control-group">
 			<label class="control-label">Location</label>
 			<div class="controls">
-				<input type="text" name="Location" class="input-large">
+				<input type="text" name="Profile.Location" value="{{ $profile.Location }}" class="input-large">
 			</div>
 		</div>
 
 		<div class="control-group">
 			<label class="control-label">Hair Texture</label>
 			<div class="controls">
-				<select name="HairTexture" class="input-large">
-					<option>Dry</option>
-					<option>Wet</option>
-					<option>Yellow</option>
+				<select id="hair-texture-select" name="Profile.HairTexture" class="input-large">
+					<option>please select</option>
+					<option value="1">Dry</option>
+					<option value="2">Wet</option>
+					<option value="3">Yellow</option>
 				</select>
 			</div>
+			<script>$("#hair-texture-select").val("{{$profile.HairTexture }}")</script>
 		</div>
 
 		<div class="control-group">
 			<label class="control-label">Description</label>
 			<div class="controls">
 				<div class="textare">
-					<textarea name="Description"></textarea>
+					<textarea name="Profile.Description">{{ $profile.Description }}</textarea>
 				</div>
 			</div>
 		</div>
