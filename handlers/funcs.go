@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/shaoshing/train"
 	"github.com/sunfmin/govalidations"
 	"github.com/sunfmin/mangotemplate"
 	"html/template"
@@ -8,6 +9,10 @@ import (
 
 var FuncMap = template.FuncMap{
 	"ErrorOn": errorOn,
+
+	"javascript_tag":            train.JavascriptTag,
+	"stylesheet_tag":            train.StylesheetTag,
+	"stylesheet_tag_with_param": train.StylesheetTagWithParam,
 }
 
 type ErrorData struct {

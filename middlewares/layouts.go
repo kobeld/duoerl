@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"github.com/kobeld/duoerl/configs"
 	"github.com/kobeld/duoerl/handlers"
 	"github.com/kobeld/duoerl/models/accounts"
 	"github.com/kobeld/duoerl/services"
@@ -11,8 +10,12 @@ import (
 )
 
 const (
-	TEMPLATES   = "templates/*/*.html"
-	MAIN_LAYOUT = "main"
+	TEMPLATE_GLOB_PATTERN = "templates/*/*.html"
+	MAIN_LAYOUT           = "main"
+)
+
+var (
+	preloadedTemplate *template.Template
 )
 
 type Header struct {
@@ -20,28 +23,31 @@ type Header struct {
 	CurrentAccount *accounts.Account
 }
 
-type provider struct{}
+type MangoTemplateProvider struct{}
 
-func (h *provider) LayoutData(env Env) interface{} {
+func (h *MangoTemplateProvider) LayoutData(env Env) interface{} {
 
 	header := &Header{
-		AssetsVersion:  configs.AssetsVersion,
 		CurrentAccount: services.FetchAccountFromEnv(env),
 	}
 
 	return header
 }
 
+func GetTemplate() *template.Template {
+	if preloadedTemplate == nil {
+		preloadedTemplate = template.New("")
+		mangotemplate.Funcs(preloadedTemplate, handlers.FuncMap)
+		template.Must(mangotemplate.ParseGlob(preloadedTemplate, TEMPLATE_GLOB_PATTERN))
+	}
+
+	return preloadedTemplate
+}
+
 func ProduceLayout(name string) Middleware {
-	tpl := template.New("")
-	tpl.Funcs(handlers.FuncMap)
-	template.Must(tpl.ParseGlob(TEMPLATES))
-	return mangotemplate.MakeLayout(tpl, name, &provider{})
+	return mangotemplate.MakeLayout(GetTemplate(), name, &MangoTemplateProvider{})
 }
 
 func ProduceRenderer() Middleware {
-	tpl := template.New("")
-	tpl.Funcs(handlers.FuncMap)
-	template.Must(tpl.ParseGlob(TEMPLATES))
-	return mangotemplate.MakeRenderer(tpl)
+	return mangotemplate.MakeRenderer(GetTemplate())
 }

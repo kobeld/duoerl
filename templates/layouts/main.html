@@ -3,8 +3,8 @@
 <html>
 <head>
 	<title>Duoerl</title>
-    <link href="/public/css/bootstrap.min.css?v={{.Layout.AssetsVersion}}" rel="stylesheet" media="screen">
-    <script src="/public/js/jquery-1.8.min.js?v={{.Layout.AssetsVersion}}"></script>
+    {{stylesheet_tag "bootstrap"}}
+
 </head>
 
 <body style="padding-top: 60px">
@@ -17,7 +17,7 @@
 		{{ .Body }}
 	</div>
 
-    <script src="/public/js/bootstrap.min.js?v={{.Layout.AssetsVersion}}"></script>
+	{{javascript_tag "basic"}}
 </body>
 
 </html>

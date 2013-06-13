@@ -1,11 +1,10 @@
 package configs
 
 var (
-	AppHost       = ""
-	HttpPort      = ":8888"
-	DBUrl         = "localhost"
-	Database      = "duoerl_p"
-	AssetsVersion = 0
+	AppHost  = "localhost:8888"
+	HttpPort = ":8888"
+	DBUrl    = "localhost"
+	Database = "duoerl"
 )
 
 const (

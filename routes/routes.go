@@ -8,14 +8,15 @@ import (
 	"github.com/kobeld/duoerl/middlewares"
 	"github.com/kobeld/mangogzip"
 	"github.com/paulbellamy/mango"
+	"github.com/shaoshing/train"
 	"github.com/sunfmin/mangolog"
 	"net/http"
 )
 
 func Mux() (mux *http.ServeMux) {
 	p := pat.New()
-	sessionMW := mango.Sessions("f908b1c425062e95d30b8d30de7123458", "duoerl",
-		&mango.CookieOptions{Path: "/", MaxAge: 3600 * 24 * 7})
+	sessionMW := mango.Sessions("f908b1c425062e95d30b8d30de7123458", "duoerl", &mango.CookieOptions{Path: "/", MaxAge: 3600 * 24 * 7})
+
 	rendererMW := middlewares.ProduceRenderer()
 	authenMW := middlewares.AuthenticateAccount()
 	hardAuthenMW := middlewares.HardAuthenAccount()
@@ -44,6 +45,8 @@ func Mux() (mux *http.ServeMux) {
 	mux.HandleFunc("/favicon.ico", filterUrl)
 	mux.Handle("/", p)
 	mux.Handle("/public/", http.FileServer(http.Dir(".")))
+
+	train.ConfigureHttpHandler(mux)
 	return
 }
 
