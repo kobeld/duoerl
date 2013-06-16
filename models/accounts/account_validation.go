@@ -1,7 +1,7 @@
 package accounts
 
 import (
-	"github.com/kobeld/duoerl/configs"
+	"github.com/kobeld/duoerl/global"
 	"github.com/sunfmin/govalidations"
 	"regexp"
 )
@@ -43,20 +43,19 @@ func (this *Account) ValidateLoginAccount() *govalidations.Validated {
 func (agk *AccountGateKeeper) AddPasswordMatchValidator(a *Account) {
 	email, password := a.Email, a.Password
 	account, _ := FindByEmail(email)
-	errorText := "Account and password do not match!"
 	agk.Add(govalidations.Custom(func(object interface{}) bool {
 		if account == nil {
 			return false
 		}
 		return true
-	}, "Password", errorText))
+	}, "Password", global.ACCOUNT_01))
 
 	agk.Add(govalidations.Custom(func(object interface{}) bool {
 		if account != nil && !account.IsPwdMatch(password) {
 			return false
 		}
 		return true
-	}, "Password", errorText))
+	}, "Password", global.ACCOUNT_01))
 
 	a = account
 	return
@@ -69,7 +68,7 @@ func (agk *AccountGateKeeper) AddEmailExistValidator() {
 			return false
 		}
 		return true
-	}, "Email", "Email already be taken!"))
+	}, "Email", global.ACCOUNT_02))
 
 	return
 }
@@ -77,11 +76,11 @@ func (agk *AccountGateKeeper) AddEmailExistValidator() {
 func (agk *AccountGateKeeper) AddEmailValidator() {
 	agk.Add(govalidations.Presence(func(object interface{}) interface{} {
 		return object.(*Account).Email
-	}, "Email", "Email can't be blank!"))
+	}, "Email", global.ACCOUNT_03))
 
 	agk.Add(govalidations.Regexp(func(object interface{}) interface{} {
 		return object.(*Account).Email
-	}, regexp.MustCompile(configs.EMAIL_REGEXP), "Email", "Format is error!"))
+	}, regexp.MustCompile(global.EMAIL_REGEXP), "Email", global.ACCOUNT_04))
 
 	return
 }
@@ -89,11 +88,11 @@ func (agk *AccountGateKeeper) AddEmailValidator() {
 func (agk *AccountGateKeeper) AddNameValidator() {
 	agk.Add(govalidations.Presence(func(object interface{}) interface{} {
 		return object.(*Account).Name
-	}, "Name", "Name can't be blank"))
+	}, "Name", global.ACCOUNT_05))
 
 	agk.Add(govalidations.Limitation(func(object interface{}) interface{} {
 		return object.(*Account).Name
-	}, 0, 20, "Name", "The length of First Name must less than 20"))
+	}, 0, 20, "Name", global.ACCOUNT_06))
 
 	return
 }
@@ -101,7 +100,7 @@ func (agk *AccountGateKeeper) AddNameValidator() {
 func (agk *AccountGateKeeper) AddPwdLengthValidator() {
 	agk.Add(govalidations.Prohibition(func(object interface{}) interface{} {
 		return object.(*Account).Password
-	}, 1, 5, "Password", "Password is too short"))
+	}, 1, 5, "Password", global.ACCOUNT_07))
 
 	return
 }
@@ -109,7 +108,7 @@ func (agk *AccountGateKeeper) AddPwdLengthValidator() {
 func (agk *AccountGateKeeper) AddPwdPresenceValidator() {
 	agk.Add(govalidations.Presence(func(object interface{}) interface{} {
 		return object.(*Account).Password
-	}, "Password", "Password can't be blank"))
+	}, "Password", global.ACCOUNT_08))
 
 	return
 }
@@ -121,6 +120,6 @@ func (agk *AccountGateKeeper) AddConfirmPasswordValidator() {
 			return false
 		}
 		return true
-	}, "ConfirmPassword", "Password does not match"))
+	}, "ConfirmPassword", global.ACCOUNT_09))
 	return
 }

@@ -1,5 +1,5 @@
 .DS_Store
-/public/.sass-cache/
+.sass-cache/
 /docs/
 workspace.vim
 tags

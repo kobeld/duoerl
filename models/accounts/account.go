@@ -2,16 +2,9 @@ package accounts
 
 import (
 	"code.google.com/p/go.crypto/bcrypt"
-	"github.com/kobeld/duoerl/configs"
+	"github.com/kobeld/duoerl/global"
 	"labix.org/v2/mgo/bson"
 	"time"
-)
-
-const (
-	TEXT_GENDER_MALE     = "Male"
-	TEXT_GENDER_FEMALE   = "Female"
-	TEXT_BIRTHDAY_SECRET = "Secret"
-	TEXT_LOCATION_SECRET = "Secret"
 )
 
 type Account struct {
@@ -30,20 +23,6 @@ type Profile struct {
 	Location    string
 	Birthday    time.Time
 	HairTexture string
-}
-
-func (this *Account) Birthday() string {
-	if this.Profile.Birthday.IsZero() {
-		return TEXT_BIRTHDAY_SECRET
-	}
-	return this.Profile.Birthday.Format(configs.DATE_BIRTHDAY)
-}
-
-func (this *Account) Gender() string {
-	if !this.Profile.Gender {
-		return TEXT_GENDER_FEMALE
-	}
-	return TEXT_GENDER_MALE
 }
 
 func (this *Account) MakeId() interface{} {
@@ -85,4 +64,18 @@ func (this *Account) Signup() (err error) {
 func (this *Account) encryptPwd() {
 	hp, _ := bcrypt.GenerateFromPassword([]byte(this.Password), 0)
 	this.Password = string(hp)
+}
+
+func (this *Account) Birthday() string {
+	if this.Profile.Birthday.IsZero() {
+		return global.TEXT_BIRTHDAY_SECRET
+	}
+	return this.Profile.Birthday.Format(global.DATE_BIRTHDAY)
+}
+
+func (this *Account) Gender() string {
+	if !this.Profile.Gender {
+		return global.TEXT_GENDER_FEMALE
+	}
+	return global.TEXT_GENDER_MALE
 }
