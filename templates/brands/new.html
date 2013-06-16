@@ -1,0 +1,57 @@
+{{ define "brands/new" }}
+
+<form action="/brand/create" method="post" class="form-horizontal">
+	<fieldset>
+		<div>
+			<legend><strong>Adding new brand</strong></legend>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Name</label>
+			<div class="controls">
+				<input type="text" name="Name" class="input-large" value="{{ .Name }}">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Alias</label>
+			<div class="controls">
+				<input type="text" name="Alias" class="input-large" value="{{ .Alias }}">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Country</label>
+			<div class="controls">
+				<input type="text" name="Country" class="input-large" value="{{ .Country }}">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Website</label>
+			<div class="controls">
+				<input type="text" name="Website" class="input-large" value="{{ .Website }}">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Introduction</label>
+			<div class="controls">
+				<div class="textare">
+					<textarea name="Intro">{{ .Intro }}</textarea>
+				</div>
+			</div>
+		</div>
+
+		<input name="Id" type="hidden" value="{{ .Id }}"/>
+
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary">Create</button>
+			<button type="button" class="btn">Cancel</button>
+		</div>
+	</fieldset>
+</form>
+
+
+
+{{ end }}

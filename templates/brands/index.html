@@ -1,0 +1,36 @@
+{{ define "brands/index" }}
+
+<h1>This is Brands index page!</h1>
+
+<a href="/brand/new">Add Brand</a>
+
+<div>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Name</th>
+				<th>Alias</th>
+				<th>Country</th>
+				<th>Introduction</th>
+			</tr>
+		</thead>
+
+		<tbody>
+
+			{{ range $index, $apiBrand := .ApiBrands }}
+			<tr>
+				<td>{{ $index }}</td>
+				<td><a href="/brand/{{ $apiBrand.Id }}">{{ $apiBrand.Name }}</a></td>
+				<td>{{ $apiBrand.Alias }}</td>
+				<td>{{ $apiBrand.Country }}</td>
+				<td>{{ $apiBrand.Intro }}</td>
+			</tr>
+			{{ end }}
+		</tbody>
+	</table>
+
+</div>
+
+{{ end }}

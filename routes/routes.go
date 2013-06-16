@@ -3,7 +3,9 @@ package routes
 import (
 	"github.com/bmizerany/pat"
 	"github.com/kobeld/duoerl/handlers/accounts"
+	"github.com/kobeld/duoerl/handlers/brands"
 	"github.com/kobeld/duoerl/handlers/feeds"
+	"github.com/kobeld/duoerl/handlers/products"
 	"github.com/kobeld/duoerl/handlers/sessions"
 	"github.com/kobeld/duoerl/middlewares"
 	"github.com/kobeld/mangogzip"
@@ -29,6 +31,7 @@ func Mux() (mux *http.ServeMux) {
 	hardAuthenStack := new(mango.Stack)
 	hardAuthenStack.Middleware(mangogzip.Zipper, mangolog.Logger, sessionMW, hardAuthenMW, mainLayoutMW, rendererMW, rHtml)
 
+	// Account related
 	p.Get("/login", mainStack.HandlerFunc(sessions.LoginPage))
 	p.Post("/login", mainStack.HandlerFunc(sessions.LoginAction))
 	p.Get("/signup", mainStack.HandlerFunc(sessions.SignupPage))
@@ -39,8 +42,23 @@ func Mux() (mux *http.ServeMux) {
 	p.Get("/profile/edit", hardAuthenStack.HandlerFunc(accounts.EditProfile))
 	p.Get("/profile/:id", mainStack.HandlerFunc(accounts.ShowProfile))
 
-	p.Get("/", mainStack.HandlerFunc(feeds.Index))
+	// Brand related
+	p.Get("/brands", mainStack.HandlerFunc(brands.Index))
+	p.Get("/brand/new", mainStack.HandlerFunc(brands.New))
+	p.Post("/brand/create", mainStack.HandlerFunc(brands.Create))
+	p.Get("/brand/:id", mainStack.HandlerFunc(brands.Show))
+	p.Get("/brand/:id/edit", mainStack.HandlerFunc(brands.Edit))
+	p.Post("/brand/:id/edit", mainStack.HandlerFunc(brands.Update))
 
+	// Product related
+	p.Get("/products", mainStack.HandlerFunc(products.Index))
+	// p.Post("/product/:id", mainStack.HandlerFunc(products.Show))
+	// p.Get("/product/new", mainStack.HandlerFunc(products.New))
+	// p.Get("/product/create", mainStack.HandlerFunc(products.Create))
+	// p.Get("/product/:id/edit", mainStack.HandlerFunc(products.Edit))
+	// p.Post("/product/:id/edit", mainStack.HandlerFunc(products.Update))
+
+	p.Get("/", mainStack.HandlerFunc(feeds.Index))
 	mux = http.NewServeMux()
 	mux.HandleFunc("/favicon.ico", filterUrl)
 	mux.Handle("/", p)
