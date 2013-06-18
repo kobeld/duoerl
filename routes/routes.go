@@ -52,9 +52,9 @@ func Mux() (mux *http.ServeMux) {
 
 	// Product related
 	p.Get("/products", mainStack.HandlerFunc(products.Index))
-	// p.Post("/product/:id", mainStack.HandlerFunc(products.Show))
-	// p.Get("/product/new", mainStack.HandlerFunc(products.New))
-	// p.Get("/product/create", mainStack.HandlerFunc(products.Create))
+	p.Get("/product/new", mainStack.HandlerFunc(products.New))
+	p.Post("/product/create", mainStack.HandlerFunc(products.Create))
+	p.Get("/product/:id", mainStack.HandlerFunc(products.Show))
 	// p.Get("/product/:id/edit", mainStack.HandlerFunc(products.Edit))
 	// p.Post("/product/:id/edit", mainStack.HandlerFunc(products.Update))
 

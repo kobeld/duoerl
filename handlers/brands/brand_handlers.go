@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	entryFields = []string{"Id", "Name", "Alias", "Country", "Intro", "Website", "LogoUrl"}
+	brandFields = []string{"Id", "Name", "Alias", "Country", "Intro", "Website", "LogoUrl"}
 )
 
 type BrandViewData struct {
@@ -20,7 +20,9 @@ type BrandViewData struct {
 	ApiBrands  []*duoerlapi.Brand
 }
 
-func NewBrandViewData(brandInput *duoerlapi.BrandInput, validated *govalidations.Validated) *BrandViewData {
+func newBrandViewData(brandInput *duoerlapi.BrandInput,
+	validated *govalidations.Validated) *BrandViewData {
+
 	return &BrandViewData{
 		BrandInput: brandInput,
 		Validated:  validated,
@@ -61,11 +63,11 @@ func New(env Env) (status Status, headers Headers, body Body) {
 func Create(env Env) (status Status, headers Headers, body Body) {
 
 	brandInput := new(duoerlapi.BrandInput)
-	formdata.UnmarshalByNames(env.Request().Request, &brandInput, entryFields)
+	formdata.UnmarshalByNames(env.Request().Request, &brandInput, brandFields)
 
 	result, err := services.CreateBrand(brandInput)
 	if validated, ok := err.(*govalidations.Validated); ok {
-		mangotemplate.ForRender(env, "brands/new", NewBrandViewData(result, validated))
+		mangotemplate.ForRender(env, "brands/new", newBrandViewData(result, validated))
 		return
 	}
 	if err != nil {

@@ -20,9 +20,3 @@ func (this *Brand) MakeId() interface{} {
 	}
 	return this.Id
 }
-
-// func NewBrandFromInput(brandInput *duoerlapi.BrandInput) *Brand {
-// 	return Brand{
-// 		Id
-// 	}
-// }

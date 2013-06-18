@@ -1,0 +1,54 @@
+{{ define "products/new" }}
+
+<form action="/product/create" method="post" class="form-horizontal">
+	<fieldset>
+		<div>
+			<legend><strong>Adding new product</strong></legend>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Name</label>
+			<div class="controls">
+				<input type="text" name="Name" class="input-large" value="{{ .ProductInput.Name }}">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Alias</label>
+			<div class="controls">
+				<input type="text" name="Alias" class="input-large" value="{{ .ProductInput.Alias }}">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Brand</label>
+			<div class="controls">
+				<select name="BrandId" class="input">
+					<option>please select</option>
+					{{ range .Brands }}
+						<option value="{{ .Id }}">{{ .Name }}</option>
+					{{ end }}
+				</select>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Introduction</label>
+			<div class="controls">
+				<div class="textare">
+					<textarea name="Intro">{{ .ProductInput.Intro }}</textarea>
+				</div>
+			</div>
+		</div>
+
+		<input name="Id" type="hidden" value="{{ .ProductInput.Id }}"/>
+
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary">Create</button>
+			<button type="button" class="btn">Cancel</button>
+		</div>
+	</fieldset>
+</form>
+
+
+{{ end }}
