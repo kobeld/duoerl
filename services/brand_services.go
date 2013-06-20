@@ -80,13 +80,19 @@ func toApiBrands(dbBrands []*brands.Brand) (apiBrands []*duoerlapi.Brand) {
 }
 
 func toApiBrand(brand *brands.Brand) *duoerlapi.Brand {
-	return &duoerlapi.Brand{
-		Id:      brand.Id.Hex(),
-		Name:    brand.Name,
-		Alias:   brand.Alias,
-		Intro:   brand.Intro,
-		Country: brand.Country,
-		Website: brand.Website,
-		LogoUrl: brand.LogoUrl,
+	apiBrand := new(duoerlapi.Brand)
+
+	if brand != nil {
+		apiBrand = &duoerlapi.Brand{
+			Id:      brand.Id.Hex(),
+			Name:    brand.Name,
+			Alias:   brand.Alias,
+			Intro:   brand.Intro,
+			Country: brand.Country,
+			Website: brand.Website,
+			LogoUrl: brand.LogoUrl,
+		}
 	}
+
+	return apiBrand
 }

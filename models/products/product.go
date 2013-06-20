@@ -19,3 +19,10 @@ func (this *Product) MakeId() interface{} {
 	}
 	return this.Id
 }
+
+func CollectBrandIds(dbProducts []*Product) (brandIds []bson.ObjectId) {
+	for _, dbProduct := range dbProducts {
+		brandIds = append(brandIds, dbProduct.BrandId)
+	}
+	return
+}

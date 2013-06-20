@@ -1,7 +1,37 @@
 {{ define "products/index" }}
 
-<h1>Product index</h1>
+<h1>Products</h1>
 
 <a href="/product/new">Add Product</a>
+
+<div>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Name</th>
+				<th>Alias</th>
+				<th>Brand</th>
+				<th>Introduction</th>
+			</tr>
+		</thead>
+
+		<tbody>
+
+			{{ range $index, $apiProduct := .ApiProducts }}
+			<tr>
+				<td>{{ $index }}</td>
+				<td><a href="/product/{{ $apiProduct.Id }}">{{ $apiProduct.Name }}</a></td>
+				<td>{{ $apiProduct.Alias }}</td>
+				<td><a href="/brand/{{ $apiProduct.Brand.Id }}">{{ $apiProduct.Brand.Name }}</a></td>
+				<td>{{ $apiProduct.Intro }}</td>
+			</tr>
+			{{ end }}
+		</tbody>
+	</table>
+
+</div>
+
 
 {{ end }}

@@ -16,8 +16,9 @@ var (
 
 type ProductViewData struct {
 	ProductInput *duoerlapi.ProductInput
-	Brands       []*duoerlapi.Brand
+	ApiProducts  []*duoerlapi.Product
 	Validated    *govalidations.Validated
+	Brands       []*duoerlapi.Brand
 }
 
 func newProductViewData(productInput *duoerlapi.ProductInput,
@@ -33,7 +34,12 @@ func newProductViewData(productInput *duoerlapi.ProductInput,
 
 func Index(env Env) (status Status, headers Headers, body Body) {
 
-	mangotemplate.ForRender(env, "products/index", nil)
+	apiProducts, err := services.AllProducts()
+	if err != nil {
+		panic(err)
+	}
+
+	mangotemplate.ForRender(env, "products/index", &ProductViewData{ApiProducts: apiProducts})
 	return
 }
 

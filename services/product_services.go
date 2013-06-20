@@ -13,6 +13,32 @@ func NewProduct() (productInput *duoerlapi.ProductInput) {
 	return
 }
 
+func AllProducts() (apiProducts []*duoerlapi.Product, err error) {
+
+	// Find all the products
+	dbProducts, err := products.FindAll(bson.M{})
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	// Collect brand Ids and find them
+	brandIds := products.CollectBrandIds(dbProducts)
+
+	dbBrands, err := brands.FindByIds(brandIds)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	// Buid the brandMap
+	brandMap := brands.BuildBrandMap(dbBrands)
+
+	apiProducts = toApiProducts(dbProducts, brandMap)
+
+	return
+}
+
 func ShowProduct(productId string) (apiProduct *duoerlapi.Product, err error) {
 	productOId, err := utils.ToObjectId(productId)
 	if err != nil {
@@ -70,17 +96,26 @@ func CreateProduct(input *duoerlapi.ProductInput) (originInput *duoerlapi.Produc
 	return
 }
 
-// func toApiProducts(products []*products.Product) (apiProducts []*duoerlapi.Product) {
+func toApiProducts(dbProducts []*products.Product, brandMap map[bson.ObjectId]*brands.Brand) (apiProducts []*duoerlapi.Product) {
+	for _, dbProduct := range dbProducts {
+		brand := brandMap[dbProduct.BrandId]
+		apiProducts = append(apiProducts, toApiProduct(dbProduct, brand))
+	}
 
-// 	return
-// }
+	return
+}
 
 func toApiProduct(product *products.Product, brand *brands.Brand) *duoerlapi.Product {
-	return &duoerlapi.Product{
-		Id:    product.Id.Hex(),
-		Name:  product.Name,
-		Alias: product.Alias,
-		Intro: product.Intro,
-		Brand: toApiBrand(brand),
+	apiProduct := new(duoerlapi.Product)
+	if product != nil {
+		apiProduct = &duoerlapi.Product{
+			Id:    product.Id.Hex(),
+			Name:  product.Name,
+			Alias: product.Alias,
+			Intro: product.Intro,
+			Brand: toApiBrand(brand),
+		}
 	}
+
+	return apiProduct
 }

@@ -20,3 +20,12 @@ func (this *Brand) MakeId() interface{} {
 	}
 	return this.Id
 }
+
+func BuildBrandMap(dbBrands []*Brand) map[bson.ObjectId]*Brand {
+	brandMap := make(map[bson.ObjectId]*Brand)
+	for _, dbBrand := range dbBrands {
+		brandMap[dbBrand.Id] = dbBrand
+	}
+
+	return brandMap
+}
