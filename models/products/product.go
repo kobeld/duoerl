@@ -35,3 +35,11 @@ func CollectBrandAndAuthorIds(dbProducts []*Product) (brandIds, authorIds []bson
 	}
 	return
 }
+
+func BuildProductMap(dbProducts []*Product) map[bson.ObjectId]*Product {
+	productMap := make(map[bson.ObjectId]*Product)
+	for _, dbProduct := range dbProducts {
+		productMap[dbProduct.Id] = dbProduct
+	}
+	return productMap
+}

@@ -16,18 +16,12 @@ var (
 
 type ProductViewData struct {
 	ProductInput *duoerlapi.ProductInput
+	ApiProduct   *duoerlapi.Product
 	ApiProducts  []*duoerlapi.Product
 	Validated    *govalidations.Validated
-	Brands       []*duoerlapi.Brand
-}
-
-func newProductViewData(productInput *duoerlapi.ProductInput,
-	brands []*duoerlapi.Brand) *ProductViewData {
-
-	return &ProductViewData{
-		ProductInput: productInput,
-		Brands:       brands,
-	}
+	ApiBrands    []*duoerlapi.Brand
+	ApiReviews   []*duoerlapi.Review
+	ReviewInput  *duoerlapi.ReviewInput
 }
 
 // ----------------
@@ -46,23 +40,41 @@ func Index(env Env) (status Status, headers Headers, body Body) {
 func Show(env Env) (status Status, headers Headers, body Body) {
 	productId := env.Request().URL.Query().Get(":id")
 
+	// Get Product
 	apiProduct, err := services.ShowProduct(productId)
 	if err != nil {
 		panic(err)
 	}
 
-	mangotemplate.ForRender(env, "products/show", apiProduct)
+	// Get Product Reviews
+	apiReviews, err := services.ShowReviewsInProduct(productId)
+	if err != nil {
+		panic(err)
+	}
+
+	// Init new Review Form data
+	productViewData := &ProductViewData{
+		ApiProduct:  apiProduct,
+		ApiReviews:  apiReviews,
+		ReviewInput: services.NewReview(),
+	}
+
+	mangotemplate.ForRender(env, "products/show", productViewData)
 	return
 }
 
 func New(env Env) (status Status, headers Headers, body Body) {
 	productInput := services.NewProduct()
-	brands, err := services.AllBrands()
+	apiBrands, err := services.AllBrands()
 	if err != nil {
 		panic(err)
 	}
 
-	productViewData := newProductViewData(productInput, brands)
+	productViewData := &ProductViewData{
+		ProductInput: productInput,
+		ApiBrands:    apiBrands,
+	}
+
 	mangotemplate.ForRender(env, "products/new", productViewData)
 	return
 }

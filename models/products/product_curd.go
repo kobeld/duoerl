@@ -24,6 +24,10 @@ func FindById(id bson.ObjectId) (product *Product, err error) {
 	return FindOne(bson.M{"_id": id})
 }
 
+func FindByIds(ids []bson.ObjectId) (products []*Product, err error) {
+	return FindAll(bson.M{"_id": bson.M{"$in": ids}})
+}
+
 func FindOne(query bson.M) (r *Product, err error) {
 	err = mgodb.FindOne(PRODUCTS, query, &r)
 	return
