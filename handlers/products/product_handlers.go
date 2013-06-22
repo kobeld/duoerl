@@ -71,6 +71,7 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 
 	productInput := new(duoerlapi.ProductInput)
 	formdata.UnmarshalByNames(env.Request().Request, &productInput, productFields)
+	productInput.AuthorId = services.FetchAccountIdFromSession(env)
 
 	result, err := services.CreateProduct(productInput)
 	if validated, ok := err.(*govalidations.Validated); ok {

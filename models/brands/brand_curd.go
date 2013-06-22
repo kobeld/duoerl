@@ -3,15 +3,24 @@ package brands
 import (
 	"github.com/sunfmin/mgodb"
 	"labix.org/v2/mgo/bson"
+	"time"
 )
 
 const BRANDS = "brands"
 
 func (this *Brand) Save() error {
+	if this.CreatedAt.IsZero() {
+		this.CreatedAt = time.Now()
+	} else {
+		this.UpdatedAt = time.Now()
+	}
 	return mgodb.Save(BRANDS, this)
 }
 
-func FindById(id bson.ObjectId) (*Brand, error) {
+func FindById(id bson.ObjectId) (brand *Brand, err error) {
+	if !id.Valid() {
+		return
+	}
 	return FindOne(bson.M{"_id": id})
 }
 

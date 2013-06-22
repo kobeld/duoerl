@@ -13,6 +13,7 @@
 				<th>Name</th>
 				<th>Alias</th>
 				<th>Brand</th>
+				<th>Author</th>
 				<th>Introduction</th>
 			</tr>
 		</thead>
@@ -25,6 +26,11 @@
 				<td><a href="/product/{{ $apiProduct.Id }}">{{ $apiProduct.Name }}</a></td>
 				<td>{{ $apiProduct.Alias }}</td>
 				<td><a href="/brand/{{ $apiProduct.Brand.Id }}">{{ $apiProduct.Brand.Name }}</a></td>
+				<td>
+				{{ if $apiProduct.Author.Name }}
+					<a href="/profile/{{ $apiProduct.Author.Id }}">{{ $apiProduct.Author.Name }}</a>
+				{{ end }}
+				</td>
 				<td>{{ $apiProduct.Intro }}</td>
 			</tr>
 			{{ end }}

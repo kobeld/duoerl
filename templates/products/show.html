@@ -15,6 +15,13 @@
 			<dt>Alias:</dt>
 			<dd>{{ .Alias }}</dd>
 
+			{{ if .Author.Name }}
+			<dt>Author:</dt>
+			<dd>
+				<a href="/profile/{{ .Author.Id }}">{{ .Author.Name }}</a>
+			</dd>
+			{{ end }}
+
 			<dt>Brand:</dt>
 			<dd><a href="/brand/{{.Brand.Id}}">{{ .Brand.Name }}</a></dd>
 
