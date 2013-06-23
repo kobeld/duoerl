@@ -8,6 +8,7 @@ import (
 	"github.com/kobeld/duoerl/handlers/products"
 	"github.com/kobeld/duoerl/handlers/reviews"
 	"github.com/kobeld/duoerl/handlers/sessions"
+	"github.com/kobeld/duoerl/handlers/wishitems"
 	"github.com/kobeld/duoerl/middlewares"
 	"github.com/kobeld/mangogzip"
 	"github.com/paulbellamy/mango"
@@ -23,11 +24,14 @@ func Mux() (mux *http.ServeMux) {
 	rendererMW := middlewares.ProduceRenderer()
 	authenMW := middlewares.AuthenticateAccount()
 	hardAuthenMW := middlewares.HardAuthenAccount()
-	rHtml, _ := middlewares.RespondHtml(), middlewares.RespondJson()
+	rHtml, rJson := middlewares.RespondHtml(), middlewares.RespondJson()
 
 	mainLayoutMW := middlewares.ProduceLayout(middlewares.MAIN_LAYOUT)
 	mainStack := new(mango.Stack)
 	mainStack.Middleware(mangogzip.Zipper, mangolog.Logger, sessionMW, authenMW, mainLayoutMW, rendererMW, rHtml)
+
+	mainAjaxStack := new(mango.Stack)
+	mainAjaxStack.Middleware(mangogzip.Zipper, mangolog.Logger, sessionMW, authenMW, rJson)
 
 	hardAuthenStack := new(mango.Stack)
 	hardAuthenStack.Middleware(mangogzip.Zipper, mangolog.Logger, sessionMW, hardAuthenMW, mainLayoutMW, rendererMW, rHtml)
@@ -61,6 +65,10 @@ func Mux() (mux *http.ServeMux) {
 
 	// Review related
 	p.Post("/review/create", mainStack.HandlerFunc(reviews.Create))
+
+	// Wish Item related
+	p.Post("/wish_item/add", mainAjaxStack.HandlerFunc(wishitems.Create))
+	p.Post("/wish_item/remove", mainAjaxStack.HandlerFunc(wishitems.Delete))
 
 	p.Get("/", mainStack.HandlerFunc(feeds.Index))
 	mux = http.NewServeMux()

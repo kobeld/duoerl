@@ -1,79 +1,84 @@
 {{ define "products/show" }}
 
-<div class="row">
+<div class="show-product" data-product="{{ .ApiProduct.Id }}">
 
-	<div class="span3">
-		<img src="http://placekitten.com/g/200/200">
+	<div class="row">
+
+		<div class="span3">
+			<p><img src="http://placekitten.com/g/200/200"></p>
+			<p><button class="btn btn-small btn-wish-item" type="button">Wish this</button></p>
+		</div>
+
+		<div class="span6">
+			<h4>{{ .ApiProduct.Name }}</h4>
+			<a href="/product/{{ .ApiProduct.Id }}/edit">Edit Product</a>
+
+			<dl class="dl-horizontal">
+
+				<dt>Alias:</dt>
+				<dd>{{ .ApiProduct.Alias }}</dd>
+
+				{{ if .ApiProduct.Author.Name }}
+				<dt>Author:</dt>
+				<dd>
+					<a href="/profile/{{ .ApiProduct.Author.Id }}">{{ .ApiProduct.Author.Name }}</a>
+				</dd>
+				{{ end }}
+
+				<dt>Brand:</dt>
+				<dd><a href="/brand/{{.ApiProduct.Brand.Id}}">{{ .ApiProduct.Brand.Name }}</a></dd>
+
+				<dt>Introduction:</dt>
+				<dd>{{ .ApiProduct.Intro }}</dd>
+			</dl>
+		</div>
+
 	</div>
 
-	<div class="span6">
-		<h4>{{ .ApiProduct.Name }}</h4>
-		<a href="/product/{{ .ApiProduct.Id }}/edit">Edit Product</a>
+	<hr>
 
-		<dl class="dl-horizontal">
+	<!-- Product Reviews -->
+	<div class="row">
+		<div class="span3">
+			<!-- Do nothing now -->
+		</div>
 
-			<dt>Alias:</dt>
-			<dd>{{ .ApiProduct.Alias }}</dd>
+		<div class="span9">
+			<h4>Reviews</h4>
 
-			{{ if .ApiProduct.Author.Name }}
-			<dt>Author:</dt>
-			<dd>
-				<a href="/profile/{{ .ApiProduct.Author.Id }}">{{ .ApiProduct.Author.Name }}</a>
-			</dd>
+			{{ range .ApiReviews }}
+			<div class="row">
+				<div class="span2">
+					<a href="/profile/{{ .Author.Id }}">{{ .Author.Name }}</a>
+				</div>
+				<div class="span4">{{ .Content }}</div>
+			</div>
 			{{ end }}
 
-			<dt>Brand:</dt>
-			<dd><a href="/brand/{{.ApiProduct.Brand.Id}}">{{ .ApiProduct.Brand.Name }}</a></dd>
-
-			<dt>Introduction:</dt>
-			<dd>{{ .ApiProduct.Intro }}</dd>
-		</dl>
-	</div>
-
-</div>
-
-<hr>
-
-<!-- Product Reviews -->
-<div class="row">
-	<div class="span3">
-		<!-- Do nothing now -->
-	</div>
-
-	<div class="span9">
-		<h4>Reviews</h4>
-
-		{{ range .ApiReviews }}
-		<div class="row">
-			<div class="span2">
-				<a href="/profile/{{ .Author.Id }}">{{ .Author.Name }}</a>
-			</div>
-			<div class="span4">{{ .Content }}</div>
 		</div>
-		{{ end }}
-
 	</div>
-</div>
 
-<!-- Review Form -->
-<div class="row">
-	<div class="span3">
-		<!-- Do nothing now -->
-	</div>
-	<div class="span9">
-		<hr>
-		<form action="/review/create" method="post" class="form-horizontal">
-			<input name="Id" type="hidden" value="{{ .ReviewInput.Id }}"/>
-			<input name="ProductId" type="hidden" value="{{ .ApiProduct.Id }}"/>
-			<fieldset>
-				<label>Write a Review</label>
-				<textarea rows="3" name="Content"></textarea>
-				<p></p>
-				<button type="submit" class="btn">Submit</button>
-			</fieldset>
-		</form>
+	<!-- Review Form -->
+	<div class="row">
+		<div class="span3">
+			<!-- Do nothing now -->
+		</div>
+		<div class="span9">
+			<hr>
+			<form action="/review/create" method="post" class="form-horizontal">
+				<input name="Id" type="hidden" value="{{ .ReviewInput.Id }}"/>
+				<input name="ProductId" type="hidden" value="{{ .ApiProduct.Id }}"/>
+				<fieldset>
+					<label>Write a Review</label>
+					<textarea rows="3" name="Content"></textarea>
+					<p></p>
+					<button type="submit" class="btn">Submit</button>
+				</fieldset>
+			</form>
 
+		</div>
 	</div>
+
 </div>
 
 {{ end }}
