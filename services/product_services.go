@@ -47,7 +47,7 @@ func AllProducts() (apiProducts []*duoerlapi.Product, err error) {
 	return
 }
 
-func ShowProduct(productId string) (apiProduct *duoerlapi.Product, err error) {
+func ShowProduct(productId, userId string) (apiProduct *duoerlapi.Product, err error) {
 	productOId, err := utils.ToObjectId(productId)
 	if err != nil {
 		utils.PrintStackAndError(err)
@@ -72,8 +72,13 @@ func ShowProduct(productId string) (apiProduct *duoerlapi.Product, err error) {
 		return
 	}
 
+	hasWished := false
+	if wishItem := GetWishItem(userId, productId); wishItem != nil {
+		hasWished = true
+	}
+
 	apiProduct = toApiProduct(product, brand, author)
-	apiProduct.HasWished = author.HasWishedProduct(product.Id)
+	apiProduct.HasWished = hasWished
 
 	return
 }

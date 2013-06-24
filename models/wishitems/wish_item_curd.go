@@ -16,22 +16,22 @@ func (this *WishItem) Save() error {
 	return mgodb.Save(WISH_ITEMS, this)
 }
 
-func DeleteByUserAndProductId(userId, productId bson.ObjectId) (err error) {
+func DeleteByUserAndProductId(userId, productId bson.ObjectId) error {
 	return DeleteWishItem(bson.M{"userid": userId, "productid": productId})
 }
 
-func FindByUserAndProductId(userId, productId bson.ObjectId) (wishItem *WishItem, err error) {
+func FindByUserAndProductId(userId, productId bson.ObjectId) (*WishItem, error) {
 	return FindOne(bson.M{"userid": userId, "productid": productId})
 }
 
-func FindByUserId(userId bson.ObjectId) (wishItems []*WishItem, err error) {
+func FindByUserId(userId bson.ObjectId) (r []*WishItem, err error) {
 	if !userId.Valid() {
 		return
 	}
 	return FindAll(bson.M{"userid": userId})
 }
 
-func FindByIds(ids []bson.ObjectId) (wishItems []*WishItem, err error) {
+func FindByIds(ids []bson.ObjectId) ([]*WishItem, error) {
 	return FindAll(bson.M{"_id": bson.M{"$in": ids}})
 }
 

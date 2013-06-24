@@ -2,11 +2,11 @@ package services
 
 import (
 	"github.com/kobeld/duoerl/models/accounts"
-	"github.com/kobeld/duoerl/models/wishitems"
+	"github.com/kobeld/duoerl/models/followbrands"
 	"github.com/kobeld/duoerl/utils"
 )
 
-func CreateWishItem(userId, productId string) (err error) {
+func CreateFollowBrand(userId, brandId string) (err error) {
 
 	userOId, err := utils.ToObjectId(userId)
 	if err != nil {
@@ -14,58 +14,29 @@ func CreateWishItem(userId, productId string) (err error) {
 		return
 	}
 
-	productOId, err := utils.ToObjectId(productId)
+	brandOId, err := utils.ToObjectId(brandId)
 	if err != nil {
 		utils.PrintStackAndError(err)
 		return
 	}
 
 	// Validation, check if the record has been created
-	wishItem, err := wishitems.FindByUserAndProductId(userOId, productOId)
-	if wishItem != nil {
+	followBrand, err := followbrands.FindByUserAndBrandId(userOId, brandOId)
+	if followBrand != nil {
 		return
 	}
 
-	wishItem = &wishitems.WishItem{
-		UserId:    userOId,
-		ProductId: productOId,
+	followBrand = &followbrands.FollowBrand{
+		UserId:  userOId,
+		BrandId: brandOId,
 	}
 
-	if err = wishItem.Save(); err != nil {
+	if err = followBrand.Save(); err != nil {
 		utils.PrintStackAndError(err)
 		return
 	}
 
-	if err = accounts.AddWishProduct(userOId, wishItem.ProductId); err != nil {
-		utils.PrintStackAndError(err)
-		return
-	}
-
-	return
-}
-
-func DeleteWishItem(userId, productId string) (err error) {
-
-	userOId, err := utils.ToObjectId(userId)
-	if err != nil {
-		utils.PrintStackAndError(err)
-		return
-	}
-
-	productOId, err := utils.ToObjectId(productId)
-	if err != nil {
-		utils.PrintStackAndError(err)
-		return
-	}
-
-	err = wishitems.DeleteByUserAndProductId(userOId, productOId)
-	if err != nil {
-		utils.PrintStackAndError(err)
-		return
-	}
-
-	err = accounts.RemoveWishProduct(userOId, productOId)
-	if err != nil {
+	if err = accounts.AddFollowBrand(userOId, followBrand.BrandId); err != nil {
 		utils.PrintStackAndError(err)
 		return
 	}
@@ -73,7 +44,7 @@ func DeleteWishItem(userId, productId string) (err error) {
 	return
 }
 
-func GetWishItem(userId, productId string) (wishItem *wishitems.WishItem) {
+func DeleteFollowBrand(userId, brandId string) (err error) {
 
 	userOId, err := utils.ToObjectId(userId)
 	if err != nil {
@@ -81,14 +52,41 @@ func GetWishItem(userId, productId string) (wishItem *wishitems.WishItem) {
 		return
 	}
 
-	productOId, err := utils.ToObjectId(productId)
+	brandOId, err := utils.ToObjectId(brandId)
 	if err != nil {
 		utils.PrintStackAndError(err)
 		return
 	}
 
-	wishItem, _ = wishitems.FindByUserAndProductId(userOId, productOId)
+	err = followbrands.DeleteByUserAndBrandId(userOId, brandOId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	err = accounts.RemoveFollowBrand(userOId, brandOId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
 
 	return
+}
 
+func GetFollowBrand(userId, brandId string) (followBrand *followbrands.FollowBrand) {
+	userOId, err := utils.ToObjectId(userId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	brandOId, err := utils.ToObjectId(brandId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	followBrand, _ = followbrands.FindByUserAndBrandId(userOId, brandOId)
+
+	return
 }

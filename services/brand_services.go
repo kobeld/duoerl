@@ -25,7 +25,7 @@ func AllBrands() (apiBrands []*duoerlapi.Brand, err error) {
 	return
 }
 
-func ShowBrand(brandId string) (apiBrand *duoerlapi.Brand, err error) {
+func ShowBrand(brandId, userId string) (apiBrand *duoerlapi.Brand, err error) {
 	brandOId, err := utils.ToObjectId(brandId)
 	if err != nil {
 		utils.PrintStackAndError(err)
@@ -38,7 +38,13 @@ func ShowBrand(brandId string) (apiBrand *duoerlapi.Brand, err error) {
 		return
 	}
 
+	hasFollowed := false
+	if followBrand := GetFollowBrand(userId, brandId); followBrand != nil {
+		hasFollowed = true
+	}
+
 	apiBrand = toApiBrand(brand)
+	apiBrand.HasFollowed = hasFollowed
 
 	return
 }

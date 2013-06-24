@@ -39,9 +39,10 @@ func Index(env Env) (status Status, headers Headers, body Body) {
 
 func Show(env Env) (status Status, headers Headers, body Body) {
 	productId := env.Request().URL.Query().Get(":id")
+	currentUserId := services.FetchAccountIdFromSession(env)
 
 	// Get Product
-	apiProduct, err := services.ShowProduct(productId)
+	apiProduct, err := services.ShowProduct(productId, currentUserId)
 	if err != nil {
 		panic(err)
 	}

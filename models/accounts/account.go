@@ -13,6 +13,7 @@ type Account struct {
 	Password        string
 	ConfirmPassword string `bson:"-" json:"-"`
 	WishProductIds  []bson.ObjectId
+	FollowBrandIds  []bson.ObjectId
 	Profile         Profile
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
@@ -63,6 +64,15 @@ func (this *Account) Gender() string {
 func (this *Account) HasWishedProduct(productId bson.ObjectId) bool {
 	for _, id := range this.WishProductIds {
 		if id == productId {
+			return true
+		}
+	}
+	return false
+}
+
+func (this *Account) HasFollowedBrand(brandId bson.ObjectId) bool {
+	for _, id := range this.FollowBrandIds {
+		if id == brandId {
 			return true
 		}
 	}

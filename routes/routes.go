@@ -5,6 +5,7 @@ import (
 	"github.com/kobeld/duoerl/handlers/accounts"
 	"github.com/kobeld/duoerl/handlers/brands"
 	"github.com/kobeld/duoerl/handlers/feeds"
+	"github.com/kobeld/duoerl/handlers/followbrands"
 	"github.com/kobeld/duoerl/handlers/products"
 	"github.com/kobeld/duoerl/handlers/reviews"
 	"github.com/kobeld/duoerl/handlers/sessions"
@@ -54,6 +55,9 @@ func Mux() (mux *http.ServeMux) {
 	p.Get("/brand/:id", mainStack.HandlerFunc(brands.Show))
 	p.Get("/brand/:id/edit", mainStack.HandlerFunc(brands.Edit))
 	p.Post("/brand/:id/edit", mainStack.HandlerFunc(brands.Update))
+	// Follow brand
+	p.Post("/brand/follow", mainStack.HandlerFunc(followbrands.Create))
+	p.Post("/brand/unfollow", mainStack.HandlerFunc(followbrands.Delete))
 
 	// Product related
 	p.Get("/products", mainStack.HandlerFunc(products.Index))

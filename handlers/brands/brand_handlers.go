@@ -17,6 +17,7 @@ var (
 type BrandViewData struct {
 	BrandInput *duoerlapi.BrandInput
 	Validated  *govalidations.Validated
+	ApiBrand   *duoerlapi.Brand
 	ApiBrands  []*duoerlapi.Brand
 }
 
@@ -44,13 +45,16 @@ func Index(env Env) (status Status, headers Headers, body Body) {
 
 func Show(env Env) (status Status, headers Headers, body Body) {
 	brandId := env.Request().URL.Query().Get(":id")
+	currentUserId := services.FetchAccountIdFromSession(env)
 
-	apiBrand, err := services.ShowBrand(brandId)
+	apiBrand, err := services.ShowBrand(brandId, currentUserId)
 	if err != nil {
 		panic(err)
 	}
 
-	mangotemplate.ForRender(env, "brands/show", apiBrand)
+	brandViewData := &BrandViewData{ApiBrand: apiBrand}
+
+	mangotemplate.ForRender(env, "brands/show", brandViewData)
 	return
 }
 

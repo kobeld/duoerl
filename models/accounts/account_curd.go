@@ -32,6 +32,18 @@ func RemoveWishProduct(userId, productId bson.ObjectId) (err error) {
 	return Update(selector, changer)
 }
 
+func AddFollowBrand(userId, brandId bson.ObjectId) (err error) {
+	selector := bson.M{"_id": userId}
+	changer := bson.M{"$push": bson.M{"followbrandids": brandId}}
+	return Update(selector, changer)
+}
+
+func RemoveFollowBrand(userId, brandId bson.ObjectId) (err error) {
+	selector := bson.M{"_id": userId}
+	changer := bson.M{"$pull": bson.M{"followbrandids": brandId}}
+	return Update(selector, changer)
+}
+
 func FindById(id bson.ObjectId) (account *Account, err error) {
 	if !id.Valid() {
 		return

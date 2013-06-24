@@ -1,28 +1,35 @@
 {{ define "brands/show" }}
 
-<div class="row">
+<div class="show-brand" data-brand="{{ .ApiBrand.Id }}">
 
-	<div class="span3">
-		<img src="http://placekitten.com/g/200/200">
-	</div>
+	<div class="row">
 
-	<div class="span6">
-		<h4>{{ .Name }}</h4>
-		<a href="{{ .Website }}">Official Site</a>
-		<a href="/brand/{{ .Id }}/edit">Edit Brand</a>
+		<div class="span3">
+			<img src="http://placekitten.com/g/200/200">
+			<p>
+				<button class="btn btn-small btn-follow-brand" type="button" {{ if .ApiBrand.HasFollowed }} style="display:none" {{ end }}>Follow Brand</button>
+				<button class="btn btn-small btn-unfollow-brand" type="button" {{ if not .ApiBrand.HasFollowed }} style="display:none" {{ end }}>Unfollow Brand</button>
+			</p>
+		</div>
 
-		<dl class="dl-horizontal">
-			<dt>Alias:</dt>
-			<dd>{{ .Alias }}</dd>
+		<div class="span6">
+			<h4>{{ .ApiBrand.Name }}</h4>
+			<a href="{{ .ApiBrand.Website }}">Official Site</a>
+			<a href="/brand/{{ .ApiBrand.Id }}/edit">Edit Brand</a>
 
-			<dt>Country:</dt>
-			<dd>{{ .Country }}</dd>
+			<dl class="dl-horizontal">
+				<dt>Alias:</dt>
+				<dd>{{ .ApiBrand.Alias }}</dd>
 
-			<dt>Introduction:</dt>
-			<dd>{{ .Intro }}</dd>
-		</dl>
+				<dt>Country:</dt>
+				<dd>{{ .ApiBrand.Country }}</dd>
+
+				<dt>Introduction:</dt>
+				<dd>{{ .ApiBrand.Intro }}</dd>
+			</dl>
+		</div>
+
 	</div>
 
 </div>
-
 {{ end }}
