@@ -1,7 +1,6 @@
 package accounts
 
 import (
-	"code.google.com/p/go.crypto/bcrypt"
 	"github.com/kobeld/duoerl/global"
 	"labix.org/v2/mgo/bson"
 	"time"
@@ -13,6 +12,7 @@ type Account struct {
 	Email           string
 	Password        string
 	ConfirmPassword string `bson:"-" json:"-"`
+	WishProductIds  []bson.ObjectId
 	Profile         Profile
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
@@ -37,17 +37,6 @@ func NewAccount() *Account {
 	return &Account{}
 }
 
-func LoginWith(email string, pwd string) (account *Account) {
-	a, _ := FindByEmail(email)
-	if a == nil {
-		return
-	}
-	if a.IsPwdMatch(pwd) {
-		account = a
-	}
-	return
-}
-
 func BuildAccountMap(dbAccounts []*Account) map[bson.ObjectId]*Account {
 	accountMap := make(map[bson.ObjectId]*Account)
 	for _, dbAccount := range dbAccounts {
@@ -55,24 +44,6 @@ func BuildAccountMap(dbAccounts []*Account) map[bson.ObjectId]*Account {
 	}
 
 	return accountMap
-}
-
-func (this *Account) IsPwdMatch(pwd string) bool {
-	if bcrypt.CompareHashAndPassword([]byte(this.Password), []byte(pwd)) != nil {
-		return false
-	}
-	return true
-}
-
-func (this *Account) Signup() (err error) {
-	this.CreatedAt = time.Now()
-	this.encryptPwd()
-	return this.Save()
-}
-
-func (this *Account) encryptPwd() {
-	hp, _ := bcrypt.GenerateFromPassword([]byte(this.Password), 0)
-	this.Password = string(hp)
 }
 
 func (this *Account) Birthday() string {
@@ -87,4 +58,13 @@ func (this *Account) Gender() string {
 		return global.TEXT_GENDER_FEMALE
 	}
 	return global.TEXT_GENDER_MALE
+}
+
+func (this *Account) HasWishedProduct(productId bson.ObjectId) bool {
+	for _, id := range this.WishProductIds {
+		if id == productId {
+			return true
+		}
+	}
+	return false
 }

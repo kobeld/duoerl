@@ -6,7 +6,10 @@
 
 		<div class="span3">
 			<p><img src="http://placekitten.com/g/200/200"></p>
-			<p><button class="btn btn-small btn-wish-item" type="button">Wish this</button></p>
+			<p>
+				<button class="btn btn-small btn-add-wishitem" type="button" {{ if .ApiProduct.HasWished }} style="display:none" {{ end }}>Wish this</button>
+				<button class="btn btn-small btn-remove-wishitem" type="button" {{ if not .ApiProduct.HasWished }} style="display:none" {{ end }}>Unwish this</button>
+			</p>
 		</div>
 
 		<div class="span6">

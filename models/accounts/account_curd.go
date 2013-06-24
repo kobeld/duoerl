@@ -2,6 +2,7 @@ package accounts
 
 import (
 	"github.com/sunfmin/mgodb"
+	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 	"strings"
 	"time"
@@ -17,6 +18,18 @@ func (this *Account) Save() error {
 	}
 	this.Email = strings.ToLower(this.Email)
 	return mgodb.Save(ACCOUNTS, this)
+}
+
+func AddWishProduct(userId, productId bson.ObjectId) (err error) {
+	selector := bson.M{"_id": userId}
+	changer := bson.M{"$push": bson.M{"wishproductids": productId}}
+	return Update(selector, changer)
+}
+
+func RemoveWishProduct(userId, productId bson.ObjectId) (err error) {
+	selector := bson.M{"_id": userId}
+	changer := bson.M{"$pull": bson.M{"wishproductids": productId}}
+	return Update(selector, changer)
 }
 
 func FindById(id bson.ObjectId) (account *Account, err error) {
@@ -41,5 +54,12 @@ func FindOne(query bson.M) (account *Account, err error) {
 
 func FindAll(query bson.M) (accounts []*Account, err error) {
 	err = mgodb.FindAll(ACCOUNTS, query, &accounts)
+	return
+}
+
+func Update(selector, changer bson.M) (err error) {
+	mgodb.CollectionDo(ACCOUNTS, func(rc *mgo.Collection) {
+		err = rc.Update(selector, changer)
+	})
 	return
 }

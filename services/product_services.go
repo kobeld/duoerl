@@ -73,6 +73,7 @@ func ShowProduct(productId string) (apiProduct *duoerlapi.Product, err error) {
 	}
 
 	apiProduct = toApiProduct(product, brand, author)
+	apiProduct.HasWished = author.HasWishedProduct(product.Id)
 
 	return
 }

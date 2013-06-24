@@ -20,5 +20,13 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 
 func Delete(env Env) (status Status, headers Headers, body Body) {
 
+	productId := env.Request().FormValue("pid")
+	userId := services.FetchAccountIdFromSession(env)
+
+	err := services.DeleteWishItem(userId, productId)
+	if err != nil {
+		panic(err)
+	}
+
 	return
 }

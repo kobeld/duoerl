@@ -2,6 +2,7 @@ package wishitems
 
 import (
 	"github.com/sunfmin/mgodb"
+	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 	"time"
 )
@@ -15,11 +16,12 @@ func (this *WishItem) Save() error {
 	return mgodb.Save(WISH_ITEMS, this)
 }
 
-func FindById(id bson.ObjectId) (wishItem *WishItem, err error) {
-	if !id.Valid() {
-		return
-	}
-	return FindOne(bson.M{"_id": id})
+func DeleteByUserAndProductId(userId, productId bson.ObjectId) (err error) {
+	return DeleteWishItem(bson.M{"userid": userId, "productid": productId})
+}
+
+func FindByUserAndProductId(userId, productId bson.ObjectId) (wishItem *WishItem, err error) {
+	return FindOne(bson.M{"userid": userId, "productid": productId})
 }
 
 func FindByUserId(userId bson.ObjectId) (wishItems []*WishItem, err error) {
@@ -40,5 +42,12 @@ func FindOne(query bson.M) (r *WishItem, err error) {
 
 func FindAll(query bson.M) (r []*WishItem, err error) {
 	err = mgodb.FindAll(WISH_ITEMS, query, &r)
+	return
+}
+
+func DeleteWishItem(query bson.M) (err error) {
+	mgodb.CollectionDo(WISH_ITEMS, func(rc *mgo.Collection) {
+		_, err = rc.RemoveAll(query)
+	})
 	return
 }
