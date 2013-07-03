@@ -1,6 +1,7 @@
 package products
 
 import (
+	"github.com/kobeld/duoerl/global"
 	"github.com/sunfmin/mgodb"
 	"labix.org/v2/mgo/bson"
 	"time"
@@ -17,8 +18,20 @@ func (this *Product) Save() error {
 	return mgodb.Save(PRODUCTS, this)
 }
 
+func FindByBrandId(brandId bson.ObjectId) (r []*Product, err error) {
+	if !brandId.Valid() {
+		err = global.InvalidIdError
+		return
+	}
+	query := bson.M{"brandid": brandId}
+	err = mgodb.FindAll(PRODUCTS, query, &r)
+	return
+
+}
+
 func FindById(id bson.ObjectId) (product *Product, err error) {
 	if !id.Valid() {
+		err = global.InvalidIdError
 		return
 	}
 	return FindOne(bson.M{"_id": id})

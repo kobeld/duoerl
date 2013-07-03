@@ -1,19 +1,19 @@
 package middlewares
 
 import (
-	"github.com/kobeld/duoerl/models/accounts"
+	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerl/services"
 	. "github.com/paulbellamy/mango"
 	"labix.org/v2/mgo/bson"
 	"net/http"
 )
 
-func AuthenticateAccount() Middleware {
+func AuthenticateUser() Middleware {
 	return func(env Env, app App) (status Status, headers Headers, body Body) {
-		accountId := services.FetchAccountIdFromSession(env)
-		if accountId != "" {
-			if account, _ := accounts.FindById(bson.ObjectIdHex(accountId)); account != nil {
-				services.PutAccountToEnv(env, account)
+		userId := services.FetchUserIdFromSession(env)
+		if userId != "" {
+			if user, _ := users.FindById(bson.ObjectIdHex(userId)); user != nil {
+				services.PutUserToEnv(env, user)
 			}
 		}
 
@@ -21,19 +21,19 @@ func AuthenticateAccount() Middleware {
 	}
 }
 
-func HardAuthenAccount() Middleware {
+func HardAuthenUser() Middleware {
 	return func(env Env, app App) (status Status, headers Headers, body Body) {
-		accountId := services.FetchAccountIdFromSession(env)
-		if accountId == "" {
+		userId := services.FetchUserIdFromSession(env)
+		if userId == "" {
 			return Redirect(http.StatusFound, "/logout")
 		}
 
-		account, _ := accounts.FindById(bson.ObjectIdHex(accountId))
-		if account == nil {
+		user, _ := users.FindById(bson.ObjectIdHex(userId))
+		if user == nil {
 			return Redirect(http.StatusFound, "/logout")
 		}
 
-		services.PutAccountToEnv(env, account)
+		services.PutUserToEnv(env, user)
 		return app(env)
 	}
 }

@@ -1,6 +1,7 @@
 package products
 
 import (
+	"fmt"
 	"labix.org/v2/mgo/bson"
 	"time"
 )
@@ -22,6 +23,10 @@ func (this *Product) MakeId() interface{} {
 		this.Id = bson.NewObjectId()
 	}
 	return this.Id
+}
+
+func (this *Product) Link() string {
+	return fmt.Sprintf("/product/%s", this.Id.Hex())
 }
 
 func CollectBrandAndAuthorIds(dbProducts []*Product) (brandIds, authorIds []bson.ObjectId) {

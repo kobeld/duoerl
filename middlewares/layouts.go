@@ -2,7 +2,7 @@ package middlewares
 
 import (
 	"github.com/kobeld/duoerl/handlers"
-	"github.com/kobeld/duoerl/models/accounts"
+	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerl/services"
 	. "github.com/paulbellamy/mango"
 	"github.com/sunfmin/mangotemplate"
@@ -19,8 +19,8 @@ var (
 )
 
 type Header struct {
-	AssetsVersion  int
-	CurrentAccount *accounts.Account
+	AssetsVersion int
+	CurrentUser   *users.User
 }
 
 type MangoTemplateProvider struct{}
@@ -28,7 +28,7 @@ type MangoTemplateProvider struct{}
 func (h *MangoTemplateProvider) LayoutData(env Env) interface{} {
 
 	header := &Header{
-		CurrentAccount: services.FetchAccountFromEnv(env),
+		CurrentUser: services.FetchUserFromEnv(env),
 	}
 
 	return header

@@ -1,4 +1,6 @@
-{{ define "accounts/profile" }}
+{{ define "users/show" }}
+
+{{ $profile := .ApiUser.Profile }}
 
 <div class="row">
 	<div class="span3">
@@ -8,29 +10,29 @@
 		</p>
 	</div>
 	<div class="span6">
-		<h4>{{ .Account.Name }}</h4>
-		{{ if .IsCurrentAccount }}
+		<h4>{{ .ApiUser.Name }}</h4>
+		{{ if .IsCurrent }}
 			<a href="/profile/edit">Edit Profile</a>
 		{{ end }}
 
 		<dl class="dl-horizontal">
 			<dt>Email:</dt>
-			<dd>{{ .Account.Email }}</dd>
+			<dd>{{ .ApiUser.Email }}</dd>
 
 			<dt>Gender:</dt>
-			<dd>{{ .Account.Gender }}</dd>
+			<dd>{{ $profile.Gender }}</dd>
 
 			<dt>Birthday:</dt>
-			<dd>{{ .Account.Birthday }}</dd>
+			<dd>{{ $profile.Birthday }}</dd>
 
 			<dt>Location:</dt>
-			<dd>{{ .Account.Profile.Location }} </dd>
+			<dd>{{ $profile.Location }} </dd>
 
 			<dt>Hair texture:</dt>
-			<dd>{{ .Account.Profile.HairTexture }}</dd>
+			<dd>{{ $profile.HairTexture }}</dd>
 
 			<dt>Description:</dt>
-			<dd>{{ .Account.Profile.Description }}</dd>
+			<dd>{{ $profile.Description }}</dd>
 		</dl>
 	</div>
 </div>

@@ -1,32 +1,25 @@
 {{ define "feeds/index" }}
 
-	<h2>Products</h2>
-	<div class="row  text-center">
-		<div class="span3">
-			<img src="http://lorempixel.com/g/150/150/" class="img-rounded">
-			<h4>Name one</h4>
-		</div>
-		<div class="span3">
-			<img src="http://lorempixel.com/g/150/150/" class="img-rounded">
-			<h4>Name Two</h4>
-		</div>
-		<div class="span3">
-			<img src="http://lorempixel.com/g/150/150/" class="img-rounded">
-			<h4>Name Three</h4>
+	<h3>Products</h3>
+	<div class="row">
+		<div class="span9">
+			<ul class="inline">
+				{{ range .ApiProducts }}
+					<li><img src="http://lorempixel.com/g/150/150/"><h5 class="text-center"><a href="{{ .Link }}">{{ .Name }}</a></h5></li>
+				{{ end }}
+			</ul>
 		</div>
 	</div>
 
 	<hr>
 
-	<h2>Brands</h2>
+	<h3>Brands</h3>
 	<div class="row">
-		<div class="span12">
+		<div class="span9">
 			<ul class="inline">
-				<li><img src="http://lorempixel.com/g/100/100/" alt=""></li>
-				<li><img src="http://lorempixel.com/g/100/100/" alt=""></li>
-				<li><img src="http://lorempixel.com/g/100/100/" alt=""></li>
-				<li><img src="http://lorempixel.com/g/100/100/" alt=""></li>
-				<li><img src="http://lorempixel.com/g/100/100/" alt=""></li>
+				{{ range .ApiBrands }}
+					<li><img src="http://lorempixel.com/g/120/120/"><h5 class="text-center"><a href="{{ .Link }}">{{ .Name }}</a></h5></li>
+				{{ end }}
 			</ul>
 		</div>
 	</div>
@@ -34,7 +27,15 @@
 
 	<hr>
 
-	<h2>Users</h2>
-
+	<h3>Users</h3>
+	<div class="row">
+		<div class="span9">
+			<ul class="inline">
+				{{ range .ApiUsers }}
+					<li><img src="http://lorempixel.com/g/100/100/"><h5 class="text-center"><a href="{{ .Link }}">{{ .Name }}</a></h5></li>
+				{{ end }}
+			</ul>
+		</div>
+	</div>
 
 {{ end }}

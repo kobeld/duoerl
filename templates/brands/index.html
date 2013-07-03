@@ -22,7 +22,7 @@
 			{{ range $index, $apiBrand := .ApiBrands }}
 			<tr>
 				<td>{{ $index }}</td>
-				<td><a href="/brand/{{ $apiBrand.Id }}">{{ $apiBrand.Name }}</a></td>
+				<td><a href="{{ .Link }}">{{ $apiBrand.Name }}</a></td>
 				<td>{{ $apiBrand.Alias }}</td>
 				<td>{{ $apiBrand.Country }}</td>
 				<td>{{ $apiBrand.Intro }}</td>

@@ -23,12 +23,12 @@
 			{{ range $index, $apiProduct := .ApiProducts }}
 			<tr>
 				<td>{{ $index }}</td>
-				<td><a href="/product/{{ $apiProduct.Id }}">{{ $apiProduct.Name }}</a></td>
+				<td><a href="{{ $apiProduct.Link }}">{{ $apiProduct.Name }}</a></td>
 				<td>{{ $apiProduct.Alias }}</td>
-				<td><a href="/brand/{{ $apiProduct.Brand.Id }}">{{ $apiProduct.Brand.Name }}</a></td>
+				<td><a href="{{ $apiProduct.Brand.Link }}">{{ $apiProduct.Brand.Name }}</a></td>
 				<td>
 				{{ if $apiProduct.Author.Name }}
-					<a href="/profile/{{ $apiProduct.Author.Id }}">{{ $apiProduct.Author.Name }}</a>
+					<a href="{{ $apiProduct.Author.Link }}">{{ $apiProduct.Author.Name }}</a>
 				{{ end }}
 				</td>
 				<td>{{ $apiProduct.Intro }}</td>

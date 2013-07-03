@@ -2,13 +2,13 @@ package routes
 
 import (
 	"github.com/bmizerany/pat"
-	"github.com/kobeld/duoerl/handlers/accounts"
 	"github.com/kobeld/duoerl/handlers/brands"
 	"github.com/kobeld/duoerl/handlers/feeds"
 	"github.com/kobeld/duoerl/handlers/followbrands"
 	"github.com/kobeld/duoerl/handlers/products"
 	"github.com/kobeld/duoerl/handlers/reviews"
 	"github.com/kobeld/duoerl/handlers/sessions"
+	"github.com/kobeld/duoerl/handlers/users"
 	"github.com/kobeld/duoerl/handlers/wishitems"
 	"github.com/kobeld/duoerl/middlewares"
 	"github.com/kobeld/mangogzip"
@@ -23,8 +23,8 @@ func Mux() (mux *http.ServeMux) {
 	sessionMW := mango.Sessions("f908b1c425062e95d30b8d30de7123458", "duoerl", &mango.CookieOptions{Path: "/", MaxAge: 3600 * 24 * 7})
 
 	rendererMW := middlewares.ProduceRenderer()
-	authenMW := middlewares.AuthenticateAccount()
-	hardAuthenMW := middlewares.HardAuthenAccount()
+	authenMW := middlewares.AuthenticateUser()
+	hardAuthenMW := middlewares.HardAuthenUser()
 	rHtml, rJson := middlewares.RespondHtml(), middlewares.RespondJson()
 
 	mainLayoutMW := middlewares.ProduceLayout(middlewares.MAIN_LAYOUT)
@@ -37,16 +37,16 @@ func Mux() (mux *http.ServeMux) {
 	hardAuthenStack := new(mango.Stack)
 	hardAuthenStack.Middleware(mangogzip.Zipper, mangolog.Logger, sessionMW, hardAuthenMW, mainLayoutMW, rendererMW, rHtml)
 
-	// Account related
+	// User related
 	p.Get("/login", mainStack.HandlerFunc(sessions.LoginPage))
 	p.Post("/login", mainStack.HandlerFunc(sessions.LoginAction))
 	p.Get("/signup", mainStack.HandlerFunc(sessions.SignupPage))
 	p.Post("/signup", mainStack.HandlerFunc(sessions.SignupAction))
 	p.Get("/logout", mainStack.HandlerFunc(sessions.Logout))
 
-	p.Post("/profile/edit", hardAuthenStack.HandlerFunc(accounts.EditProfileAction))
-	p.Get("/profile/edit", hardAuthenStack.HandlerFunc(accounts.EditProfile))
-	p.Get("/profile/:id", mainStack.HandlerFunc(accounts.ShowProfile))
+	p.Post("/user/edit", hardAuthenStack.HandlerFunc(users.Update))
+	p.Get("/user/edit", hardAuthenStack.HandlerFunc(users.Edit))
+	p.Get("/user/:id", mainStack.HandlerFunc(users.Show))
 
 	// Brand related
 	p.Get("/brands", mainStack.HandlerFunc(brands.Index))

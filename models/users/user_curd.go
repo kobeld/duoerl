@@ -1,4 +1,4 @@
-package accounts
+package users
 
 import (
 	"github.com/sunfmin/mgodb"
@@ -8,16 +8,16 @@ import (
 	"time"
 )
 
-const ACCOUNTS = "accounts"
+const USERS = "users"
 
-func (this *Account) Save() error {
+func (this *User) Save() error {
 	if this.CreatedAt.IsZero() {
 		this.CreatedAt = time.Now()
 	} else {
 		this.UpdatedAt = time.Now()
 	}
 	this.Email = strings.ToLower(this.Email)
-	return mgodb.Save(ACCOUNTS, this)
+	return mgodb.Save(USERS, this)
 }
 
 func AddWishProduct(userId, productId bson.ObjectId) (err error) {
@@ -44,33 +44,33 @@ func RemoveFollowBrand(userId, brandId bson.ObjectId) (err error) {
 	return Update(selector, changer)
 }
 
-func FindById(id bson.ObjectId) (account *Account, err error) {
+func FindById(id bson.ObjectId) (user *User, err error) {
 	if !id.Valid() {
 		return
 	}
 	return FindOne(bson.M{"_id": id})
 }
 
-func FindByIds(ids []bson.ObjectId) ([]*Account, error) {
+func FindByIds(ids []bson.ObjectId) ([]*User, error) {
 	return FindAll(bson.M{"_id": bson.M{"$in": ids}})
 }
 
-func FindByEmail(email string) (*Account, error) {
+func FindByEmail(email string) (*User, error) {
 	return FindOne(bson.M{"email": strings.ToLower(email)})
 }
 
-func FindOne(query bson.M) (account *Account, err error) {
-	err = mgodb.FindOne(ACCOUNTS, query, &account)
+func FindOne(query bson.M) (user *User, err error) {
+	err = mgodb.FindOne(USERS, query, &user)
 	return
 }
 
-func FindAll(query bson.M) (accounts []*Account, err error) {
-	err = mgodb.FindAll(ACCOUNTS, query, &accounts)
+func FindAll(query bson.M) (users []*User, err error) {
+	err = mgodb.FindAll(USERS, query, &users)
 	return
 }
 
 func Update(selector, changer bson.M) (err error) {
-	mgodb.CollectionDo(ACCOUNTS, func(rc *mgo.Collection) {
+	mgodb.CollectionDo(USERS, func(rc *mgo.Collection) {
 		err = rc.Update(selector, changer)
 	})
 	return

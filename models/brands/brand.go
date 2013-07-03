@@ -1,6 +1,7 @@
 package brands
 
 import (
+	"fmt"
 	"labix.org/v2/mgo/bson"
 	"time"
 )
@@ -22,6 +23,10 @@ func (this *Brand) MakeId() interface{} {
 		this.Id = bson.NewObjectId()
 	}
 	return this.Id
+}
+
+func (this *Brand) Link() string {
+	return fmt.Sprintf("/brand/%s", this.Id.Hex())
 }
 
 func BuildBrandMap(dbBrands []*Brand) map[bson.ObjectId]*Brand {

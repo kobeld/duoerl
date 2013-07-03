@@ -39,7 +39,7 @@ func Index(env Env) (status Status, headers Headers, body Body) {
 
 func Show(env Env) (status Status, headers Headers, body Body) {
 	productId := env.Request().URL.Query().Get(":id")
-	currentUserId := services.FetchAccountIdFromSession(env)
+	currentUserId := services.FetchUserIdFromSession(env)
 
 	// Get Product
 	apiProduct, err := services.ShowProduct(productId, currentUserId)
@@ -84,7 +84,7 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 
 	productInput := new(duoerlapi.ProductInput)
 	formdata.UnmarshalByNames(env.Request().Request, &productInput, productFields)
-	productInput.AuthorId = services.FetchAccountIdFromSession(env)
+	productInput.AuthorId = services.FetchUserIdFromSession(env)
 
 	result, err := services.CreateProduct(productInput)
 	if validated, ok := err.(*govalidations.Validated); ok {

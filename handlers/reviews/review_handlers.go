@@ -18,7 +18,7 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 
 	reviewInput := new(duoerlapi.ReviewInput)
 	formdata.UnmarshalByNames(env.Request().Request, &reviewInput, reviewFields)
-	reviewInput.AuthorId = services.FetchAccountIdFromSession(env)
+	reviewInput.AuthorId = services.FetchUserIdFromSession(env)
 
 	result, err := services.CreateReview(reviewInput)
 	if validated, ok := err.(*govalidations.Validated); ok {

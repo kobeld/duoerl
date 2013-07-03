@@ -24,12 +24,12 @@
 				{{ if .ApiProduct.Author.Name }}
 				<dt>Author:</dt>
 				<dd>
-					<a href="/profile/{{ .ApiProduct.Author.Id }}">{{ .ApiProduct.Author.Name }}</a>
+					<a href="{{ .ApiProduct.Author.Link }}">{{ .ApiProduct.Author.Name }}</a>
 				</dd>
 				{{ end }}
 
 				<dt>Brand:</dt>
-				<dd><a href="/brand/{{.ApiProduct.Brand.Id}}">{{ .ApiProduct.Brand.Name }}</a></dd>
+				<dd><a href="{{ .ApiProduct.Brand.Link }}">{{ .ApiProduct.Brand.Name }}</a></dd>
 
 				<dt>Introduction:</dt>
 				<dd>{{ .ApiProduct.Intro }}</dd>
@@ -52,7 +52,7 @@
 			{{ range .ApiReviews }}
 			<div class="row">
 				<div class="span2">
-					<a href="/profile/{{ .Author.Id }}">{{ .Author.Name }}</a>
+					<a href="{{ .Author.Link }}">{{ .Author.Name }}</a>
 				</div>
 				<div class="span4">{{ .Content }}</div>
 			</div>

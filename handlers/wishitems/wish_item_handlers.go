@@ -8,7 +8,7 @@ import (
 func Create(env Env) (status Status, headers Headers, body Body) {
 
 	productId := env.Request().FormValue("pid")
-	userId := services.FetchAccountIdFromSession(env)
+	userId := services.FetchUserIdFromSession(env)
 
 	err := services.CreateWishItem(userId, productId)
 	if err != nil {
@@ -21,7 +21,7 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 func Delete(env Env) (status Status, headers Headers, body Body) {
 
 	productId := env.Request().FormValue("pid")
-	userId := services.FetchAccountIdFromSession(env)
+	userId := services.FetchUserIdFromSession(env)
 
 	err := services.DeleteWishItem(userId, productId)
 	if err != nil {

@@ -8,9 +8,9 @@
 				<li class="active"><a href="/products">Products</a></li>
 			</ul>
 			<ul class="nav pull-right">
-				{{ if .Layout.CurrentAccount }}
-					<li><a href="/profile/{{.Layout.CurrentAccount.Id.Hex}}">
-						<strong>{{ .Layout.CurrentAccount.Name }}</strong></a></li>
+				{{ if .Layout.CurrentUser }}
+					<li><a href="{{.Layout.CurrentUser.Link }}">
+						<strong>{{ .Layout.CurrentUser.Name }}</strong></a></li>
 					<li><a href="/logout">Logout</a></li>
 				{{ else }}
 					<li><a href="/login">Login</a></li>

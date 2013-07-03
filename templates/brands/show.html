@@ -31,5 +31,18 @@
 
 	</div>
 
+	<hr>
+
+	<h4>Products</h4>
+	<div class="row">
+		<div class="span9">
+			<ul class="inline">
+				{{ range .ApiProducts }}
+					<li><img src="http://lorempixel.com/g/100/100/"><h5 class="text-center"><a href="{{ .Link }}">{{ .Name }}</a></h5></li>
+				{{ end }}
+			</ul>
+		</div>
+	</div>
+
 </div>
 {{ end }}

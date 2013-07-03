@@ -91,6 +91,7 @@ func toApiBrand(brand *brands.Brand) *duoerlapi.Brand {
 	if brand != nil {
 		apiBrand = &duoerlapi.Brand{
 			Id:      brand.Id.Hex(),
+			Link:    brand.Link(),
 			Name:    brand.Name,
 			Alias:   brand.Alias,
 			Intro:   brand.Intro,

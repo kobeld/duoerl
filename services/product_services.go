@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/kobeld/duoerl/models/accounts"
 	"github.com/kobeld/duoerl/models/brands"
 	"github.com/kobeld/duoerl/models/products"
+	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerl/utils"
 	"github.com/kobeld/duoerlapi"
 	"labix.org/v2/mgo/bson"
@@ -32,7 +32,7 @@ func AllProducts() (apiProducts []*duoerlapi.Product, err error) {
 		return
 	}
 
-	dbAuthors, err := accounts.FindByIds(authorIds)
+	dbAuthors, err := users.FindByIds(authorIds)
 	if err != nil {
 		utils.PrintStackAndError(err)
 		return
@@ -40,9 +40,30 @@ func AllProducts() (apiProducts []*duoerlapi.Product, err error) {
 
 	// Build the brandMap and authorMap
 	brandMap := brands.BuildBrandMap(dbBrands)
-	authorMap := accounts.BuildAccountMap(dbAuthors)
+	authorMap := users.BuildUserMap(dbAuthors)
 
 	apiProducts = toApiProducts(dbProducts, brandMap, authorMap)
+
+	return
+}
+
+func BrandProducts(brandId string) (apiProducts []*duoerlapi.Product, err error) {
+
+	brandOId, err := utils.ToObjectId(brandId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	productz, err := products.FindByBrandId(brandOId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	for _, product := range productz {
+		apiProducts = append(apiProducts, toApiProduct(product, nil, nil))
+	}
 
 	return
 }
@@ -66,7 +87,7 @@ func ShowProduct(productId, userId string) (apiProduct *duoerlapi.Product, err e
 		return
 	}
 
-	author, err := accounts.FindById(product.AuthorId)
+	author, err := users.FindById(product.AuthorId)
 	if err != nil {
 		utils.PrintStackAndError(err)
 		return
@@ -124,7 +145,7 @@ func CreateProduct(input *duoerlapi.ProductInput) (originInput *duoerlapi.Produc
 }
 
 func toApiProducts(dbProducts []*products.Product, brandMap map[bson.ObjectId]*brands.Brand,
-	authorMap map[bson.ObjectId]*accounts.Account) (apiProducts []*duoerlapi.Product) {
+	authorMap map[bson.ObjectId]*users.User) (apiProducts []*duoerlapi.Product) {
 
 	for _, dbProduct := range dbProducts {
 		brand := brandMap[dbProduct.BrandId]
@@ -135,16 +156,17 @@ func toApiProducts(dbProducts []*products.Product, brandMap map[bson.ObjectId]*b
 	return
 }
 
-func toApiProduct(product *products.Product, brand *brands.Brand, author *accounts.Account) *duoerlapi.Product {
+func toApiProduct(product *products.Product, brand *brands.Brand, author *users.User) *duoerlapi.Product {
 	apiProduct := new(duoerlapi.Product)
 	if product != nil {
 		apiProduct = &duoerlapi.Product{
 			Id:     product.Id.Hex(),
+			Link:   product.Link(),
 			Name:   product.Name,
 			Alias:  product.Alias,
 			Intro:  product.Intro,
 			Brand:  toApiBrand(brand),
-			Author: toApiAccount(author),
+			Author: toApiUser(author),
 		}
 	}
 

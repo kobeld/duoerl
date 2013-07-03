@@ -1,6 +1,7 @@
 package wishitems
 
 import (
+	"github.com/kobeld/duoerl/global"
 	"github.com/sunfmin/mgodb"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
@@ -26,6 +27,7 @@ func FindByUserAndProductId(userId, productId bson.ObjectId) (*WishItem, error) 
 
 func FindByUserId(userId bson.ObjectId) (r []*WishItem, err error) {
 	if !userId.Valid() {
+		err = global.InvalidIdError
 		return
 	}
 	return FindAll(bson.M{"userid": userId})

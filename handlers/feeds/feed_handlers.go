@@ -10,6 +10,7 @@ import (
 type HomeViewData struct {
 	ApiProducts []*duoerlapi.Product
 	ApiBrands   []*duoerlapi.Brand
+	ApiUsers    []*duoerlapi.User
 }
 
 func Index(env Env) (status Status, headers Headers, body Body) {
@@ -24,9 +25,15 @@ func Index(env Env) (status Status, headers Headers, body Body) {
 		panic(err)
 	}
 
+	apiUsers, err := services.GetUsers()
+	if err != nil {
+		panic(err)
+	}
+
 	homeViewData := &HomeViewData{
 		ApiProducts: apiProducts,
 		ApiBrands:   apiBrands,
+		ApiUsers:    apiUsers,
 	}
 
 	mangotemplate.ForRender(env, "feeds/index", homeViewData)

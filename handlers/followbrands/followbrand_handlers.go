@@ -8,7 +8,7 @@ import (
 func Create(env Env) (status Status, headers Headers, body Body) {
 
 	brandId := env.Request().FormValue("bid")
-	userId := services.FetchAccountIdFromSession(env)
+	userId := services.FetchUserIdFromSession(env)
 
 	err := services.CreateFollowBrand(userId, brandId)
 	if err != nil {
@@ -21,7 +21,7 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 func Delete(env Env) (status Status, headers Headers, body Body) {
 
 	brandId := env.Request().FormValue("bid")
-	userId := services.FetchAccountIdFromSession(env)
+	userId := services.FetchUserIdFromSession(env)
 
 	err := services.DeleteFollowBrand(userId, brandId)
 	if err != nil {

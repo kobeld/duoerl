@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/kobeld/duoerl/models/accounts"
 	"github.com/kobeld/duoerl/models/products"
 	"github.com/kobeld/duoerl/models/reviews"
+	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerl/utils"
 	"github.com/kobeld/duoerlapi"
 	"labix.org/v2/mgo/bson"
@@ -74,7 +74,7 @@ func ShowReviewsInProduct(productId string) (apiReviews []*duoerlapi.Review, err
 
 	authorIds, productIds := reviews.CollectAuthorAndProductIds(dbReviews)
 
-	dbAuthors, err := accounts.FindByIds(authorIds)
+	dbAuthors, err := users.FindByIds(authorIds)
 	if err != nil {
 		utils.PrintStackAndError(err)
 		return
@@ -87,7 +87,7 @@ func ShowReviewsInProduct(productId string) (apiReviews []*duoerlapi.Review, err
 	}
 
 	productMap := products.BuildProductMap(dbProducts)
-	authorMap := accounts.BuildAccountMap(dbAuthors)
+	authorMap := users.BuildUserMap(dbAuthors)
 
 	apiReviews = toApiReviews(dbReviews, productMap, authorMap)
 
@@ -97,7 +97,7 @@ func ShowReviewsInProduct(productId string) (apiReviews []*duoerlapi.Review, err
 // ------------- Private  ---------------
 
 func toApiReviews(dbReviews []*reviews.Review, productMap map[bson.ObjectId]*products.Product,
-	authorMap map[bson.ObjectId]*accounts.Account) (apiReviews []*duoerlapi.Review) {
+	authorMap map[bson.ObjectId]*users.User) (apiReviews []*duoerlapi.Review) {
 
 	for _, dbReview := range dbReviews {
 		dbProduct := productMap[dbReview.ProductId]
@@ -108,14 +108,14 @@ func toApiReviews(dbReviews []*reviews.Review, productMap map[bson.ObjectId]*pro
 	return
 }
 
-func toApiReview(dbReview *reviews.Review, dbProduct *products.Product, dbAuthor *accounts.Account) *duoerlapi.Review {
+func toApiReview(dbReview *reviews.Review, dbProduct *products.Product, dbAuthor *users.User) *duoerlapi.Review {
 	apiReview := new(duoerlapi.Review)
 	if dbReview != nil {
 		apiReview = &duoerlapi.Review{
 			Id:      dbReview.Id.Hex(),
 			Content: dbReview.Content,
 			Product: toApiProduct(dbProduct, nil, dbAuthor),
-			Author:  toApiAccount(dbAuthor),
+			Author:  toApiUser(dbAuthor),
 		}
 	}
 	return apiReview

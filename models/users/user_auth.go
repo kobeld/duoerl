@@ -1,35 +1,35 @@
-package accounts
+package users
 
 import (
 	"code.google.com/p/go.crypto/bcrypt"
 	"time"
 )
 
-func LoginWith(email string, pwd string) (account *Account) {
+func LoginWith(email string, pwd string) (user *User) {
 	a, _ := FindByEmail(email)
 	if a == nil {
 		return
 	}
 	if a.IsPwdMatch(pwd) {
-		account = a
+		user = a
 	}
 	return
 }
 
-func (this *Account) IsPwdMatch(pwd string) bool {
+func (this *User) IsPwdMatch(pwd string) bool {
 	if bcrypt.CompareHashAndPassword([]byte(this.Password), []byte(pwd)) != nil {
 		return false
 	}
 	return true
 }
 
-func (this *Account) Signup() (err error) {
+func (this *User) Signup() (err error) {
 	this.CreatedAt = time.Now()
 	this.encryptPwd()
 	return this.Save()
 }
 
-func (this *Account) encryptPwd() {
+func (this *User) encryptPwd() {
 	hp, _ := bcrypt.GenerateFromPassword([]byte(this.Password), 0)
 	this.Password = string(hp)
 }
