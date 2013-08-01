@@ -10,7 +10,7 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 	productId := env.Request().FormValue("pid")
 	userId := services.FetchUserIdFromSession(env)
 
-	err := services.CreateWishItem(userId, productId)
+	err := services.AddWishItem(userId, productId)
 	if err != nil {
 		panic(err)
 	}
@@ -23,7 +23,7 @@ func Delete(env Env) (status Status, headers Headers, body Body) {
 	productId := env.Request().FormValue("pid")
 	userId := services.FetchUserIdFromSession(env)
 
-	err := services.DeleteWishItem(userId, productId)
+	err := services.RemoveWishItem(userId, productId)
 	if err != nil {
 		panic(err)
 	}

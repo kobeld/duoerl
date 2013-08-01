@@ -10,7 +10,13 @@
 				<button class="btn btn-small btn-add-wishitem" type="button" {{ if .ApiProduct.HasWished }} style="display:none" {{ end }}>Wish this</button>
 				<button class="btn btn-small btn-remove-wishitem" type="button" {{ if not .ApiProduct.HasWished }} style="display:none" {{ end }}>Unwish this</button>
 			</p>
+			<p>
+				<a href="#ownitem-modal" role="button" class="btn btn-small link-add-ownitem-trigger" data-toggle="modal" {{ if .ApiProduct.HasOwned }} style="display:none" {{ end }}>Own this</a>
+				<button class="btn btn-small btn-remove-ownitem" type="button" {{ if not .ApiProduct.HasOwned }} style="display:none" {{ end }}>Remove Owning</button>
+			</p>
 		</div>
+
+
 
 		<div class="span6">
 			<h4>{{ .ApiProduct.Name }}</h4>
@@ -80,6 +86,35 @@
 			</form>
 
 		</div>
+	</div>
+
+	<!-- Modal -->
+	<div id="ownitem-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">I own this</h3>
+		</div>
+
+	  	<div class="modal-body form-horizontal">
+			<div class="control-group">
+				<label class="control-label" for="selectbasic">Got from</label>
+				<div class="controls">
+					<select name="selectbasic" class="input-large select-gotFrom">
+
+						{{ range $value, $text := .GotFromOptions }}
+							<option value="{{ $value }}">{{ $text }}</option>
+						{{ end }}
+
+					</select>
+				</div>
+			</div>
+	  	</div>
+
+	  	<div class="modal-footer">
+	    	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	    	<button type="btn" class="btn btn-primary btn-add-ownitem">Save</button>
+	  	</div>
 	</div>
 
 </div>

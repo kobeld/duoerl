@@ -5,6 +5,7 @@ import (
 	"github.com/kobeld/duoerl/handlers/brands"
 	"github.com/kobeld/duoerl/handlers/feeds"
 	"github.com/kobeld/duoerl/handlers/followbrands"
+	"github.com/kobeld/duoerl/handlers/ownitems"
 	"github.com/kobeld/duoerl/handlers/products"
 	"github.com/kobeld/duoerl/handlers/reviews"
 	"github.com/kobeld/duoerl/handlers/sessions"
@@ -37,7 +38,7 @@ func Mux() (mux *http.ServeMux) {
 	hardAuthenStack := new(mango.Stack)
 	hardAuthenStack.Middleware(mangogzip.Zipper, mangolog.Logger, sessionMW, hardAuthenMW, mainLayoutMW, rendererMW, rHtml)
 
-	// User related
+	// User
 	p.Get("/login", mainStack.HandlerFunc(sessions.LoginPage))
 	p.Post("/login", mainStack.HandlerFunc(sessions.LoginAction))
 	p.Get("/signup", mainStack.HandlerFunc(sessions.SignupPage))
@@ -48,7 +49,7 @@ func Mux() (mux *http.ServeMux) {
 	p.Get("/user/edit", hardAuthenStack.HandlerFunc(users.Edit))
 	p.Get("/user/:id", mainStack.HandlerFunc(users.Show))
 
-	// Brand related
+	// Brand
 	p.Get("/brands", mainStack.HandlerFunc(brands.Index))
 	p.Get("/brand/new", mainStack.HandlerFunc(brands.New))
 	p.Post("/brand/create", mainStack.HandlerFunc(brands.Create))
@@ -59,7 +60,7 @@ func Mux() (mux *http.ServeMux) {
 	p.Post("/brand/follow", mainStack.HandlerFunc(followbrands.Create))
 	p.Post("/brand/unfollow", mainStack.HandlerFunc(followbrands.Delete))
 
-	// Product related
+	// Product
 	p.Get("/products", mainStack.HandlerFunc(products.Index))
 	p.Get("/product/new", mainStack.HandlerFunc(products.New))
 	p.Post("/product/create", mainStack.HandlerFunc(products.Create))
@@ -67,12 +68,15 @@ func Mux() (mux *http.ServeMux) {
 	// p.Get("/product/:id/edit", mainStack.HandlerFunc(products.Edit))
 	// p.Post("/product/:id/edit", mainStack.HandlerFunc(products.Update))
 
-	// Review related
+	// Review
 	p.Post("/review/create", mainStack.HandlerFunc(reviews.Create))
 
-	// Wish Item related
+	// Wish Item
 	p.Post("/wish_item/add", mainAjaxStack.HandlerFunc(wishitems.Create))
 	p.Post("/wish_item/remove", mainAjaxStack.HandlerFunc(wishitems.Delete))
+
+	// Own Item
+	p.Post("/own_item/add", mainAjaxStack.HandlerFunc(ownitems.Create))
 
 	p.Get("/", mainStack.HandlerFunc(feeds.Index))
 	mux = http.NewServeMux()

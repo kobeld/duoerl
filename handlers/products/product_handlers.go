@@ -1,6 +1,7 @@
 package products
 
 import (
+	"github.com/kobeld/duoerl/global"
 	"github.com/kobeld/duoerl/services"
 	"github.com/kobeld/duoerlapi"
 	. "github.com/paulbellamy/mango"
@@ -15,13 +16,14 @@ var (
 )
 
 type ProductViewData struct {
-	ProductInput *duoerlapi.ProductInput
-	ApiProduct   *duoerlapi.Product
-	ApiProducts  []*duoerlapi.Product
-	Validated    *govalidations.Validated
-	ApiBrands    []*duoerlapi.Brand
-	ApiReviews   []*duoerlapi.Review
-	ReviewInput  *duoerlapi.ReviewInput
+	ProductInput   *duoerlapi.ProductInput
+	ApiProduct     *duoerlapi.Product
+	ApiProducts    []*duoerlapi.Product
+	Validated      *govalidations.Validated
+	ApiBrands      []*duoerlapi.Brand
+	ApiReviews     []*duoerlapi.Review
+	ReviewInput    *duoerlapi.ReviewInput
+	GotFromOptions map[string]string
 }
 
 // ----------------
@@ -55,9 +57,10 @@ func Show(env Env) (status Status, headers Headers, body Body) {
 
 	// Init new Review Form data
 	productViewData := &ProductViewData{
-		ApiProduct:  apiProduct,
-		ApiReviews:  apiReviews,
-		ReviewInput: services.NewReview(),
+		ApiProduct:     apiProduct,
+		ApiReviews:     apiReviews,
+		ReviewInput:    services.NewReview(),
+		GotFromOptions: global.GotFromOptions,
 	}
 
 	mangotemplate.ForRender(env, "products/show", productViewData)

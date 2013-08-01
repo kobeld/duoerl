@@ -20,6 +20,12 @@ func (this *User) Save() error {
 	return mgodb.Save(USERS, this)
 }
 
+func AddOwnProduct(userId, productId bson.ObjectId) (err error) {
+	selector := bson.M{"_id": userId}
+	changer := bson.M{"$push": bson.M{"ownproductids": productId}}
+	return Update(selector, changer)
+}
+
 func AddWishProduct(userId, productId bson.ObjectId) (err error) {
 	selector := bson.M{"_id": userId}
 	changer := bson.M{"$push": bson.M{"wishproductids": productId}}

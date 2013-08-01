@@ -6,7 +6,7 @@ import (
 	"github.com/kobeld/duoerl/utils"
 )
 
-func CreateWishItem(userId, productId string) (err error) {
+func AddWishItem(userId, productId string) (err error) {
 
 	userOId, err := utils.ToObjectId(userId)
 	if err != nil {
@@ -44,7 +44,7 @@ func CreateWishItem(userId, productId string) (err error) {
 	return
 }
 
-func DeleteWishItem(userId, productId string) (err error) {
+func RemoveWishItem(userId, productId string) (err error) {
 
 	userOId, err := utils.ToObjectId(userId)
 	if err != nil {
@@ -73,7 +73,7 @@ func DeleteWishItem(userId, productId string) (err error) {
 	return
 }
 
-func GetWishItem(userId, productId string) (wishItem *wishitems.WishItem) {
+func GetWishItem(userId, productId string) (wishItem *wishitems.WishItem, err error) {
 
 	userOId, err := utils.ToObjectId(userId)
 	if err != nil {
@@ -87,7 +87,7 @@ func GetWishItem(userId, productId string) (wishItem *wishitems.WishItem) {
 		return
 	}
 
-	wishItem, _ = wishitems.FindByUserAndProductId(userOId, productOId)
+	wishItem, err = wishitems.FindByUserAndProductId(userOId, productOId)
 
 	return
 

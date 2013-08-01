@@ -14,6 +14,7 @@ type User struct {
 	Password        string
 	ConfirmPassword string `bson:"-" json:"-"`
 	WishProductIds  []bson.ObjectId
+	OwnProductIds   []bson.ObjectId
 	FollowBrandIds  []bson.ObjectId
 	Profile         Profile
 	CreatedAt       time.Time
