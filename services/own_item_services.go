@@ -40,6 +40,28 @@ func AddOwnItem(ownItemInput *duoerlapi.OwnItemInput) (err error) {
 	return
 }
 
+func RemoveOwnItem(userId, productId string) (err error) {
+	userOId, err := utils.ToObjectId(userId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	productOId, err := utils.ToObjectId(productId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	err = ownitems.DeleteByUserAndProductId(userOId, productOId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	return
+}
+
 func GetOwnItem(userId, productId string) (ownItem *ownitems.OwnItem, err error) {
 
 	userOId, err := utils.ToObjectId(userId)

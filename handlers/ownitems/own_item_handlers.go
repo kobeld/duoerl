@@ -28,13 +28,13 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 
 func Delete(env Env) (status Status, headers Headers, body Body) {
 
-	// productId := env.Request().FormValue("pid")
-	// userId := services.FetchUserIdFromSession(env)
+	productId := env.Request().FormValue("pid")
+	userId := services.FetchUserIdFromSession(env)
 
-	// err := services.RemoveOwnItem(userId, productId)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	err := services.RemoveOwnItem(userId, productId)
+	if err != nil {
+		panic(err)
+	}
 
 	return
 }

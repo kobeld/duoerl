@@ -77,6 +77,7 @@ func Mux() (mux *http.ServeMux) {
 
 	// Own Item
 	p.Post("/own_item/add", mainAjaxStack.HandlerFunc(ownitems.Create))
+	p.Post("/own_item/remove", mainAjaxStack.HandlerFunc(ownitems.Delete))
 
 	p.Get("/", mainStack.HandlerFunc(feeds.Index))
 	mux = http.NewServeMux()

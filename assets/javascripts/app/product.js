@@ -1,7 +1,7 @@
 $(function() {
 	var errorMsg = "Internal Error!";
 
-	// Add a wish item
+	// Add product to wish item
 	$(".btn-add-wishitem").click(function() {
 		var self = this,
 			productId = $(this).closest(".show-product").data("product");
@@ -13,6 +13,7 @@ $(function() {
 		.fail(function(){ alert(errorMsg) });
 	});
 
+	// Remove a wish item
 	$(".btn-remove-wishitem").click(function() {
 		var self = this,
 			productId = $(this).closest(".show-product").data("product");
@@ -25,6 +26,7 @@ $(function() {
 		.fail(function(){ alert(errorMsg) });
 	});
 
+	// Add product to own item
 	$(".btn-add-ownitem").click(function() {
 		var self = this,
 			productId = $(this).closest(".show-product").data("product"),
@@ -36,6 +38,19 @@ $(function() {
 			$(".btn-remove-ownitem").show();
 
 			$('#ownitem-modal').modal('hide');
+		})
+		.fail(function(){ alert(errorMsg) });
+	});
+
+	// Remove a own item
+	$(".btn-remove-ownitem").click(function() {
+		var self = this,
+			productId = $(this).closest(".show-product").data("product");
+
+		$.post("/own_item/remove", {pid: productId})
+		.done(function(){
+			$(self).hide();
+			$(".link-add-ownitem-trigger").show();
 		})
 		.fail(function(){ alert(errorMsg) });
 	});
