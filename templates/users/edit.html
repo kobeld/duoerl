@@ -1,12 +1,12 @@
 {{ define "users/edit" }}
 
-{{ $profile := .Account.Profile }}
+{{ $profile := .ApiUser.Profile }}
 
-<form action="/profile/edit" method="post" class="form-horizontal">
+<form action="/user/edit" method="post" class="form-horizontal">
 	<fieldset>
 		<div>
-			<legend><strong>{{ .Account.Name }}</strong>
-				<small><span class="muted">({{ .Account.Email }})</span></small>
+			<legend><strong>{{ .ApiUser.Name }}</strong>
+				<small><span class="muted">({{ .ApiUser.Email }})</span></small>
 			</legend>
 		</div>
 
@@ -50,16 +50,29 @@
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">Hair Texture</label>
+			<label class="control-label">肤质类型</label>
 			<div class="controls">
-				<select id="hair-texture-select" name="Profile.HairTexture" class="input-large">
-					<option>please select</option>
-					<option value="1">Dry</option>
-					<option value="2">Wet</option>
-					<option value="3">Yellow</option>
+				<select id="skin-texture-select" name="Profile.SkinTexture" class="input-large">
+					<option>-- 请选择 --</option>
+					{{ range $value, $text := .SkinTextureOptions }}
+						<option value="{{ $value }}">{{ $text }}</option>
+					{{ end }}
 				</select>
 			</div>
-			<script>$("#hair-texture-select").val("{{$profile.HairTexture }}")</script>
+			<script>$("#skin-texture-select").val("{{$profile.SkinTexture}}")</script>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">发质类型</label>
+			<div class="controls">
+				<select id="hair-texture-select" name="Profile.HairTexture" class="input-large">
+					<option>-- 请选择 --</option>
+					{{ range $value, $text := .HairTextureOptions }}
+						<option value="{{ $value }}">{{ $text }}</option>
+					{{ end }}
+				</select>
+			</div>
+			<script>$("#hair-texture-select").val("{{$profile.HairTexture}}")</script>
 		</div>
 
 		<div class="control-group">

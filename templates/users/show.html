@@ -12,7 +12,7 @@
 	<div class="span6">
 		<h4>{{ .ApiUser.Name }}</h4>
 		{{ if .IsCurrent }}
-			<a href="/profile/edit">Edit Profile</a>
+			<a href="/user/edit">Edit</a>
 		{{ end }}
 
 		<dl class="dl-horizontal">
@@ -25,14 +25,21 @@
 			<dt>Birthday:</dt>
 			<dd>{{ $profile.Birthday }}</dd>
 
-			<dt>Location:</dt>
-			<dd>{{ $profile.Location }} </dd>
+			{{ if $profile.Location }}
+				<dt>Location:</dt>
+				<dd>{{ $profile.Location }} </dd>
+			{{ end }}
+
+			<dt>Skin texture:</dt>
+			<dd>{{ $profile.SkinTextureText }}</dd>
 
 			<dt>Hair texture:</dt>
-			<dd>{{ $profile.HairTexture }}</dd>
+			<dd>{{ $profile.HairTextureText }}</dd>
 
-			<dt>Description:</dt>
-			<dd>{{ $profile.Description }}</dd>
+			{{ if $profile.Description }}
+				<dt>Description:</dt>
+				<dd>{{ $profile.Description }}</dd>
+			{{ end }}
 		</dl>
 	</div>
 </div>

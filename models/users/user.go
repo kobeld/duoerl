@@ -23,6 +23,7 @@ type Profile struct {
 	Description string
 	Location    string
 	Birthday    time.Time
+	SkinTexture string
 	HairTexture string
 }
 

@@ -1,6 +1,7 @@
 package users
 
 import (
+	"github.com/kobeld/duoerl/global"
 	"github.com/kobeld/duoerl/services"
 	"github.com/kobeld/duoerlapi"
 	. "github.com/paulbellamy/mango"
@@ -9,9 +10,16 @@ import (
 	"net/http"
 )
 
+var (
+	userFields = []string{"Profile.Gender", "Profile.Location", "Profile.Description",
+		"Profile.HairTexture", "Profile.SkinTexture"}
+)
+
 type UserViewData struct {
-	ApiUser   *duoerlapi.User
-	IsCurrent bool
+	ApiUser            *duoerlapi.User
+	IsCurrent          bool
+	SkinTextureOptions map[string]string
+	HairTextureOptions map[string]string
 }
 
 // ------------------
@@ -41,17 +49,23 @@ func Edit(env Env) (status Status, headers Headers, body Body) {
 		panic(err)
 	}
 
-	mangotemplate.ForRender(env, "users/edit", &UserViewData{ApiUser: apiUser})
+	userViewData := &UserViewData{
+		ApiUser:            apiUser,
+		SkinTextureOptions: global.SkinTextureOptions,
+		HairTextureOptions: global.HairTextureOptions,
+	}
+
+	mangotemplate.ForRender(env, "users/edit", userViewData)
 	return
 }
 
 func Update(env Env) (status Status, headers Headers, body Body) {
-	account := services.FetchUserFromEnv(env)
-	formdata.UnmarshalByNames(env.Request().Request, account,
-		[]string{"Profile.Gender", "Profile.Location", "Profile.Description", "Profile.HairTexture"})
-	if err := account.Save(); err != nil {
+	user := services.FetchUserFromEnv(env)
+	formdata.UnmarshalByNames(env.Request().Request, user, userFields)
+
+	if err := user.Save(); err != nil {
 		panic(err)
 	}
 
-	return Redirect(http.StatusFound, "/profile/edit")
+	return Redirect(http.StatusFound, "/user/edit")
 }

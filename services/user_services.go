@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/kobeld/duoerl/global"
 	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerl/utils"
 	"github.com/kobeld/duoerlapi"
@@ -61,11 +62,14 @@ func toApiUser(user *users.User) *duoerlapi.User {
 
 func toApiProfile(profile users.Profile) *duoerlapi.Profile {
 	apiProfile := &duoerlapi.Profile{
-		Gender:      profile.GenderText(),
-		Description: profile.Description,
-		Location:    profile.Location,
-		Birthday:    profile.BirthdayText(),
-		HairTexture: profile.HairTexture,
+		Gender:          profile.GenderText(),
+		Description:     profile.Description,
+		Location:        profile.Location,
+		Birthday:        profile.BirthdayText(),
+		SkinTexture:     profile.SkinTexture,
+		SkinTextureText: global.SkinTextureOptions[profile.SkinTexture],
+		HairTexture:     profile.HairTexture,
+		HairTextureText: global.HairTextureOptions[profile.HairTexture],
 	}
 
 	return apiProfile
