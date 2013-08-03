@@ -20,36 +20,6 @@ func (this *User) Save() error {
 	return mgodb.Save(USERS, this)
 }
 
-func AddOwnProduct(userId, productId bson.ObjectId) (err error) {
-	selector := bson.M{"_id": userId}
-	changer := bson.M{"$push": bson.M{"ownproductids": productId}}
-	return Update(selector, changer)
-}
-
-func AddWishProduct(userId, productId bson.ObjectId) (err error) {
-	selector := bson.M{"_id": userId}
-	changer := bson.M{"$push": bson.M{"wishproductids": productId}}
-	return Update(selector, changer)
-}
-
-func RemoveWishProduct(userId, productId bson.ObjectId) (err error) {
-	selector := bson.M{"_id": userId}
-	changer := bson.M{"$pull": bson.M{"wishproductids": productId}}
-	return Update(selector, changer)
-}
-
-func AddFollowBrand(userId, brandId bson.ObjectId) (err error) {
-	selector := bson.M{"_id": userId}
-	changer := bson.M{"$push": bson.M{"followbrandids": brandId}}
-	return Update(selector, changer)
-}
-
-func RemoveFollowBrand(userId, brandId bson.ObjectId) (err error) {
-	selector := bson.M{"_id": userId}
-	changer := bson.M{"$pull": bson.M{"followbrandids": brandId}}
-	return Update(selector, changer)
-}
-
 func FindById(id bson.ObjectId) (user *User, err error) {
 	if !id.Valid() {
 		return
@@ -80,4 +50,35 @@ func Update(selector, changer bson.M) (err error) {
 		err = rc.Update(selector, changer)
 	})
 	return
+}
+
+// ----- Duplicated, just for reference
+func AddOwnProduct(userId, productId bson.ObjectId) (err error) {
+	selector := bson.M{"_id": userId}
+	changer := bson.M{"$push": bson.M{"ownproductids": productId}}
+	return Update(selector, changer)
+}
+
+func AddWishProduct(userId, productId bson.ObjectId) (err error) {
+	selector := bson.M{"_id": userId}
+	changer := bson.M{"$push": bson.M{"wishproductids": productId}}
+	return Update(selector, changer)
+}
+
+func RemoveWishProduct(userId, productId bson.ObjectId) (err error) {
+	selector := bson.M{"_id": userId}
+	changer := bson.M{"$pull": bson.M{"wishproductids": productId}}
+	return Update(selector, changer)
+}
+
+func AddFollowBrand(userId, brandId bson.ObjectId) (err error) {
+	selector := bson.M{"_id": userId}
+	changer := bson.M{"$push": bson.M{"followbrandids": brandId}}
+	return Update(selector, changer)
+}
+
+func RemoveFollowBrand(userId, brandId bson.ObjectId) (err error) {
+	selector := bson.M{"_id": userId}
+	changer := bson.M{"$pull": bson.M{"followbrandids": brandId}}
+	return Update(selector, changer)
 }

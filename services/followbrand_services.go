@@ -2,7 +2,6 @@ package services
 
 import (
 	"github.com/kobeld/duoerl/models/followbrands"
-	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerl/utils"
 )
 
@@ -36,11 +35,6 @@ func CreateFollowBrand(userId, brandId string) (err error) {
 		return
 	}
 
-	if err = users.AddFollowBrand(userOId, followBrand.BrandId); err != nil {
-		utils.PrintStackAndError(err)
-		return
-	}
-
 	return
 }
 
@@ -59,12 +53,6 @@ func DeleteFollowBrand(userId, brandId string) (err error) {
 	}
 
 	err = followbrands.DeleteByUserAndBrandId(userOId, brandOId)
-	if err != nil {
-		utils.PrintStackAndError(err)
-		return
-	}
-
-	err = users.RemoveFollowBrand(userOId, brandOId)
 	if err != nil {
 		utils.PrintStackAndError(err)
 		return

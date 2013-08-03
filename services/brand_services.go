@@ -38,13 +38,16 @@ func ShowBrand(brandId, userId string) (apiBrand *duoerlapi.Brand, err error) {
 		return
 	}
 
-	hasFollowed := false
-	if followBrand := GetFollowBrand(userId, brandId); followBrand != nil {
-		hasFollowed = true
+	apiBrand = toApiBrand(brand)
+
+	// Not login user
+	if userId == "" {
+		return
 	}
 
-	apiBrand = toApiBrand(brand)
-	apiBrand.HasFollowed = hasFollowed
+	if followBrand := GetFollowBrand(userId, brandId); followBrand != nil {
+		apiBrand.HasFollowed = true
+	}
 
 	return
 }

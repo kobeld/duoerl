@@ -2,7 +2,6 @@ package services
 
 import (
 	"github.com/kobeld/duoerl/models/ownitems"
-	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerl/utils"
 	"github.com/kobeld/duoerlapi"
 )
@@ -34,11 +33,6 @@ func AddOwnItem(ownItemInput *duoerlapi.OwnItemInput) (err error) {
 	}
 
 	if err = ownItem.Save(); err != nil {
-		utils.PrintStackAndError(err)
-		return
-	}
-
-	if err = users.AddOwnProduct(userOId, productOId); err != nil {
 		utils.PrintStackAndError(err)
 		return
 	}

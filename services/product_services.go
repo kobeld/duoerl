@@ -93,19 +93,20 @@ func ShowProduct(productId, userId string) (apiProduct *duoerlapi.Product, err e
 		return
 	}
 
-	hasWished := false
-	if wishItem, _ := GetWishItem(userId, productId); wishItem != nil {
-		hasWished = true
-	}
-
-	hasOwned := false
-	if ownItem, _ := GetOwnItem(userId, productId); ownItem != nil {
-		hasOwned = true
-	}
-
 	apiProduct = toApiProduct(product, brand, author)
-	apiProduct.HasWished = hasWished
-	apiProduct.HasOwned = hasOwned
+
+	// Not login user
+	if userId == "" {
+		return
+	}
+
+	if wishItem, _ := GetWishItem(userId, productId); wishItem != nil {
+		apiProduct.HasWished = true
+	}
+
+	if ownItem, _ := GetOwnItem(userId, productId); ownItem != nil {
+		apiProduct.HasOwned = true
+	}
 
 	return
 }

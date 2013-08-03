@@ -13,9 +13,6 @@ type User struct {
 	Email           string
 	Password        string
 	ConfirmPassword string `bson:"-" json:"-"`
-	WishProductIds  []bson.ObjectId
-	OwnProductIds   []bson.ObjectId
-	FollowBrandIds  []bson.ObjectId
 	Profile         Profile
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
@@ -55,24 +52,6 @@ func (this *Profile) GenderText() string {
 	}
 
 	return global.TEXT_GENDER_FEMALE
-}
-
-func (this *User) HasWishedProduct(productId bson.ObjectId) bool {
-	for _, id := range this.WishProductIds {
-		if id == productId {
-			return true
-		}
-	}
-	return false
-}
-
-func (this *User) HasFollowedBrand(brandId bson.ObjectId) bool {
-	for _, id := range this.FollowBrandIds {
-		if id == brandId {
-			return true
-		}
-	}
-	return false
 }
 
 // --------- Functions ----------

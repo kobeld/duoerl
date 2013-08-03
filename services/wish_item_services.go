@@ -1,7 +1,6 @@
 package services
 
 import (
-	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerl/models/wishitems"
 	"github.com/kobeld/duoerl/utils"
 )
@@ -36,11 +35,6 @@ func AddWishItem(userId, productId string) (err error) {
 		return
 	}
 
-	if err = users.AddWishProduct(userOId, wishItem.ProductId); err != nil {
-		utils.PrintStackAndError(err)
-		return
-	}
-
 	return
 }
 
@@ -59,12 +53,6 @@ func RemoveWishItem(userId, productId string) (err error) {
 	}
 
 	err = wishitems.DeleteByUserAndProductId(userOId, productOId)
-	if err != nil {
-		utils.PrintStackAndError(err)
-		return
-	}
-
-	err = users.RemoveWishProduct(userOId, productOId)
 	if err != nil {
 		utils.PrintStackAndError(err)
 		return
