@@ -1,6 +1,7 @@
 package users
 
 import (
+	"github.com/kobeld/duoerl/utils"
 	"github.com/sunfmin/mgodb"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
@@ -18,6 +19,22 @@ func (this *User) Save() error {
 	}
 	this.Email = strings.ToLower(this.Email)
 	return mgodb.Save(USERS, this)
+}
+
+func FetchByIdHex(idHex string) (user *User, err error) {
+	userId, err := utils.ToObjectId(idHex)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	user, err = FindById(userId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	return
 }
 
 func FindById(id bson.ObjectId) (user *User, err error) {

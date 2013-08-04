@@ -11,7 +11,7 @@
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">Gender</label>
+			<label class="control-label">性  别</label>
 			<div class="controls">
 				<label class="radio inline">
 					<input type="radio" name="Profile.Gender" value="false" {{ if not $profile.Gender }}checked{{end}}> Female
@@ -23,27 +23,12 @@
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">Birthday</label>
-			<div class="controls">
-				<select name="Profile.Year" class="input-small">
-					<option>please select</option>
-					<option value="1986">1986</option>
-					<option value="1985">1985</option>
-					<option value="1984">1984</option>
-				</select>
-				<select name="Profile.Month" class="input-mini">
-					<option>03</option>
-					<option>04</option>
-				</select>
-				<select name="Profile.Day" class="input-mini">
-					<option>11</option>
-					<option>20</option>
-				</select>
-			</div>
+			<label class="control-label">出生日期</label>
+			<div id="birthday-picker" class="controls" data-birthday="{{ $profile.Birthday }}"></div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">Location</label>
+			<label class="control-label">所在地</label>
 			<div class="controls">
 				<input type="text" name="Profile.Location" value="{{ $profile.Location }}" class="input-large">
 			</div>

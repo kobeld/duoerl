@@ -12,7 +12,7 @@ import (
 
 var (
 	userFields = []string{"Profile.Gender", "Profile.Location", "Profile.Description",
-		"Profile.HairTexture", "Profile.SkinTexture"}
+		"Profile.HairTexture", "Profile.SkinTexture", "Profile.Birthday"}
 )
 
 type UserViewData struct {
@@ -60,10 +60,12 @@ func Edit(env Env) (status Status, headers Headers, body Body) {
 }
 
 func Update(env Env) (status Status, headers Headers, body Body) {
-	user := services.FetchUserFromEnv(env)
-	formdata.UnmarshalByNames(env.Request().Request, user, userFields)
 
-	if err := user.Save(); err != nil {
+	userInput := &duoerlapi.UserInput{Id: services.FetchUserIdFromSession(env)}
+	formdata.UnmarshalByNames(env.Request().Request, userInput, userFields)
+
+	err := services.UpdateProfile(userInput)
+	if err != nil {
 		panic(err)
 	}
 

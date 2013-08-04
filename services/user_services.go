@@ -5,16 +5,34 @@ import (
 	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerl/utils"
 	"github.com/kobeld/duoerlapi"
+	"time"
 )
 
-func GetUser(userId string) (apiUser *duoerlapi.User, err error) {
-	userOId, err := utils.ToObjectId(userId)
+func UpdateProfile(userInput *duoerlapi.UserInput) (err error) {
+	user, err := users.FetchByIdHex(userInput.Id)
 	if err != nil {
 		utils.PrintStackAndError(err)
 		return
 	}
 
-	user, err := users.FindById(userOId)
+	user.Profile.Gender = userInput.Profile.Gender
+	user.Profile.Location = userInput.Profile.Location
+	user.Profile.Description = userInput.Profile.Description
+	user.Profile.HairTexture = userInput.Profile.HairTexture
+	user.Profile.SkinTexture = userInput.Profile.SkinTexture
+	user.Profile.Birthday, _ = time.Parse(global.DATE_BIRTHDAY, userInput.Profile.Birthday)
+
+	if err = user.Save(); err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	return
+}
+
+func GetUser(userId string) (apiUser *duoerlapi.User, err error) {
+
+	user, err := users.FetchByIdHex(userId)
 	if err != nil {
 		utils.PrintStackAndError(err)
 		return
@@ -65,7 +83,7 @@ func toApiProfile(profile users.Profile) *duoerlapi.Profile {
 		Gender:          profile.GenderText(),
 		Description:     profile.Description,
 		Location:        profile.Location,
-		Birthday:        profile.BirthdayText(),
+		Birthday:        profile.Birthday.Format(global.DATE_BIRTHDAY),
 		SkinTexture:     profile.SkinTexture,
 		SkinTextureText: global.SkinTextureOptions[profile.SkinTexture],
 		HairTexture:     profile.HairTexture,

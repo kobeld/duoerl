@@ -1,1 +1,1 @@
-//= require javascripts/basic/bootstrap.min
+//= require javascripts/plugins/bday-picker

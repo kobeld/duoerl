@@ -40,13 +40,6 @@ func (this *User) Link() string {
 	return fmt.Sprintf("/user/%s", this.Id.Hex())
 }
 
-func (this *Profile) BirthdayText() string {
-	if this.Birthday.IsZero() {
-		return global.TEXT_BIRTHDAY_SECRET
-	}
-	return this.Birthday.Format(global.DATE_BIRTHDAY)
-}
-
 func (this *Profile) GenderText() string {
 	if this.Gender {
 		return global.TEXT_GENDER_MALE
