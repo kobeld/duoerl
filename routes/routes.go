@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/bmizerany/pat"
 	"github.com/kobeld/duoerl/handlers/brands"
+	"github.com/kobeld/duoerl/handlers/categories"
 	"github.com/kobeld/duoerl/handlers/feeds"
 	"github.com/kobeld/duoerl/handlers/followbrands"
 	"github.com/kobeld/duoerl/handlers/ownitems"
@@ -78,6 +79,10 @@ func Mux() (mux *http.ServeMux) {
 	// Own Item
 	p.Post("/own_item/add", mainAjaxStack.HandlerFunc(ownitems.Create))
 	p.Post("/own_item/remove", mainAjaxStack.HandlerFunc(ownitems.Delete))
+
+	// For admin in the futrue
+	p.Get("/admin/categories", mainStack.HandlerFunc(categories.Index))
+	p.Post("/admin/category/create", mainStack.HandlerFunc(categories.Create))
 
 	p.Get("/", mainStack.HandlerFunc(feeds.Index))
 	mux = http.NewServeMux()

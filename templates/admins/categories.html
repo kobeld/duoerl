@@ -1,0 +1,59 @@
+{{ define "admin/categories" }}
+
+<form action="/admin/category/create" method="post" class="form-inline">
+	<label><strong>添加大类：</strong></label>
+	<input type="hidden" name="Level" value="Lev1">
+	<input type="text" name="Name" placeholder="名称" value="{{.CategoryInput.Name}}">
+	<button class="btn btn-primary" type="submit">Add</button>
+	{{ErrorOn .Validated "Name"}}
+</form>
+
+<hr>
+
+<h4>当前分类</h4>
+
+<div>
+
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>序  号</th>
+				<th>大类名称</th>
+				<th>产品小类</th>
+				<th>操  作</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			{{ $categoryInput := .CategoryInput }}
+			{{ $validated := .Validated }}
+
+			{{ range $index, $apiCategory := .ApiCategories }}
+			<tr>
+				<td>{{ $index }}</td>
+				<td>{{ $apiCategory.Name }}</td>
+				<td>
+					<ul>
+						{{ range $apiSubCategory := $apiCategory.SubCategories }}
+							<li>{{ $apiSubCategory.Name }}</li>
+						{{ end }}
+					</ul>
+				</td>
+				<td>
+					<form action="/admin/category/create" method="post" class="form-inline">
+						<input type="hidden" name="ParentId" value="{{ $apiCategory.Id }}">
+						<input type="hidden" name="Level" value="Lev2">
+						<input type="text" class="span2" name="Name" placeholder="名称" value="{{$categoryInput.Name}}">
+						<button class="btn btn-small btn-primary" type="submit">Add</button>
+						{{ErrorOn $validated "Name"}}
+					</form>
+				</td>
+			</tr>
+			{{ end }}
+		</tbody>
+	</table>
+
+</div>
+
+
+{{ end }}
