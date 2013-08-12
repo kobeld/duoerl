@@ -13,8 +13,8 @@ func (this *Category) Save() error {
 	return mgodb.Save(CATEGORIES, this)
 }
 
-func FindByNameAndLevel(name, level string) (r *Category, err error) {
-	query := bson.M{"name": name, "level": level}
+func FindUniqueCategory(name, level string, parentId bson.ObjectId) (r *Category, err error) {
+	query := bson.M{"name": name, "level": level, "parentid": parentId}
 	return FindOne(query)
 }
 

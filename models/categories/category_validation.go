@@ -31,7 +31,7 @@ func (this *CategoryGateKeeper) AddNameAndLevelValidator() {
 func (this *CategoryGateKeeper) AddUniqueValidator() {
 	this.Add(govalidations.Custom(func(object interface{}) bool {
 		category := object.(*Category)
-		c, _ := FindByNameAndLevel(category.Name, category.Level)
+		c, _ := FindUniqueCategory(category.Name, category.Level, category.ParentId)
 		return c == nil
 	}, "Name", global.CATEGORY_01))
 
