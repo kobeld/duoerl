@@ -23,14 +23,10 @@ type AdminCategoryViewData struct {
 // ----------------
 
 func Index(env Env) (status Status, headers Headers, body Body) {
-	apiCategories, err := services.GetFullCategories()
-	if err != nil {
-		panic(err)
-	}
 
 	viewData := &AdminCategoryViewData{
 		CategoryInput: new(duoerlapi.CategoryInput),
-		ApiCategories: apiCategories,
+		ApiCategories: services.GetFullCategories(),
 	}
 
 	mangotemplate.ForRender(env, "admin/categories", viewData)
@@ -41,17 +37,12 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 	categoryInput := new(duoerlapi.CategoryInput)
 	formdata.UnmarshalByNames(env.Request().Request, &categoryInput, categoryFields)
 
-	apiCategories, err := services.GetFullCategories()
-	if err != nil {
-		panic(err)
-	}
-
 	viewData := &AdminCategoryViewData{
 		CategoryInput: categoryInput,
-		ApiCategories: apiCategories,
+		ApiCategories: services.GetFullCategories(),
 	}
 
-	_, err = services.CreateCategory(categoryInput)
+	_, err := services.CreateCategory(categoryInput)
 	if validated, ok := err.(*govalidations.Validated); ok {
 		viewData.Validated = validated
 		mangotemplate.ForRender(env, "admin/categories", viewData)

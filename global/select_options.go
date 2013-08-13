@@ -1,5 +1,9 @@
 package global
 
+import (
+	"github.com/kobeld/duoerlapi"
+)
+
 // Product Got From
 const (
 	FROM_STROE  string = "from_01"
@@ -50,3 +54,6 @@ var HairTextureOptions = map[string]string{
 	HAIR_07: "暗哑发质",
 	HAIR_08: "脱落发质",
 }
+
+// All Categories
+var Categories []*duoerlapi.Category

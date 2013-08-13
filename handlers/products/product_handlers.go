@@ -19,6 +19,7 @@ type ProductViewData struct {
 	ProductInput   *duoerlapi.ProductInput
 	ApiProduct     *duoerlapi.Product
 	ApiProducts    []*duoerlapi.Product
+	ApiCategories  []*duoerlapi.Category
 	Validated      *govalidations.Validated
 	ApiBrands      []*duoerlapi.Brand
 	ApiReviews     []*duoerlapi.Review
@@ -75,8 +76,9 @@ func New(env Env) (status Status, headers Headers, body Body) {
 	}
 
 	productViewData := &ProductViewData{
-		ProductInput: productInput,
-		ApiBrands:    apiBrands,
+		ProductInput:  productInput,
+		ApiBrands:     apiBrands,
+		ApiCategories: services.GetFullCategories(),
 	}
 
 	mangotemplate.ForRender(env, "products/new", productViewData)
