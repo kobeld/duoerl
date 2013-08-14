@@ -4,6 +4,7 @@ import (
 	"github.com/bmizerany/pat"
 	"github.com/kobeld/duoerl/handlers/brands"
 	"github.com/kobeld/duoerl/handlers/categories"
+	"github.com/kobeld/duoerl/handlers/efficacies"
 	"github.com/kobeld/duoerl/handlers/feeds"
 	"github.com/kobeld/duoerl/handlers/followbrands"
 	"github.com/kobeld/duoerl/handlers/ownitems"
@@ -83,6 +84,7 @@ func Mux() (mux *http.ServeMux) {
 	// For admin in the futrue
 	p.Get("/admin/categories", mainStack.HandlerFunc(categories.Index))
 	p.Post("/admin/category/create", mainStack.HandlerFunc(categories.Create))
+	p.Post("/admin/efficacy/create", mainStack.HandlerFunc(efficacies.Create))
 
 	p.Get("/", mainStack.HandlerFunc(feeds.Index))
 	mux = http.NewServeMux()

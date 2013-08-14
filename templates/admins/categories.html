@@ -18,8 +18,9 @@
 		<thead>
 			<tr>
 				<th>序  号</th>
-				<th>大类名称</th>
-				<th>产品小类</th>
+				<th>大  类</th>
+				<th>小  类</th>
+				<th>功  效</th>
 				<th>操  作</th>
 			</tr>
 		</thead>
@@ -40,10 +41,25 @@
 					</ul>
 				</td>
 				<td>
+					<ul>
+						{{ range $apiEfficacy := $apiCategory.Efficacies }}
+							<li>{{ $apiEfficacy.Name }}</li>
+						{{ end }}
+					</ul>
+				</td>
+				<td>
 					<form action="/admin/category/create" method="post" class="form-inline">
 						<input type="hidden" name="ParentId" value="{{ $apiCategory.Id }}">
 						<input type="hidden" name="Level" value="Lev2">
-						<input type="text" class="span2" name="Name" placeholder="名称" value="{{$categoryInput.Name}}">
+						<input type="text" class="span2" name="Name" placeholder="小类名称" value="{{$categoryInput.Name}}">
+						<button class="btn btn-small btn-primary" type="submit">Add</button>
+						{{ErrorOn $validated "Name"}}
+					</form>
+					<br>
+					<form action="/admin/efficacy/create" method="post" class="form-inline">
+						<input type="hidden" name="ParentId" value="{{ $apiCategory.Id }}">
+						<input type="hidden" name="Level" value="Lev2">
+						<input type="text" class="span2" name="Name" placeholder="功效名称" value="{{$categoryInput.Name}}">
 						<button class="btn btn-small btn-primary" type="submit">Add</button>
 						{{ErrorOn $validated "Name"}}
 					</form>

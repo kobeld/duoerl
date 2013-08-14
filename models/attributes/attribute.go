@@ -7,6 +7,7 @@ import (
 
 const (
 	TYPE_CATEGORY = "attr_01"
+	TYPE_EFFICACY = "attr_02"
 )
 
 type Attribute struct {
@@ -16,21 +17,26 @@ type Attribute struct {
 	ParentId bson.ObjectId `bson:",omitempty" json:",omitempty"`
 }
 
-func (this *Attribute) MakeId() interface{} {
-	if this.Id == "" {
-		this.Id = bson.NewObjectId()
-	}
-	return this.Id
-}
-
-func NewCategoryAttr(name, parentIdHex string) (attr *Attribute) {
+func newAttribute(name, parentIdHex string) *Attribute {
 	parentId, _ := utils.ToObjectId(parentIdHex)
-	attr = &Attribute{
+	return &Attribute{
 		Id:       bson.NewObjectId(),
 		Name:     name,
 		AType:    TYPE_CATEGORY,
 		ParentId: parentId,
 	}
+}
 
-	return
+func NewCategoryAttr(name, parentIdHex string) *Attribute {
+	attr := newAttribute(name, parentIdHex)
+	attr.AType = TYPE_CATEGORY
+
+	return attr
+}
+
+func NewEfficacyAttr(name, parentIdHex string) *Attribute {
+	attr := newAttribute(name, parentIdHex)
+	attr.AType = TYPE_EFFICACY
+
+	return attr
 }
