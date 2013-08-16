@@ -54,4 +54,13 @@ $(function() {
 		})
 		.fail(function(){ alert(errorMsg) });
 	});
+
+	// Add/Edit product > select Category
+	$(".category-select").change(function(){
+		var categoryId = $(this).val();
+		$(".subcategory-efficacy").hide();
+		$(".category-"+categoryId).show();
+
+	});
+
 });

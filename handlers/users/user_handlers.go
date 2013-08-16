@@ -5,7 +5,7 @@ import (
 	"github.com/kobeld/duoerl/services"
 	"github.com/kobeld/duoerlapi"
 	. "github.com/paulbellamy/mango"
-	"github.com/sunfmin/formdata"
+	"github.com/theplant/formdata"
 	"github.com/sunfmin/mangotemplate"
 	"net/http"
 )

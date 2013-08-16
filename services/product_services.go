@@ -111,7 +111,7 @@ func ShowProduct(productId, userId string) (apiProduct *duoerlapi.Product, err e
 	return
 }
 
-// Todo: validation needed
+// Todo: validation needed. Idea: validate the input object
 func CreateProduct(input *duoerlapi.ProductInput) (originInput *duoerlapi.ProductInput, err error) {
 	originInput = input
 
@@ -127,6 +127,18 @@ func CreateProduct(input *duoerlapi.ProductInput) (originInput *duoerlapi.Produc
 		return
 	}
 
+	categoryOId, err := utils.ToObjectId(input.CategoryId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	subCategoryOId, err := utils.ToObjectId(input.SubCategoryId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
 	authorOId, err := utils.ToObjectId(input.AuthorId)
 	if err != nil {
 		// Don't return
@@ -134,13 +146,16 @@ func CreateProduct(input *duoerlapi.ProductInput) (originInput *duoerlapi.Produc
 	}
 
 	product := &products.Product{
-		Id:       oId,
-		BrandId:  brandObjectId,
-		Name:     input.Name,
-		Alias:    input.Alias,
-		Intro:    input.Intro,
-		Image:    input.Image,
-		AuthorId: authorOId,
+		Id:            oId,
+		BrandId:       brandObjectId,
+		Name:          input.Name,
+		Alias:         input.Alias,
+		Intro:         input.Intro,
+		Image:         input.Image,
+		AuthorId:      authorOId,
+		CategoryId:    categoryOId,
+		SubCategoryId: subCategoryOId,
+		EfficacyIds:   utils.TurnPlainIdsToObjectIds(input.EfficacyIds),
 	}
 
 	if err = product.Save(); err != nil {
@@ -167,13 +182,16 @@ func toApiProduct(product *products.Product, brand *brands.Brand, author *users.
 	apiProduct := new(duoerlapi.Product)
 	if product != nil {
 		apiProduct = &duoerlapi.Product{
-			Id:     product.Id.Hex(),
-			Link:   product.Link(),
-			Name:   product.Name,
-			Alias:  product.Alias,
-			Intro:  product.Intro,
-			Brand:  toApiBrand(brand),
-			Author: toApiUser(author),
+			Id:          product.Id.Hex(),
+			Link:        product.Link(),
+			Name:        product.Name,
+			Alias:       product.Alias,
+			Intro:       product.Intro,
+			Brand:       toApiBrand(brand),
+			Author:      toApiUser(author),
+			Category:    GetCategory(product.CategoryId.Hex()),
+			SubCategory: GetSubCategory(product.SubCategoryId.Hex()),
+			Efficacies:  GetEfficaciesByIds(utils.TurnObjectIdToPlainIds(product.EfficacyIds)),
 		}
 	}
 

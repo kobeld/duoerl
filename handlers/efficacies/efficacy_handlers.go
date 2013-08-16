@@ -4,9 +4,9 @@ import (
 	"github.com/kobeld/duoerl/services"
 	"github.com/kobeld/duoerlapi"
 	. "github.com/paulbellamy/mango"
-	"github.com/sunfmin/formdata"
 	"github.com/sunfmin/govalidations"
 	"github.com/sunfmin/mangotemplate"
+	"github.com/theplant/formdata"
 	"net/http"
 )
 
@@ -28,7 +28,7 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 	formdata.UnmarshalByNames(env.Request().Request, &efficacyInput, efficacyFields)
 	viewData := &AdminEfficacyViewData{
 		EfficacyInput: efficacyInput,
-		ApiCategories: services.GetFullCategories(),
+		ApiCategories: services.GetCategories(),
 	}
 
 	_, err := services.CreateEfficacy(efficacyInput)

@@ -5,7 +5,21 @@ import (
 	"github.com/kobeld/duoerlapi"
 )
 
-// -------
+func GetEfficacyById(efficacyId string) *duoerlapi.Efficacy {
+	return GetEfficacyMap()[efficacyId]
+}
+
+func GetEfficaciesByIds(efficacyIds []string) (apiEfficacies []*duoerlapi.Efficacy) {
+	for _, efficacyId := range efficacyIds {
+		if efficacyId == "" {
+			continue
+		}
+		apiEfficacies = append(apiEfficacies, GetEfficacyById(efficacyId))
+	}
+	return
+}
+
+// ---- Private ----
 
 func toApiEfficacy(efficacy *efficacies.Efficacy) *duoerlapi.Efficacy {
 	apiEfficacy := new(duoerlapi.Efficacy)

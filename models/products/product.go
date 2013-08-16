@@ -7,15 +7,18 @@ import (
 )
 
 type Product struct {
-	Id        bson.ObjectId `bson:"_id"`
-	BrandId   bson.ObjectId
-	AuthorId  bson.ObjectId
-	Name      string
-	Alias     string
-	Intro     string
-	Image     string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Id            bson.ObjectId `bson:"_id"`
+	BrandId       bson.ObjectId
+	AuthorId      bson.ObjectId
+	CategoryId    bson.ObjectId
+	SubCategoryId bson.ObjectId
+	EfficacyIds   []bson.ObjectId
+	Name          string
+	Alias         string
+	Intro         string
+	Image         string
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
 }
 
 func (this *Product) MakeId() interface{} {

@@ -24,19 +24,40 @@
 
 			<dl class="dl-horizontal">
 
-				<dt>Alias:</dt>
-				<dd>{{ .ApiProduct.Alias }}</dd>
+				{{ if .ApiProduct.Alias }}
+					<dt>Alias:</dt>
+					<dd>{{ .ApiProduct.Alias }}</dd>
+				{{ end }}
 
 				{{ if .ApiProduct.Author.Name }}
-				<dt>Author:</dt>
-				<dd>
-					<a href="{{ .ApiProduct.Author.Link }}">{{ .ApiProduct.Author.Name }}</a>
-				</dd>
+					<dt>Author:</dt>
+					<dd>
+						<a href="{{ .ApiProduct.Author.Link }}">{{ .ApiProduct.Author.Name }}</a>
+					</dd>
 				{{ end }}
 
 				<dt>Brand:</dt>
 				<dd><a href="{{ .ApiProduct.Brand.Link }}">{{ .ApiProduct.Brand.Name }}</a></dd>
 
+				{{ if .ApiProduct.Category }}
+					<dt>Category:</dt>
+					<dd>{{ .ApiProduct.Category.Name }}</dd>
+				{{ end }}
+
+				{{ if .ApiProduct.SubCategory }}
+					<dt>SubCategory:</dt>
+					<dd>{{ .ApiProduct.SubCategory.Name }}</dd>
+				{{ end }}
+
+				{{ if .ApiProduct.Efficacies }}
+					<dt>Efficacies:</dt>
+					<dd>
+					{{ range .ApiProduct.Efficacies }}
+						{{ .Name }}
+					{{ end }}
+					</dd>
+				{{ end }}
+				<p></p>
 				<dt>Introduction:</dt>
 				<dd>{{ .ApiProduct.Intro }}</dd>
 			</dl>

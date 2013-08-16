@@ -4,7 +4,7 @@ import (
 	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerl/services"
 	. "github.com/paulbellamy/mango"
-	"github.com/sunfmin/formdata"
+	"github.com/theplant/formdata"
 	"github.com/sunfmin/govalidations"
 	"github.com/sunfmin/mangotemplate"
 	"net/http"

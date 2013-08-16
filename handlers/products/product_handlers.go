@@ -5,14 +5,15 @@ import (
 	"github.com/kobeld/duoerl/services"
 	"github.com/kobeld/duoerlapi"
 	. "github.com/paulbellamy/mango"
-	"github.com/sunfmin/formdata"
 	"github.com/sunfmin/govalidations"
 	"github.com/sunfmin/mangotemplate"
+	"github.com/theplant/formdata"
 	"net/http"
 )
 
 var (
-	productFields = []string{"Id", "Name", "Alias", "Intro", "Image", "BrandId"}
+	productFields = []string{"Id", "Name", "Alias", "Intro", "Image", "BrandId",
+		"CategoryId", "SubcategoryId", "EfficacyIds"}
 )
 
 type ProductViewData struct {
@@ -78,7 +79,7 @@ func New(env Env) (status Status, headers Headers, body Body) {
 	productViewData := &ProductViewData{
 		ProductInput:  productInput,
 		ApiBrands:     apiBrands,
-		ApiCategories: services.GetFullCategories(),
+		ApiCategories: services.GetCategories(),
 	}
 
 	mangotemplate.ForRender(env, "products/new", productViewData)

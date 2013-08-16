@@ -55,5 +55,10 @@ var HairTextureOptions = map[string]string{
 	HAIR_08: "脱落发质",
 }
 
-// All Categories
-var Categories []*duoerlapi.Category
+// Cached data
+var (
+	Categories     []*duoerlapi.Category
+	CategoryMap    map[string]*duoerlapi.Category
+	SubCategoryMap map[string]*duoerlapi.SubCategory
+	EfficacyMap    map[string]*duoerlapi.Efficacy
+)

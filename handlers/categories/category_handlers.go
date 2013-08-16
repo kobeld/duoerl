@@ -4,9 +4,9 @@ import (
 	"github.com/kobeld/duoerl/services"
 	"github.com/kobeld/duoerlapi"
 	. "github.com/paulbellamy/mango"
-	"github.com/sunfmin/formdata"
 	"github.com/sunfmin/govalidations"
 	"github.com/sunfmin/mangotemplate"
+	"github.com/theplant/formdata"
 	"net/http"
 )
 
@@ -26,7 +26,7 @@ func Index(env Env) (status Status, headers Headers, body Body) {
 
 	viewData := &AdminCategoryViewData{
 		CategoryInput: new(duoerlapi.CategoryInput),
-		ApiCategories: services.GetFullCategories(),
+		ApiCategories: services.GetCategories(),
 	}
 
 	mangotemplate.ForRender(env, "admin/categories", viewData)
@@ -39,7 +39,7 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 
 	viewData := &AdminCategoryViewData{
 		CategoryInput: categoryInput,
-		ApiCategories: services.GetFullCategories(),
+		ApiCategories: services.GetCategories(),
 	}
 
 	_, err := services.CreateCategory(categoryInput)
