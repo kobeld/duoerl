@@ -2,7 +2,7 @@
 
 {{ $profile := .ApiUser.Profile }}
 
-<form action="/user/edit" method="post" class="form-horizontal">
+<form action="/user/update" method="post" class="form-horizontal">
 	<fieldset>
 
 		<div>
@@ -16,7 +16,7 @@
 			<div class="controls">
 				<img class="user-avatar" src="{{.ApiUser.Avatar}}">
 				<br>
-				<input id="fileupload" type="file" data-url="/upload/user/{{.ApiUser.Id}}" multiple>
+				<input id="fileupload" type="file" data-url="/upload/{{.ApiUser.ImageAttr.ImageType}}/{{.ApiUser.Id}}" multiple>
 
 				<input name="Avatar" class="upload-avatar-input" type="hidden" value="{{.ApiUser.Avatar }}"/>
 			</div>

@@ -1,0 +1,105 @@
+{{ define "products/form" }}
+
+<div class="row">
+	<div class="span6">
+		<div class="control-group">
+			<label class="control-label">名称</label>
+			<div class="controls">
+				<input type="text" name="Name" class="input-large" value="{{ .ProductInput.Name }}">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">别名</label>
+			<div class="controls">
+				<input type="text" name="Alias" class="input-large" value="{{ .ProductInput.Alias }}">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">品牌</label>
+			<div class="controls">
+				<select name="BrandId" class="input brand-select">
+					<option>please select</option>
+					{{ range .ApiBrands }}
+						<option value="{{ .Id }}">{{ .Name }}</option>
+					{{ end }}
+				</select>
+			</div>
+			<script>$(".brand-select").val("{{.ProductInput.BrandId}}")</script>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">分类</label>
+			<div class="controls">
+				<select name="CategoryId" class="input category-select">
+					<option>please select</option>
+					{{ range .ApiCategories }}
+						<option value="{{ .Id }}">{{ .Name }}</option>
+					{{ end }}
+				</select>
+			</div>
+
+			<script>
+				$(".category-select").val("{{.ProductInput.CategoryId}}");
+			</script>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">介绍</label>
+			<div class="controls">
+				<div class="textare">
+					<textarea name="Intro">{{ .ProductInput.Intro }}</textarea>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- Subcategory and Efficacy selection -->
+	<div class="span5">
+		{{ range .ApiCategories }}
+
+		<div class="category-{{.Id}} subcategory-efficacy" style="display:none">
+
+			<div class="control-group">
+				<label for="radios">小类</label>
+				<div>
+					{{ range .SubCategories }}
+						<label class="radio inline" for="{{.Id}}">
+							<input type="radio" name="SubcategoryId" id="{{.Id}}" value="{{.Id}}">{{.Name}}
+						</label>
+					{{ end }}
+				</div>
+			</div>
+
+			<hr>
+
+			<div class="control-group">
+				<label for="checkboxes">功效</label>
+				<div >
+					{{ range $index, $efficacy := .Efficacies }}
+						<label class="checkbox inline" for="{{$efficacy.Id}}">
+							<input type="checkbox" name="EfficacyIds[{{$index}}]" id="{{$efficacy.Id}}" value="{{$efficacy.Id}}">{{$efficacy.Name}}
+						</label>
+					{{ end }}
+				</div>
+			</div>
+
+		</div>
+
+		{{ end }}
+	</div><!-- End of span5 -->
+
+	<input name="Id" type="hidden" value="{{ .ProductInput.Id }}"/>
+
+	<script>
+		$(".category-{{.ProductInput.CategoryId}}").show();
+		$("#{{.ProductInput.SubCategoryId}}").attr("checked", true);
+		_.each({{.ProductInput.EfficacyIds}}, function(efficacyId){
+			$("#"+efficacyId).attr("checked", true);
+		});
+	</script>
+</div>
+
+{{ end }}

@@ -9,8 +9,29 @@ import (
 	"labix.org/v2/mgo/bson"
 )
 
+// For new product form
 func NewProduct() (productInput *duoerlapi.ProductInput) {
 	productInput = &duoerlapi.ProductInput{Id: bson.NewObjectId().Hex()}
+	return
+}
+
+// For edit product form
+func EditProduct(productId string) (productInput *duoerlapi.ProductInput, err error) {
+
+	productOId, err := utils.ToObjectId(productId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	product, err := products.FindById(productOId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	productInput = toProductInput(product)
+
 	return
 }
 
@@ -69,6 +90,7 @@ func BrandProducts(brandId string) (apiProducts []*duoerlapi.Product, err error)
 }
 
 func ShowProduct(productId, userId string) (apiProduct *duoerlapi.Product, err error) {
+
 	productOId, err := utils.ToObjectId(productId)
 	if err != nil {
 		utils.PrintStackAndError(err)
@@ -166,6 +188,58 @@ func CreateProduct(input *duoerlapi.ProductInput) (originInput *duoerlapi.Produc
 	return
 }
 
+// Todo: validation needed. Idea: validate the input object
+func UpdateProduct(input *duoerlapi.ProductInput) (originInput *duoerlapi.ProductInput, err error) {
+	// When the validation fails, should giving back the originInput for front-end renderring
+	originInput = input
+
+	oId, err := utils.ToObjectId(input.Id)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	brandObjectId, err := utils.ToObjectId(input.BrandId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	categoryOId, err := utils.ToObjectId(input.CategoryId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	subCategoryOId, err := utils.ToObjectId(input.SubCategoryId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	product, err := products.FindById(oId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	product.BrandId = brandObjectId
+	product.Name = input.Name
+	product.Alias = input.Alias
+	product.Intro = input.Intro
+	product.CategoryId = categoryOId
+	product.SubCategoryId = subCategoryOId
+	product.EfficacyIds = utils.TurnPlainIdsToObjectIds(input.EfficacyIds)
+
+	if err = product.Save(); err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	return
+}
+
+// ----- Private -----
 func toApiProducts(dbProducts []*products.Product, brandMap map[bson.ObjectId]*brands.Brand,
 	authorMap map[bson.ObjectId]*users.User) (apiProducts []*duoerlapi.Product) {
 
@@ -196,4 +270,20 @@ func toApiProduct(product *products.Product, brand *brands.Brand, author *users.
 	}
 
 	return apiProduct
+}
+
+func toProductInput(product *products.Product) (productInput *duoerlapi.ProductInput) {
+	productInput = &duoerlapi.ProductInput{
+		Id:            product.Id.Hex(),
+		Name:          product.Name,
+		Alias:         product.Alias,
+		Intro:         product.Intro,
+		BrandId:       product.BrandId.Hex(),
+		AuthorId:      product.AuthorId.Hex(),
+		CategoryId:    product.CategoryId.Hex(),
+		SubCategoryId: product.SubCategoryId.Hex(),
+		EfficacyIds:   utils.TurnObjectIdToPlainIds(product.EfficacyIds),
+	}
+
+	return
 }

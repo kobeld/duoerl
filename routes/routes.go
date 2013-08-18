@@ -50,7 +50,7 @@ func Mux() (mux *http.ServeMux) {
 	p.Post("/signup", mainStack.HandlerFunc(sessions.SignupAction))
 	p.Get("/logout", mainStack.HandlerFunc(sessions.Logout))
 
-	p.Post("/user/edit", hardAuthenStack.HandlerFunc(users.Update))
+	p.Post("/user/update", hardAuthenStack.HandlerFunc(users.Update))
 	p.Get("/user/edit", hardAuthenStack.HandlerFunc(users.Edit))
 	p.Get("/user/:id", mainStack.HandlerFunc(users.Show))
 
@@ -70,8 +70,8 @@ func Mux() (mux *http.ServeMux) {
 	p.Get("/product/new", mainStack.HandlerFunc(products.New))
 	p.Post("/product/create", mainStack.HandlerFunc(products.Create))
 	p.Get("/product/:id", mainStack.HandlerFunc(products.Show))
-	// p.Get("/product/:id/edit", mainStack.HandlerFunc(products.Edit))
-	// p.Post("/product/:id/edit", mainStack.HandlerFunc(products.Update))
+	p.Get("/product/:id/edit", mainStack.HandlerFunc(products.Edit))
+	p.Post("/product/update", mainStack.HandlerFunc(products.Update))
 
 	// Review
 	p.Post("/review/create", mainStack.HandlerFunc(reviews.Create))
@@ -93,7 +93,7 @@ func Mux() (mux *http.ServeMux) {
 	imageUploader := tenpu.MakeUploader(images.TheImageMaker)
 	imageLoader := tenpu.MakeFileLoader(images.TheImageMaker)
 
-	p.Post("/upload/user/:uid", imageUploader)
+	p.Post("/upload/:category/:uid", imageUploader)
 	p.Get("/img/:id/:name", imageLoader)
 
 	p.Get("/", mainStack.HandlerFunc(feeds.Index))

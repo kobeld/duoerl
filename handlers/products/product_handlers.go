@@ -86,6 +86,30 @@ func New(env Env) (status Status, headers Headers, body Body) {
 	return
 }
 
+func Edit(env Env) (status Status, headers Headers, body Body) {
+
+	productId := env.Request().URL.Query().Get(":id")
+
+	productInput, err := services.EditProduct(productId)
+	if err != nil {
+		panic(err)
+	}
+
+	apiBrands, err := services.AllBrands()
+	if err != nil {
+		panic(err)
+	}
+
+	productViewData := &ProductViewData{
+		ProductInput:  productInput,
+		ApiBrands:     apiBrands,
+		ApiCategories: services.GetCategories(),
+	}
+
+	mangotemplate.ForRender(env, "products/edit", productViewData)
+	return
+}
+
 func Create(env Env) (status Status, headers Headers, body Body) {
 
 	productInput := new(duoerlapi.ProductInput)
@@ -99,6 +123,27 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 			Validated:    validated,
 		}
 		mangotemplate.ForRender(env, "products/new", viewData)
+		return
+	}
+	if err != nil {
+		panic(err)
+	}
+
+	return Redirect(http.StatusFound, "/product/"+result.Id)
+}
+
+func Update(env Env) (status Status, headers Headers, body Body) {
+
+	productInput := new(duoerlapi.ProductInput)
+	formdata.UnmarshalByNames(env.Request().Request, &productInput, productFields)
+
+	result, err := services.UpdateProduct(productInput)
+	if validated, ok := err.(*govalidations.Validated); ok {
+		viewData := &ProductViewData{
+			ProductInput: result,
+			Validated:    validated,
+		}
+		mangotemplate.ForRender(env, "products/edit", viewData)
 		return
 	}
 	if err != nil {

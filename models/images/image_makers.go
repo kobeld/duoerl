@@ -8,6 +8,12 @@ import (
 	"net/http"
 )
 
+const (
+	CATEGORY_USER    = "user"
+	CATEGORY_PRODUCT = "product"
+	CATEGORY_BRAND   = "brand"
+)
+
 var TheImageMaker = NewImageMaker()
 
 type ImageMaker struct {
@@ -29,6 +35,7 @@ func (this *ImageMaker) MakeForUpload(r *http.Request) (storage tenpu.BlobStorag
 	var imageInput *ImageInput
 	storage, meta, imageInput, err = this.make(r)
 	imageInput.OwnerId = r.URL.Query().Get(":uid")
+	imageInput.Category = r.URL.Query().Get(":category")
 	input = imageInput
 	return
 }

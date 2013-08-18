@@ -16,6 +16,7 @@ type ImageInput struct {
 	Thumb       string
 	Download    bool
 	OwnerId     string
+	Category    string
 }
 
 func (this *ImageInput) GetFileMeta() (filename string, contentType string, contentId string) {
@@ -54,6 +55,7 @@ func (this *ImageInput) SetAttrsForCreate(att *tenpu.Attachment) (err error) {
 	if this.OwnerId != "" {
 		att.OwnerId = []string{this.OwnerId}
 	}
+	att.Category = this.Category
 	return
 }
 

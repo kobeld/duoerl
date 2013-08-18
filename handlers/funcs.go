@@ -9,6 +9,7 @@ import (
 
 var FuncMap = template.FuncMap{
 	"ErrorOn": errorOn,
+	"EqualId": equalId,
 
 	"javascript_tag":            train.JavascriptTag,
 	"stylesheet_tag":            train.StylesheetTag,
@@ -36,4 +37,11 @@ func errorOn(validated *govalidations.Validated, fieldName string) (r template.H
 		FieldName: fieldName,
 	}))
 	return
+}
+
+func equalId(idOne, idTwo string) bool {
+	if idOne == idTwo {
+		return true
+	}
+	return false
 }

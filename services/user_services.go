@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/kobeld/duoerl/global"
+	"github.com/kobeld/duoerl/models/images"
 	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerl/utils"
 	"github.com/kobeld/duoerlapi"
@@ -56,6 +57,12 @@ func GetUsers() (apiUsers []*duoerlapi.User, err error) {
 	return
 }
 
+func newUserImageAttr() *duoerlapi.ImageAttr {
+	return &duoerlapi.ImageAttr{
+		ImageType: images.CATEGORY_USER,
+	}
+}
+
 func toApiUsers(dbUsers []*users.User) (apiUsers []*duoerlapi.User) {
 	for _, dbUser := range dbUsers {
 		apiUsers = append(apiUsers, toApiUser(dbUser))
@@ -68,12 +75,13 @@ func toApiUser(user *users.User) *duoerlapi.User {
 
 	if user != nil {
 		apiUser = &duoerlapi.User{
-			Id:      user.Id.Hex(),
-			Link:    user.Link(),
-			Name:    user.Name,
-			Email:   user.Email,
-			Avatar:  user.Avatar(),
-			Profile: toApiProfile(user.Profile),
+			Id:        user.Id.Hex(),
+			Link:      user.Link(),
+			Name:      user.Name,
+			Email:     user.Email,
+			Avatar:    user.Avatar(),
+			ImageAttr: newUserImageAttr(),
+			Profile:   toApiProfile(user.Profile),
 		}
 	}
 

@@ -1,9 +1,9 @@
-{{ define "products/new" }}
+{{ define "products/edit" }}
 
-<form action="/product/create" method="post" class="form-horizontal">
+<form action="/product/update" method="post" class="form-horizontal">
 	<fieldset>
 		<div>
-			<legend><strong>Add a new product</strong></legend>
+			<legend><strong>Edit a product</strong></legend>
 		</div>
 
 		{{ template "products/form" .}}
@@ -14,6 +14,5 @@
 		</div>
 	</fieldset>
 </form>
-
 
 {{ end }}
