@@ -4,10 +4,22 @@
 
 <form action="/user/edit" method="post" class="form-horizontal">
 	<fieldset>
+
 		<div>
 			<legend><strong>{{ .ApiUser.Name }}</strong>
 				<small><span class="muted">({{ .ApiUser.Email }})</span></small>
 			</legend>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">头  像</label>
+			<div class="controls">
+				<img class="user-avatar" src="{{.ApiUser.Avatar}}">
+				<br>
+				<input id="fileupload" type="file" data-url="/upload/user/{{.ApiUser.Id}}" multiple>
+
+				<input name="Avatar" class="upload-avatar-input" type="hidden" value="{{.ApiUser.Avatar }}"/>
+			</div>
 		</div>
 
 		<div class="control-group">

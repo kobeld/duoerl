@@ -14,14 +14,17 @@ import (
 	"github.com/kobeld/duoerl/handlers/users"
 	"github.com/kobeld/duoerl/handlers/wishitems"
 	"github.com/kobeld/duoerl/middlewares"
+	"github.com/kobeld/duoerl/models/images"
 	"github.com/kobeld/mangogzip"
 	"github.com/paulbellamy/mango"
 	"github.com/shaoshing/train"
 	"github.com/sunfmin/mangolog"
+	"github.com/sunfmin/tenpu"
 	"net/http"
 )
 
 func Mux() (mux *http.ServeMux) {
+
 	p := pat.New()
 	sessionMW := mango.Sessions("f908b1c425062e95d30b8d30de7123458", "duoerl", &mango.CookieOptions{Path: "/", MaxAge: 3600 * 24 * 7})
 
@@ -85,6 +88,13 @@ func Mux() (mux *http.ServeMux) {
 	p.Get("/admin/categories", mainStack.HandlerFunc(categories.Index))
 	p.Post("/admin/category/create", mainStack.HandlerFunc(categories.Create))
 	p.Post("/admin/efficacy/create", mainStack.HandlerFunc(efficacies.Create))
+
+	// For Image upload
+	imageUploader := tenpu.MakeUploader(images.TheImageMaker)
+	imageLoader := tenpu.MakeFileLoader(images.TheImageMaker)
+
+	p.Post("/upload/user/:uid", imageUploader)
+	p.Get("/img/:id/:name", imageLoader)
 
 	p.Get("/", mainStack.HandlerFunc(feeds.Index))
 	mux = http.NewServeMux()

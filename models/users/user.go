@@ -3,6 +3,7 @@ package users
 import (
 	"fmt"
 	"github.com/kobeld/duoerl/global"
+	"github.com/kobeld/duoerl/utils/gravatar"
 	"labix.org/v2/mgo/bson"
 	"time"
 )
@@ -13,6 +14,7 @@ type User struct {
 	Email           string
 	Password        string
 	ConfirmPassword string `bson:"-" json:"-"`
+	AvatarUrl       string
 	Profile         Profile
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
@@ -46,6 +48,13 @@ func (this *Profile) GenderText() string {
 	}
 
 	return global.TEXT_GENDER_FEMALE
+}
+
+func (this *User) Avatar() string {
+	if this.AvatarUrl != "" {
+		return this.AvatarUrl
+	}
+	return gravatar.UrlSize(this.Email, 160)
 }
 
 // --------- Functions ----------

@@ -15,6 +15,7 @@ func UpdateProfile(userInput *duoerlapi.UserInput) (err error) {
 		return
 	}
 
+	user.AvatarUrl = userInput.Avatar
 	user.Profile.Gender = userInput.Profile.Gender
 	user.Profile.Location = userInput.Profile.Location
 	user.Profile.Description = userInput.Profile.Description
@@ -71,6 +72,7 @@ func toApiUser(user *users.User) *duoerlapi.User {
 			Link:    user.Link(),
 			Name:    user.Name,
 			Email:   user.Email,
+			Avatar:  user.Avatar(),
 			Profile: toApiProfile(user.Profile),
 		}
 	}

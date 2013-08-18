@@ -5,13 +5,13 @@ import (
 	"github.com/kobeld/duoerl/services"
 	"github.com/kobeld/duoerlapi"
 	. "github.com/paulbellamy/mango"
-	"github.com/theplant/formdata"
 	"github.com/sunfmin/mangotemplate"
+	"github.com/theplant/formdata"
 	"net/http"
 )
 
 var (
-	userFields = []string{"Profile.Gender", "Profile.Location", "Profile.Description",
+	userFields = []string{"Avatar", "Profile.Gender", "Profile.Location", "Profile.Description",
 		"Profile.HairTexture", "Profile.SkinTexture", "Profile.Birthday"}
 )
 
