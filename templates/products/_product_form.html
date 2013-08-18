@@ -2,22 +2,34 @@
 
 <div class="row">
 	<div class="span6">
+
 		<div class="control-group">
-			<label class="control-label">名称</label>
+			<label class="control-label">图  片</label>
+			<div class="controls">
+				<img class="object-img" src="{{.ProductInput.Image}}">
+				<br>
+				<input id="fileupload" type="file" data-url="/upload/{{.ProductInput.ImageAttr.ImageType}}/{{.ProductInput.Id}}" multiple>
+
+				<input name="Image" class="upload-img-input" type="hidden" value="{{.ProductInput.Image }}"/>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">名  称</label>
 			<div class="controls">
 				<input type="text" name="Name" class="input-large" value="{{ .ProductInput.Name }}">
 			</div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">别名</label>
+			<label class="control-label">别  名</label>
 			<div class="controls">
 				<input type="text" name="Alias" class="input-large" value="{{ .ProductInput.Alias }}">
 			</div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">品牌</label>
+			<label class="control-label">品  牌</label>
 			<div class="controls">
 				<select name="BrandId" class="input brand-select">
 					<option>please select</option>
@@ -30,7 +42,7 @@
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">分类</label>
+			<label class="control-label">分  类</label>
 			<div class="controls">
 				<select name="CategoryId" class="input category-select">
 					<option>please select</option>
@@ -46,7 +58,7 @@
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">介绍</label>
+			<label class="control-label">介  绍</label>
 			<div class="controls">
 				<div class="textare">
 					<textarea name="Intro">{{ .ProductInput.Intro }}</textarea>
@@ -63,7 +75,7 @@
 		<div class="category-{{.Id}} subcategory-efficacy" style="display:none">
 
 			<div class="control-group">
-				<label for="radios">小类</label>
+				<label for="radios">小  类</label>
 				<div>
 					{{ range .SubCategories }}
 						<label class="radio inline" for="{{.Id}}">
@@ -76,7 +88,7 @@
 			<hr>
 
 			<div class="control-group">
-				<label for="checkboxes">功效</label>
+				<label for="checkboxes">功  效</label>
 				<div >
 					{{ range $index, $efficacy := .Efficacies }}
 						<label class="checkbox inline" for="{{$efficacy.Id}}">

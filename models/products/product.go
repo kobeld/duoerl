@@ -32,6 +32,15 @@ func (this *Product) Link() string {
 	return fmt.Sprintf("/product/%s", this.Id.Hex())
 }
 
+func (this *Product) ImageUrl() string {
+
+	if this.Image == "" {
+		return "http://lorempixel.com/g/200/200/"
+	}
+
+	return this.Image
+}
+
 func CollectBrandAndAuthorIds(dbProducts []*Product) (brandIds, authorIds []bson.ObjectId) {
 	for _, dbProduct := range dbProducts {
 		if dbProduct.BrandId.Valid() {

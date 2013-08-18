@@ -14,11 +14,11 @@
 		<div class="control-group">
 			<label class="control-label">头  像</label>
 			<div class="controls">
-				<img class="user-avatar" src="{{.ApiUser.Avatar}}">
+				<img class="object-img" src="{{.ApiUser.Avatar}}">
 				<br>
 				<input id="fileupload" type="file" data-url="/upload/{{.ApiUser.ImageAttr.ImageType}}/{{.ApiUser.Id}}" multiple>
 
-				<input name="Avatar" class="upload-avatar-input" type="hidden" value="{{.ApiUser.Avatar }}"/>
+				<input name="Avatar" class="upload-img-input" type="hidden" value="{{.ApiUser.Avatar }}"/>
 			</div>
 		</div>
 

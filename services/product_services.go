@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/kobeld/duoerl/models/brands"
+	"github.com/kobeld/duoerl/models/images"
 	"github.com/kobeld/duoerl/models/products"
 	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerl/utils"
@@ -11,7 +12,11 @@ import (
 
 // For new product form
 func NewProduct() (productInput *duoerlapi.ProductInput) {
-	productInput = &duoerlapi.ProductInput{Id: bson.NewObjectId().Hex()}
+	productInput = &duoerlapi.ProductInput{
+		Id:        bson.NewObjectId().Hex(),
+		Image:     "http://lorempixel.com/g/200/200/", // Temp
+		ImageAttr: newProductImageAttr(),
+	}
 	return
 }
 
@@ -226,6 +231,7 @@ func UpdateProduct(input *duoerlapi.ProductInput) (originInput *duoerlapi.Produc
 	product.BrandId = brandObjectId
 	product.Name = input.Name
 	product.Alias = input.Alias
+	product.Image = input.Image
 	product.Intro = input.Intro
 	product.CategoryId = categoryOId
 	product.SubCategoryId = subCategoryOId
@@ -240,6 +246,13 @@ func UpdateProduct(input *duoerlapi.ProductInput) (originInput *duoerlapi.Produc
 }
 
 // ----- Private -----
+
+func newProductImageAttr() *duoerlapi.ImageAttr {
+	return &duoerlapi.ImageAttr{
+		ImageType: images.CATEGORY_PRODUCT,
+	}
+}
+
 func toApiProducts(dbProducts []*products.Product, brandMap map[bson.ObjectId]*brands.Brand,
 	authorMap map[bson.ObjectId]*users.User) (apiProducts []*duoerlapi.Product) {
 
@@ -261,6 +274,7 @@ func toApiProduct(product *products.Product, brand *brands.Brand, author *users.
 			Name:        product.Name,
 			Alias:       product.Alias,
 			Intro:       product.Intro,
+			Image:       product.ImageUrl(),
 			Brand:       toApiBrand(brand),
 			Author:      toApiUser(author),
 			Category:    GetCategory(product.CategoryId.Hex()),
@@ -278,6 +292,8 @@ func toProductInput(product *products.Product) (productInput *duoerlapi.ProductI
 		Name:          product.Name,
 		Alias:         product.Alias,
 		Intro:         product.Intro,
+		Image:         product.ImageUrl(),
+		ImageAttr:     newProductImageAttr(),
 		BrandId:       product.BrandId.Hex(),
 		AuthorId:      product.AuthorId.Hex(),
 		CategoryId:    product.CategoryId.Hex(),
