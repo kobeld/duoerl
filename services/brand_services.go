@@ -2,13 +2,67 @@ package services
 
 import (
 	"github.com/kobeld/duoerl/models/brands"
+	"github.com/kobeld/duoerl/models/images"
 	"github.com/kobeld/duoerl/utils"
 	"github.com/kobeld/duoerlapi"
 	"labix.org/v2/mgo/bson"
 )
 
 func NewBrand() (brandInput *duoerlapi.BrandInput) {
-	brandInput = &duoerlapi.BrandInput{Id: bson.NewObjectId().Hex()}
+	brandInput = &duoerlapi.BrandInput{
+		Id:        bson.NewObjectId().Hex(),
+		Logo:      "http://lorempixel.com/g/200/200/", // Temp
+		ImageAttr: newBrandImageAttr(),
+	}
+	return
+}
+
+func EditBrand(brandId string) (brandInput *duoerlapi.BrandInput, err error) {
+
+	brandOId, err := utils.ToObjectId(brandId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	brand, err := brands.FindById(brandOId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	brandInput = toBrandInput(brand)
+
+	return
+}
+
+func UpdateBrand(input *duoerlapi.BrandInput) (originInput *duoerlapi.BrandInput, err error) {
+	originInput = input
+
+	brandOId, err := utils.ToObjectId(input.Id)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	brand, err := brands.FindById(brandOId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	brand.Name = input.Name
+	brand.Alias = input.Alias
+	brand.Intro = input.Intro
+	brand.Country = input.Country
+	brand.Logo = input.Logo
+	brand.Website = input.Website
+
+	if err = brand.Save(); err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
 	return
 }
 
@@ -68,7 +122,7 @@ func CreateBrand(brandInput *duoerlapi.BrandInput) (input *duoerlapi.BrandInput,
 		Intro:   brandInput.Intro,
 		Country: brandInput.Country,
 		Website: brandInput.Website,
-		LogoUrl: brandInput.LogoUrl,
+		Logo:    brandInput.Logo,
 	}
 
 	if err = brand.Save(); err != nil {
@@ -79,7 +133,13 @@ func CreateBrand(brandInput *duoerlapi.BrandInput) (input *duoerlapi.BrandInput,
 	return
 }
 
-// ------------------
+// -------- Private ----------
+
+func newBrandImageAttr() *duoerlapi.ImageAttr {
+	return &duoerlapi.ImageAttr{
+		ImageType: images.CATEGORY_BRAND,
+	}
+}
 
 func toApiBrands(dbBrands []*brands.Brand) (apiBrands []*duoerlapi.Brand) {
 	for _, dbBrand := range dbBrands {
@@ -100,9 +160,24 @@ func toApiBrand(brand *brands.Brand) *duoerlapi.Brand {
 			Intro:   brand.Intro,
 			Country: brand.Country,
 			Website: brand.Website,
-			LogoUrl: brand.LogoUrl,
+			Logo:    brand.LogoUrl(),
 		}
 	}
 
 	return apiBrand
+}
+
+func toBrandInput(brand *brands.Brand) (brandInput *duoerlapi.BrandInput) {
+	brandInput = &duoerlapi.BrandInput{
+		Id:        brand.Id.Hex(),
+		Name:      brand.Name,
+		Alias:     brand.Alias,
+		Intro:     brand.Intro,
+		Country:   brand.Country,
+		Website:   brand.Website,
+		Logo:      brand.LogoUrl(),
+		ImageAttr: newBrandImageAttr(),
+	}
+
+	return
 }

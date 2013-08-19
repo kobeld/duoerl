@@ -33,11 +33,9 @@ func (this *Product) Link() string {
 }
 
 func (this *Product) ImageUrl() string {
-
 	if this.Image == "" {
 		return "http://lorempixel.com/g/200/200/"
 	}
-
 	return this.Image
 }
 

@@ -13,7 +13,7 @@ type Brand struct {
 	Intro     string
 	Country   string
 	Website   string
-	LogoUrl   string
+	Logo      string
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
@@ -27,6 +27,13 @@ func (this *Brand) MakeId() interface{} {
 
 func (this *Brand) Link() string {
 	return fmt.Sprintf("/brand/%s", this.Id.Hex())
+}
+
+func (this *Brand) LogoUrl() string {
+	if this.Logo == "" {
+		return "http://lorempixel.com/g/200/200/"
+	}
+	return this.Logo
 }
 
 func BuildBrandMap(dbBrands []*Brand) map[bson.ObjectId]*Brand {

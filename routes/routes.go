@@ -60,7 +60,7 @@ func Mux() (mux *http.ServeMux) {
 	p.Post("/brand/create", mainStack.HandlerFunc(brands.Create))
 	p.Get("/brand/:id", mainStack.HandlerFunc(brands.Show))
 	p.Get("/brand/:id/edit", mainStack.HandlerFunc(brands.Edit))
-	p.Post("/brand/:id/edit", mainStack.HandlerFunc(brands.Update))
+	p.Post("/brand/update", mainStack.HandlerFunc(brands.Update))
 	// Follow brand
 	p.Post("/brand/follow", mainStack.HandlerFunc(followbrands.Create))
 	p.Post("/brand/unfollow", mainStack.HandlerFunc(followbrands.Delete))

@@ -1,9 +1,9 @@
-{{ define "brands/new" }}
+{{ define "brands/edit" }}
 
-<form action="/brand/create" method="post" class="form-horizontal">
+<form action="/brand/update" method="post" class="form-horizontal">
 	<fieldset>
 		<div>
-			<legend><strong>Adding new brand</strong></legend>
+			<legend><strong>Edit brand</strong></legend>
 		</div>
 
 		{{ template "brands/form" . }}

@@ -1,0 +1,53 @@
+{{ define "brands/form" }}
+
+<div class="control-group">
+	<label class="control-label">Logo</label>
+	<div class="controls">
+		<img class="object-img" src="{{.BrandInput.Logo}}">
+		<br>
+		<input id="fileupload" type="file" data-url="/upload/{{.BrandInput.ImageAttr.ImageType}}/{{.BrandInput.Id}}" multiple>
+
+		<input name="Logo" class="upload-img-input" type="hidden" value="{{.BrandInput.Logo }}"/>
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">Name</label>
+	<div class="controls">
+		<input type="text" name="Name" class="input-large" value="{{ .BrandInput.Name }}">
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">Alias</label>
+	<div class="controls">
+		<input type="text" name="Alias" class="input-large" value="{{ .BrandInput.Alias }}">
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">Country</label>
+	<div class="controls">
+		<input type="text" name="Country" class="input-large" value="{{ .BrandInput.Country }}">
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">Website</label>
+	<div class="controls">
+		<input type="text" name="Website" class="input-large" value="{{ .BrandInput.Website }}">
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">Introduction</label>
+	<div class="controls">
+		<div class="textare">
+			<textarea name="Intro">{{ .BrandInput.Intro }}</textarea>
+		</div>
+	</div>
+</div>
+
+<input name="Id" type="hidden" value="{{ .BrandInput.Id }}"/>
+
+{{ end }}

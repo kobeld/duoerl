@@ -4,14 +4,15 @@ import (
 	"github.com/kobeld/duoerl/services"
 	"github.com/kobeld/duoerlapi"
 	. "github.com/paulbellamy/mango"
-	"github.com/theplant/formdata"
 	"github.com/sunfmin/govalidations"
 	"github.com/sunfmin/mangotemplate"
+	"github.com/theplant/formdata"
 	"net/http"
 )
 
 var (
-	brandFields = []string{"Id", "Name", "Alias", "Country", "Intro", "Website", "LogoUrl"}
+	brandFields = []string{"Id", "Name", "Alias", "Country",
+		"Intro", "Website", "Logo"}
 )
 
 type BrandViewData struct {
@@ -66,7 +67,7 @@ func Show(env Env) (status Status, headers Headers, body Body) {
 
 func New(env Env) (status Status, headers Headers, body Body) {
 	brandInput := services.NewBrand()
-	mangotemplate.ForRender(env, "brands/new", brandInput)
+	mangotemplate.ForRender(env, "brands/new", newBrandViewData(brandInput, nil))
 	return
 }
 
@@ -89,12 +90,33 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 
 func Edit(env Env) (status Status, headers Headers, body Body) {
 
-	// mangotemplate.ForRender(env, template, data)
+	brandId := env.Request().URL.Query().Get(":id")
+	brandInput, err := services.EditBrand(brandId)
+	if validated, ok := err.(*govalidations.Validated); ok {
+		mangotemplate.ForRender(env, "brands/edit", newBrandViewData(brandInput, validated))
+		return
+	}
+	if err != nil {
+		panic(err)
+	}
+
+	mangotemplate.ForRender(env, "brands/edit", newBrandViewData(brandInput, nil))
 	return
 }
 
 func Update(env Env) (status Status, headers Headers, body Body) {
 
-	// mangotemplate.ForRender(env, template, data)
-	return
+	brandInput := new(duoerlapi.BrandInput)
+	formdata.UnmarshalByNames(env.Request().Request, &brandInput, brandFields)
+
+	result, err := services.UpdateBrand(brandInput)
+	if validated, ok := err.(*govalidations.Validated); ok {
+		mangotemplate.ForRender(env, "products/edit", newBrandViewData(result, validated))
+		return
+	}
+	if err != nil {
+		panic(err)
+	}
+
+	return Redirect(http.StatusFound, "/brand/"+result.Id)
 }
