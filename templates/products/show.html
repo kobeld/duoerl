@@ -7,50 +7,47 @@
 		<div class="span3">
 			<p><img src="{{ .ApiProduct.Image }}"></p>
 			<p>
-				<button class="btn btn-small btn-add-wishitem" type="button" {{ if .ApiProduct.HasWished }} style="display:none" {{ end }}>Wish this</button>
-				<button class="btn btn-small btn-remove-wishitem" type="button" {{ if not .ApiProduct.HasWished }} style="display:none" {{ end }}>Unwish this</button>
+				<button class="btn btn-small btn-add-wishitem" type="button" {{ if .ApiProduct.HasWished }} style="display:none" {{ end }}>想 要</button>
+				<button class="btn btn-small btn-remove-wishitem" type="button" {{ if not .ApiProduct.HasWished }} style="display:none" {{ end }}>取消想要</button>
+				<a href="#ownitem-modal" role="button" class="btn btn-small link-add-ownitem-trigger" data-toggle="modal" {{ if .ApiProduct.HasOwned }} style="display:none" {{ end }}>用 过</a>
+				<button class="btn btn-small btn-remove-ownitem" type="button" {{ if not .ApiProduct.HasOwned }} style="display:none" {{ end }}>取消用过</button>
 			</p>
-			<p>
-				<a href="#ownitem-modal" role="button" class="btn btn-small link-add-ownitem-trigger" data-toggle="modal" {{ if .ApiProduct.HasOwned }} style="display:none" {{ end }}>Own this</a>
-				<button class="btn btn-small btn-remove-ownitem" type="button" {{ if not .ApiProduct.HasOwned }} style="display:none" {{ end }}>Remove Owning</button>
-			</p>
+
+			<a href="/product/{{ .ApiProduct.Id }}/edit">编 辑</a>
 		</div>
-
-
 
 		<div class="span6">
 			<h4>{{ .ApiProduct.Name }}</h4>
-			<a href="/product/{{ .ApiProduct.Id }}/edit">Edit Product</a>
 
 			<dl class="dl-horizontal">
 
 				{{ if .ApiProduct.Alias }}
-					<dt>Alias:</dt>
+					<dt>别  名:</dt>
 					<dd>{{ .ApiProduct.Alias }}</dd>
 				{{ end }}
 
 				{{ if .ApiProduct.Author.Name }}
-					<dt>Author:</dt>
+					<dt>贡献者:</dt>
 					<dd>
 						<a href="{{ .ApiProduct.Author.Link }}">{{ .ApiProduct.Author.Name }}</a>
 					</dd>
 				{{ end }}
 
-				<dt>Brand:</dt>
+				<dt>品 牌:</dt>
 				<dd><a href="{{ .ApiProduct.Brand.Link }}">{{ .ApiProduct.Brand.Name }}</a></dd>
 
 				{{ if .ApiProduct.Category }}
-					<dt>Category:</dt>
+					<dt>分 类:</dt>
 					<dd>{{ .ApiProduct.Category.Name }}</dd>
 				{{ end }}
 
 				{{ if .ApiProduct.SubCategory }}
-					<dt>SubCategory:</dt>
+					<dt>小 类:</dt>
 					<dd>{{ .ApiProduct.SubCategory.Name }}</dd>
 				{{ end }}
 
 				{{ if .ApiProduct.Efficacies }}
-					<dt>Efficacies:</dt>
+					<dt>功 效:</dt>
 					<dd>
 					{{ range .ApiProduct.Efficacies }}
 						{{ .Name }}
@@ -58,7 +55,7 @@
 					</dd>
 				{{ end }}
 				<p></p>
-				<dt>Introduction:</dt>
+				<dt>简 介:</dt>
 				<dd>{{ .ApiProduct.Intro }}</dd>
 			</dl>
 		</div>
@@ -74,15 +71,29 @@
 		</div>
 
 		<div class="span9">
-			<h4>Reviews</h4>
+			<h4>使用心得</h4>
 
 			{{ range .ApiReviews }}
 			<div class="row">
-				<div class="span2">
+				<div class="span1">
+					<img src="{{.Author.Avatar}}" style="width:60px; height:60px">
+					<br>
 					<a href="{{ .Author.Link }}">{{ .Author.Name }}</a>
 				</div>
-				<div class="span4">{{ .Content }}</div>
+				<div class="span4">
+					评 分：{{.Rating}}
+
+					<br>
+					{{ .Content }}
+					<br>
+
+					功 效:
+					{{ range .Efficacies }}
+						<span>{{.Name}}</span>
+					{{ end }}
+				</div>
 			</div>
+			<p></p>
 			{{ end }}
 
 		</div>
@@ -99,10 +110,25 @@
 				<input name="Id" type="hidden" value="{{ .ReviewInput.Id }}"/>
 				<input name="ProductId" type="hidden" value="{{ .ApiProduct.Id }}"/>
 				<fieldset>
-					<label>Write a Review</label>
+					<h4>写心得</h4>
+					{{ range $value, $text := .RatingOptions }}
+					<label class="radio inline">
+						<input type="radio" name="Rating" value="{{$value}}">{{$text}}
+					</label>
+					{{ end }}
+					<p></p>
+
+					{{ range $index, $efficacy := .ApiProduct.Category.Efficacies }}
+						<label class="checkbox inline" for="{{$efficacy.Id}}">
+							<input type="checkbox" name="EfficacyIds[{{$index}}]" id="{{$efficacy.Id}}" value="{{$efficacy.Id}}">{{$efficacy.Name}}
+						</label>
+					{{ end }}
+					<p></p>
+
 					<textarea rows="3" name="Content"></textarea>
 					<p></p>
-					<button type="submit" class="btn">Submit</button>
+
+					<button type="submit" class="btn">提 交</button>
 				</fieldset>
 			</form>
 
@@ -114,12 +140,12 @@
 
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3 id="myModalLabel">I own this</h3>
+			<h3 id="myModalLabel">我用过</h3>
 		</div>
 
 	  	<div class="modal-body form-horizontal">
 			<div class="control-group">
-				<label class="control-label" for="selectbasic">Got from</label>
+				<label class="control-label" for="selectbasic">获得途径</label>
 				<div class="controls">
 					<select name="selectbasic" class="input-large select-gotFrom">
 
@@ -133,8 +159,8 @@
 	  	</div>
 
 	  	<div class="modal-footer">
-	    	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-	    	<button type="btn" class="btn btn-primary btn-add-ownitem">Save</button>
+	    	<button class="btn" data-dismiss="modal" aria-hidden="true">关 闭</button>
+	    	<button type="btn" class="btn btn-primary btn-add-ownitem">保  存</button>
 	  	</div>
 	</div>
 

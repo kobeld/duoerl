@@ -35,13 +35,13 @@ var SkinTextureOptions = map[string]string{
 // User Hair Texture
 const (
 	HAIR_01 string = "hair_01"
-	HAIR_02 string = "hair_02"
-	HAIR_03 string = "hair_03"
-	HAIR_04 string = "hair_04"
-	HAIR_05 string = "hair_05"
-	HAIR_06 string = "hair_06"
-	HAIR_07 string = "hair_07"
-	HAIR_08 string = "hair_08"
+	HAIR_02        = "hair_02"
+	HAIR_03        = "hair_03"
+	HAIR_04        = "hair_04"
+	HAIR_05        = "hair_05"
+	HAIR_06        = "hair_06"
+	HAIR_07        = "hair_07"
+	HAIR_08        = "hair_08"
 )
 
 var HairTextureOptions = map[string]string{
@@ -53,6 +53,23 @@ var HairTextureOptions = map[string]string{
 	HAIR_06: "头屑发质",
 	HAIR_07: "暗哑发质",
 	HAIR_08: "脱落发质",
+}
+
+// Review Rating
+const (
+	RATING_01 string = "1"
+	RATING_02        = "2"
+	RATING_03        = "3"
+	RATING_04        = "4"
+	RATING_05        = "5"
+)
+
+var RatingOptions = map[string]string{
+	RATING_01: "很差",
+	RATING_02: "较差",
+	RATING_03: "还行",
+	RATING_04: "推荐",
+	RATING_05: "力荐",
 }
 
 // Cached data

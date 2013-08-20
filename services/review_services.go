@@ -44,10 +44,12 @@ func CreateReview(input *duoerlapi.ReviewInput) (originInput *duoerlapi.ReviewIn
 	}
 
 	review := &reviews.Review{
-		Id:        oId,
-		AuthorId:  authorOId,
-		ProductId: productOId,
-		Content:   input.Content,
+		Id:          oId,
+		AuthorId:    authorOId,
+		ProductId:   productOId,
+		Content:     input.Content,
+		Rating:      input.Rating,
+		EfficacyIds: utils.TurnPlainIdsToObjectIds(input.EfficacyIds),
 	}
 
 	if err = review.Save(); err != nil {
@@ -111,11 +113,14 @@ func toApiReviews(dbReviews []*reviews.Review, productMap map[bson.ObjectId]*pro
 func toApiReview(dbReview *reviews.Review, dbProduct *products.Product, dbAuthor *users.User) *duoerlapi.Review {
 	apiReview := new(duoerlapi.Review)
 	if dbReview != nil {
+		efficacyIds := utils.TurnObjectIdToPlainIds(dbReview.EfficacyIds)
 		apiReview = &duoerlapi.Review{
-			Id:      dbReview.Id.Hex(),
-			Content: dbReview.Content,
-			Product: toApiProduct(dbProduct, nil, dbAuthor),
-			Author:  toApiUser(dbAuthor),
+			Id:         dbReview.Id.Hex(),
+			Content:    dbReview.Content,
+			Product:    toApiProduct(dbProduct, nil, dbAuthor),
+			Author:     toApiUser(dbAuthor),
+			Rating:     dbReview.Rating,
+			Efficacies: GetEfficaciesByIds(efficacyIds),
 		}
 	}
 	return apiReview

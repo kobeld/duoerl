@@ -4,14 +4,14 @@ import (
 	"github.com/kobeld/duoerl/services"
 	"github.com/kobeld/duoerlapi"
 	. "github.com/paulbellamy/mango"
-	"github.com/theplant/formdata"
 	"github.com/sunfmin/govalidations"
 	"github.com/sunfmin/mangotemplate"
+	"github.com/theplant/formdata"
 	"net/http"
 )
 
 var (
-	reviewFields = []string{"Id", "ProductId", "Content"}
+	reviewFields = []string{"Id", "ProductId", "Content", "Rating", "EfficacyIds"}
 )
 
 func Create(env Env) (status Status, headers Headers, body Body) {

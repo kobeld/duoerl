@@ -26,6 +26,7 @@ type ProductViewData struct {
 	ApiReviews     []*duoerlapi.Review
 	ReviewInput    *duoerlapi.ReviewInput
 	GotFromOptions map[string]string
+	RatingOptions  map[string]string
 }
 
 // ----------------
@@ -63,6 +64,7 @@ func Show(env Env) (status Status, headers Headers, body Body) {
 		ApiReviews:     apiReviews,
 		ReviewInput:    services.NewReview(),
 		GotFromOptions: global.GotFromOptions,
+		RatingOptions:  global.RatingOptions,
 	}
 
 	mangotemplate.ForRender(env, "products/show", productViewData)

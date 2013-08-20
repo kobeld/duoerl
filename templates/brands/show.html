@@ -7,24 +7,26 @@
 		<div class="span3">
 			<img src="{{ .ApiBrand.Logo }}" style="width:200px; height:200px">
 			<p>
-				<button class="btn btn-small btn-follow-brand" type="button" {{ if .ApiBrand.HasFollowed }} style="display:none" {{ end }}>Follow Brand</button>
-				<button class="btn btn-small btn-unfollow-brand" type="button" {{ if not .ApiBrand.HasFollowed }} style="display:none" {{ end }}>Unfollow Brand</button>
+				<button class="btn btn-small btn-follow-brand" type="button" {{ if .ApiBrand.HasFollowed }} style="display:none" {{ end }}>关注</button>
+				<button class="btn btn-small btn-unfollow-brand" type="button" {{ if not .ApiBrand.HasFollowed }} style="display:none" {{ end }}>取消关注</button>
+			</p>
+			<p>
+				<a href="/brand/{{ .ApiBrand.Id }}/edit">编辑</a>
 			</p>
 		</div>
 
 		<div class="span6">
 			<h4>{{ .ApiBrand.Name }}</h4>
-			<a href="{{ .ApiBrand.Website }}">Official Site</a>
-			<a href="/brand/{{ .ApiBrand.Id }}/edit">Edit Brand</a>
+			<a href="{{ .ApiBrand.Website }}">官方网站</a>
 
 			<dl class="dl-horizontal">
-				<dt>Alias:</dt>
+				<dt>别  名:</dt>
 				<dd>{{ .ApiBrand.Alias }}</dd>
 
 				<dt>诞生地:</dt>
 				<dd>{{ .ApiBrand.Country }}</dd>
 
-				<dt>Introduction:</dt>
+				<dt>简  介:</dt>
 				<dd>{{ .ApiBrand.Intro }}</dd>
 			</dl>
 		</div>
@@ -33,7 +35,7 @@
 
 	<hr>
 
-	<h4>Products</h4>
+	<h4>热门产品</h4>
 	<div class="row">
 		<div class="span9">
 			<ul class="inline">

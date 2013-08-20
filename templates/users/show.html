@@ -9,32 +9,32 @@
 	<div class="span6">
 		<h4>{{ .ApiUser.Name }}</h4>
 		{{ if .IsCurrent }}
-			<a href="/user/edit">Edit</a>
+			<a href="/user/edit">编 辑</a>
 		{{ end }}
 
 		<dl class="dl-horizontal">
-			<dt>Email:</dt>
+			<dt>邮 件:</dt>
 			<dd>{{ .ApiUser.Email }}</dd>
 
-			<dt>Gender:</dt>
+			<dt>性 别:</dt>
 			<dd>{{ $profile.Gender }}</dd>
 
-			<dt>Birthday:</dt>
+			<dt>生 日:</dt>
 			<dd>{{ $profile.Birthday }}</dd>
 
 			{{ if $profile.Location }}
-				<dt>Location:</dt>
+				<dt>所在地:</dt>
 				<dd>{{ $profile.Location }} </dd>
 			{{ end }}
 
-			<dt>Skin texture:</dt>
+			<dt>肤质类型:</dt>
 			<dd>{{ $profile.SkinTextureText }}</dd>
 
-			<dt>Hair texture:</dt>
+			<dt>发质类型:</dt>
 			<dd>{{ $profile.HairTextureText }}</dd>
 
 			{{ if $profile.Description }}
-				<dt>Description:</dt>
+				<dt>自我简介:</dt>
 				<dd>{{ $profile.Description }}</dd>
 			{{ end }}
 		</dl>

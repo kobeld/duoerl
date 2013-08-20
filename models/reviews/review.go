@@ -6,11 +6,13 @@ import (
 )
 
 type Review struct {
-	Id        bson.ObjectId `bson:"_id"`
-	AuthorId  bson.ObjectId
-	ProductId bson.ObjectId
-	Content   string
-	CreatedAt time.Time
+	Id          bson.ObjectId `bson:"_id"`
+	AuthorId    bson.ObjectId
+	ProductId   bson.ObjectId
+	Content     string
+	Rating      string
+	EfficacyIds []bson.ObjectId
+	CreatedAt   time.Time
 }
 
 func (this *Review) MakeId() interface{} {
