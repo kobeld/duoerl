@@ -4,6 +4,7 @@
 		<a class="brand" href="/"><strong>Duoerl</strong></a>
 		<div class="nav-collapse collapse">
 			<ul class="nav">
+				<li class="active"><a href="/">首 页</a></li>
 				<li class="active"><a href="/brands">品 牌</a></li>
 				<li class="active"><a href="/products">化妆品</a></li>
 			</ul>
@@ -15,10 +16,11 @@
 						<ul class="dropdown-menu">
                           <li><a href="{{.Layout.CurrentUser.Link }}">个人首页</a></li>
                           <li class="divider"></li>
-                          <li><a href="/admin/categories">分 类</a></li>
+                          <li><a href="/admin/categories">分类管理</a></li>
+                          <li class="divider"></li>
+                          <li><a href="/logout">退 出</a></li>
                         </ul>
 					</li>
-					<li><a href="/logout">退 出</a></li>
 				{{ else }}
 					<li><a href="/login">登 录</a></li>
 					<li><a href="/signup">注 册</a></li>

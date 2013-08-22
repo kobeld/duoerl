@@ -1,6 +1,7 @@
 package followbrands
 
 import (
+	"github.com/kobeld/duoerl/global"
 	"github.com/sunfmin/mgodb"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
@@ -16,16 +17,25 @@ func (this *FollowBrand) Save() error {
 	return mgodb.Save(FOLLOW_BRANDS, this)
 }
 
-func DeleteByUserAndBrandId(userId, brandId bson.ObjectId) error {
+func DeleteByUserAndBrandId(userId, brandId bson.ObjectId) (err error) {
+	if !userId.Valid() || !brandId.Valid() {
+		err = global.InvalidIdError
+		return
+	}
 	return DeleteFollowBrand(bson.M{"userid": userId, "brandid": brandId})
 }
 
-func FindByUserAndBrandId(userId, brandId bson.ObjectId) (*FollowBrand, error) {
+func FindByUserAndBrandId(userId, brandId bson.ObjectId) (followBrand *FollowBrand, err error) {
+	if !userId.Valid() || !brandId.Valid() {
+		err = global.InvalidIdError
+		return
+	}
 	return FindOne(bson.M{"userid": userId, "brandid": brandId})
 }
 
 func FindByUserId(userId bson.ObjectId) (r []*FollowBrand, err error) {
 	if !userId.Valid() {
+		err = global.InvalidIdError
 		return
 	}
 	return FindAll(bson.M{"userid": userId})
@@ -48,6 +58,29 @@ func FindAll(query bson.M) (r []*FollowBrand, err error) {
 func DeleteFollowBrand(query bson.M) (err error) {
 	mgodb.CollectionDo(FOLLOW_BRANDS, func(rc *mgo.Collection) {
 		_, err = rc.RemoveAll(query)
+	})
+	return
+}
+
+func CountBrandFollowerByBrandId(brandId bson.ObjectId) (num int, err error) {
+	if !brandId.Valid() {
+		err = global.InvalidIdError
+		return
+	}
+	return CountFollowBrand(bson.M{"brandid": brandId})
+}
+
+func CountFollowingBrandByUserId(userId bson.ObjectId) (num int, err error) {
+	if !userId.Valid() {
+		err = global.InvalidIdError
+		return
+	}
+	return CountFollowBrand(bson.M{"userid": userId})
+}
+
+func CountFollowBrand(query bson.M) (num int, err error) {
+	mgodb.CollectionDo(FOLLOW_BRANDS, func(c *mgo.Collection) {
+		num, err = c.Find(query).Count()
 	})
 	return
 }

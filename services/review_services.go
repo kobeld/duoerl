@@ -37,6 +37,13 @@ func CreateReview(input *duoerlapi.ReviewInput) (originInput *duoerlapi.ReviewIn
 		return
 	}
 
+	// Check if the product exists
+	product, err := products.FindById(productOId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
 	authorOId, err := utils.ToObjectId(input.AuthorId)
 	if err != nil {
 		utils.PrintStackAndError(err)
@@ -47,6 +54,7 @@ func CreateReview(input *duoerlapi.ReviewInput) (originInput *duoerlapi.ReviewIn
 		Id:          oId,
 		AuthorId:    authorOId,
 		ProductId:   productOId,
+		BrandId:     product.BrandId,
 		Content:     input.Content,
 		Rating:      input.Rating,
 		EfficacyIds: utils.TurnPlainIdsToObjectIds(input.EfficacyIds),

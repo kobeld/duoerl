@@ -3,6 +3,7 @@ package products
 import (
 	"github.com/kobeld/duoerl/global"
 	"github.com/sunfmin/mgodb"
+	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 	"time"
 )
@@ -48,5 +49,19 @@ func FindOne(query bson.M) (r *Product, err error) {
 
 func FindAll(query bson.M) (r []*Product, err error) {
 	err = mgodb.FindAll(PRODUCTS, query, &r)
+	return
+}
+
+func CountProductByBrandId(brandId bson.ObjectId) (num int, err error) {
+	if !brandId.Valid() {
+		err = global.InvalidIdError
+	}
+	return CountProduct(bson.M{"brandid": brandId})
+}
+
+func CountProduct(query bson.M) (num int, err error) {
+	mgodb.CollectionDo(PRODUCTS, func(c *mgo.Collection) {
+		num, err = c.Find(query).Count()
+	})
 	return
 }

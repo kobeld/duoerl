@@ -9,6 +9,7 @@ type Review struct {
 	Id          bson.ObjectId `bson:"_id"`
 	AuthorId    bson.ObjectId
 	ProductId   bson.ObjectId
+	BrandId     bson.ObjectId
 	Content     string
 	Rating      string
 	EfficacyIds []bson.ObjectId

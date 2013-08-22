@@ -2,7 +2,10 @@ package services
 
 import (
 	"github.com/kobeld/duoerl/models/brands"
+	"github.com/kobeld/duoerl/models/followbrands"
 	"github.com/kobeld/duoerl/models/images"
+	"github.com/kobeld/duoerl/models/products"
+	"github.com/kobeld/duoerl/models/reviews"
 	"github.com/kobeld/duoerl/utils"
 	"github.com/kobeld/duoerlapi"
 	"labix.org/v2/mgo/bson"
@@ -103,6 +106,8 @@ func ShowBrand(brandId, userId string) (apiBrand *duoerlapi.Brand, err error) {
 		apiBrand.HasFollowed = true
 	}
 
+	apiBrand.BrandStats = getBrandStats(brandOId)
+
 	return
 }
 
@@ -134,6 +139,28 @@ func CreateBrand(brandInput *duoerlapi.BrandInput) (input *duoerlapi.BrandInput,
 }
 
 // -------- Private ----------
+
+func getBrandStats(brandId bson.ObjectId) (brandStats *duoerlapi.BrandStats) {
+	var err error
+	brandStats = new(duoerlapi.BrandStats)
+
+	brandStats.FollowerCount, err = followbrands.CountBrandFollowerByBrandId(brandId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+	}
+
+	brandStats.ProductCount, err = products.CountProductByBrandId(brandId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+	}
+
+	brandStats.ReviewCount, err = reviews.CountReviewByBrandId(brandId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+	}
+
+	return brandStats
+}
 
 func newBrandImageAttr() *duoerlapi.ImageAttr {
 	return &duoerlapi.ImageAttr{
