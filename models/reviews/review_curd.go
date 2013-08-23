@@ -25,6 +25,15 @@ func FindById(id bson.ObjectId) (review *Review, err error) {
 	return FindOne(bson.M{"_id": id})
 }
 
+func FindSomeByBrandId(brandId bson.ObjectId) (rs []*Review, err error) {
+	if !brandId.Valid() {
+		err = global.InvalidIdError
+		return
+	}
+
+	return FindAll(bson.M{"brandid": brandId})
+}
+
 func FindSomeByProductId(productId bson.ObjectId) (rs []*Review, err error) {
 	if !productId.Valid() {
 		err = global.InvalidIdError

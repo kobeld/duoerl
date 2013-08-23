@@ -67,12 +67,49 @@
 		</div>
 	</div>
 
+	<hr>
+
+	<h4>产品心得 ({{$brandStats.ReviewCount}})</h4>
+	<div class="row">
+		<div class="span9">
+			<div class="row">
+			{{ range .ApiReviews }}
+				<div class="span1">
+					<img src="{{.Author.Avatar}}" style="width:60px; height:60px">
+					<br>
+					<a href="{{ .Author.Link }}"><strong>{{ .Author.Name }}</strong></a>
+				</div>
+				<div class="span5">
+					评 分：{{.Rating}}
+
+					<br>
+					{{ .Content }}
+					<br>
+
+					功 效:
+					{{ range .Efficacies }}
+						<span>{{.Name}}</span>
+					{{ end }}
+				</div>
+				<div class="span2">
+					<img src="{{.Product.Image}}" style="width:60px; height:60px">
+					<br>
+					<a href="{{ .Product.Link }}"><strong>{{ .Product.Name }}</strong></a>
+				</div>
+			{{ end }}
+			</div>
+			<p></p>
+		</div>
+	</div>
+
+	<hr>
+
 	<h4>Ta们也在关注 ({{$brandStats.FollowerCount}})</h4>
 	<div class="row">
 		<div class="span9">
 			<ul class="inline">
 				{{ range .BrandFollowers }}
-					<li><img src="{{ .Avatar }}" style="width:80px; height:80px"><h5 class="text-center"><a href="{{ .Link }}">{{ .Name }}</a></h5></li>
+					<li><img src="{{ .Avatar }}" style="width:60px; height:60px"><h5 class="text-center"><a href="{{ .Link }}">{{ .Name }}</a></h5></li>
 				{{ end }}
 			</ul>
 		</div>

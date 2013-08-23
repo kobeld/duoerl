@@ -20,6 +20,7 @@ type BrandViewData struct {
 	Validated      *govalidations.Validated
 	ApiBrand       *duoerlapi.Brand
 	ApiBrands      []*duoerlapi.Brand
+	ApiReviews     []*duoerlapi.Review
 	ApiProducts    []*duoerlapi.Product
 	BrandFollowers []*duoerlapi.User
 }
@@ -65,10 +66,16 @@ func Show(env Env) (status Status, headers Headers, body Body) {
 		panic(err)
 	}
 
+	apiReviews, err := services.ShowReviewsInBrand(brandIdHex)
+	if err != nil {
+		panic(err)
+	}
+
 	brandViewData := &BrandViewData{
 		ApiBrand:       apiBrand,
 		ApiProducts:    apiProducts,
 		BrandFollowers: brandFollowers,
+		ApiReviews:     apiReviews,
 	}
 
 	mangotemplate.ForRender(env, "brands/show", brandViewData)
