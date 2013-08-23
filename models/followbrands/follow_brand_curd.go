@@ -17,12 +17,12 @@ func (this *FollowBrand) Save() error {
 	return mgodb.Save(FOLLOW_BRANDS, this)
 }
 
-func DeleteByUserAndBrandId(userId, brandId bson.ObjectId) (err error) {
-	if !userId.Valid() || !brandId.Valid() {
+func FindByBrandId(brandId bson.ObjectId) (r []*FollowBrand, err error) {
+	if !brandId.Valid() {
 		err = global.InvalidIdError
 		return
 	}
-	return DeleteFollowBrand(bson.M{"userid": userId, "brandid": brandId})
+	return FindAll(bson.M{"brandid": brandId})
 }
 
 func FindByUserAndBrandId(userId, brandId bson.ObjectId) (followBrand *FollowBrand, err error) {
@@ -83,4 +83,12 @@ func CountFollowBrand(query bson.M) (num int, err error) {
 		num, err = c.Find(query).Count()
 	})
 	return
+}
+
+func DeleteByUserAndBrandId(userId, brandId bson.ObjectId) (err error) {
+	if !userId.Valid() || !brandId.Valid() {
+		err = global.InvalidIdError
+		return
+	}
+	return DeleteFollowBrand(bson.M{"userid": userId, "brandid": brandId})
 }

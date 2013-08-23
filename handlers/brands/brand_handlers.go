@@ -16,11 +16,12 @@ var (
 )
 
 type BrandViewData struct {
-	BrandInput  *duoerlapi.BrandInput
-	Validated   *govalidations.Validated
-	ApiBrand    *duoerlapi.Brand
-	ApiBrands   []*duoerlapi.Brand
-	ApiProducts []*duoerlapi.Product
+	BrandInput     *duoerlapi.BrandInput
+	Validated      *govalidations.Validated
+	ApiBrand       *duoerlapi.Brand
+	ApiBrands      []*duoerlapi.Brand
+	ApiProducts    []*duoerlapi.Product
+	BrandFollowers []*duoerlapi.User
 }
 
 func newBrandViewData(brandInput *duoerlapi.BrandInput,
@@ -46,19 +47,28 @@ func Index(env Env) (status Status, headers Headers, body Body) {
 }
 
 func Show(env Env) (status Status, headers Headers, body Body) {
-	brandId := env.Request().URL.Query().Get(":id")
+	brandIdHex := env.Request().URL.Query().Get(":id")
 	currentUserId := services.FetchUserIdFromSession(env)
 
-	apiBrand, err := services.ShowBrand(brandId, currentUserId)
+	apiBrand, err := services.ShowBrand(brandIdHex, currentUserId)
 	if err != nil {
 		panic(err)
 	}
 
-	apiProducts, err := services.BrandProducts(brandId)
+	apiProducts, err := services.BrandProducts(brandIdHex)
+	if err != nil {
+		panic(err)
+	}
+
+	brandFollowers, err := services.GetBrandFollowers(brandIdHex)
+	if err != nil {
+		panic(err)
+	}
 
 	brandViewData := &BrandViewData{
-		ApiBrand:    apiBrand,
-		ApiProducts: apiProducts,
+		ApiBrand:       apiBrand,
+		ApiProducts:    apiProducts,
+		BrandFollowers: brandFollowers,
 	}
 
 	mangotemplate.ForRender(env, "brands/show", brandViewData)

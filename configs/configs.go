@@ -7,3 +7,7 @@ var (
 	DatabaseName      = "duoerl"
 	ImageDatabaseName = "duoerl_images"
 )
+
+const (
+	BRAND_SHOW_FOLLOWER_NUM = 10
+)

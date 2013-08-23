@@ -67,5 +67,16 @@
 		</div>
 	</div>
 
+	<h4>Ta们也在关注 ({{$brandStats.FollowerCount}})</h4>
+	<div class="row">
+		<div class="span9">
+			<ul class="inline">
+				{{ range .BrandFollowers }}
+					<li><img src="{{ .Avatar }}" style="width:80px; height:80px"><h5 class="text-center"><a href="{{ .Link }}">{{ .Name }}</a></h5></li>
+				{{ end }}
+			</ul>
+		</div>
+	</div>
+
 </div>
 {{ end }}
