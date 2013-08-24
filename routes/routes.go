@@ -7,6 +7,7 @@ import (
 	"github.com/kobeld/duoerl/handlers/efficacies"
 	"github.com/kobeld/duoerl/handlers/feeds"
 	"github.com/kobeld/duoerl/handlers/followbrands"
+	"github.com/kobeld/duoerl/handlers/news"
 	"github.com/kobeld/duoerl/handlers/ownitems"
 	"github.com/kobeld/duoerl/handlers/products"
 	"github.com/kobeld/duoerl/handlers/reviews"
@@ -61,6 +62,7 @@ func Mux() (mux *http.ServeMux) {
 	p.Get("/brand/:id", mainStack.HandlerFunc(brands.Show))
 	p.Get("/brand/:id/edit", mainStack.HandlerFunc(brands.Edit))
 	p.Post("/brand/update", mainStack.HandlerFunc(brands.Update))
+
 	// Follow brand
 	p.Post("/brand/follow", mainStack.HandlerFunc(followbrands.Create))
 	p.Post("/brand/unfollow", mainStack.HandlerFunc(followbrands.Delete))
@@ -84,10 +86,17 @@ func Mux() (mux *http.ServeMux) {
 	p.Post("/own_item/add", mainAjaxStack.HandlerFunc(ownitems.Create))
 	p.Post("/own_item/remove", mainAjaxStack.HandlerFunc(ownitems.Delete))
 
+	// News
+	p.Get("/news/:id", mainStack.HandlerFunc(news.Show))
+	p.Post("/news/create", mainStack.HandlerFunc(news.Create))
+
 	// For admin in the futrue
 	p.Get("/admin/categories", mainStack.HandlerFunc(categories.Index))
 	p.Post("/admin/category/create", mainStack.HandlerFunc(categories.Create))
 	p.Post("/admin/efficacy/create", mainStack.HandlerFunc(efficacies.Create))
+
+	// News for admin
+	p.Get("/admin/news/new", mainStack.HandlerFunc(news.New))
 
 	// For Image upload
 	imageUploader := tenpu.MakeUploader(images.TheImageMaker)

@@ -11,7 +11,6 @@ const (
 )
 
 type Attribute struct {
-	Id       bson.ObjectId `bson:"_id"`
 	Name     string
 	AType    string
 	ParentId bson.ObjectId `bson:",omitempty" json:",omitempty"`
@@ -20,7 +19,6 @@ type Attribute struct {
 func newAttribute(name, parentIdHex string) *Attribute {
 	parentId, _ := utils.ToObjectId(parentIdHex)
 	return &Attribute{
-		Id:       bson.NewObjectId(),
 		Name:     name,
 		AType:    TYPE_CATEGORY,
 		ParentId: parentId,

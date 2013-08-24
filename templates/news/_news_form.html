@@ -1,0 +1,44 @@
+{{ define "news/form" }}
+
+<!-- Passing NewsInput in -->
+
+<div class="row">
+	<div class="span9">
+
+		<div class="control-group">
+			<label class="control-label">品  牌</label>
+			<div class="controls">
+				<select name="BrandId" class="input brand-select">
+					<option>please select</option>
+					{{ range .ApiBrands }}
+						<option value="{{ .Id }}">{{ .Name }}</option>
+					{{ end }}
+				</select>
+			</div>
+			<script>$(".brand-select").val("{{.NewsInput.BrandId}}")</script>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">标  题</label>
+			<div class="controls">
+				<input type="text" name="Title" class="input-block-level" value="{{ .NewsInput.Title }}">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">介  绍</label>
+			<div class="controls">
+				<div class="textare">
+					<textarea name="Content" class="input-block-level" rows="12">{{ .NewsInput.Content }}</textarea>
+				</div>
+			</div>
+		</div>
+
+	</div><!-- .span6 -->
+
+	<input name="Id" type="hidden" value="{{ .NewsInput.Id }}"/>
+
+</div>
+
+
+{{ end }}

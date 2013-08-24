@@ -37,7 +37,6 @@ func Index(env Env) (status Status, headers Headers, body Body) {
 	if err != nil {
 		panic(err)
 	}
-
 	mangotemplate.ForRender(env, "products/index", &ProductViewData{ApiProducts: apiProducts})
 	return
 }
@@ -53,7 +52,7 @@ func Show(env Env) (status Status, headers Headers, body Body) {
 	}
 
 	// Get Product Reviews
-	apiReviews, err := services.ShowReviewsInProduct(productId)
+	apiReviews, err := services.GetReviewsInProduct(productId)
 	if err != nil {
 		panic(err)
 	}

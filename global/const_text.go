@@ -12,5 +12,6 @@ const (
 )
 
 const (
-	DATE_BIRTHDAY = "2006-01-02"
+	DATE_BIRTHDAY   = "2006-01-02"
+	CREATED_AT_LONG = "2006-01-02 15:04"
 )

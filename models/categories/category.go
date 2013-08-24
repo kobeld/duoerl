@@ -12,6 +12,7 @@ const (
 )
 
 type Category struct {
+	Id                   bson.ObjectId `bson:"_id"`
 	attributes.Attribute `,inline`
 	Level                string
 }

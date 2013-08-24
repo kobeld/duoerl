@@ -23,6 +23,7 @@ type BrandViewData struct {
 	ApiReviews     []*duoerlapi.Review
 	ApiProducts    []*duoerlapi.Product
 	BrandFollowers []*duoerlapi.User
+	ApiNews        []*duoerlapi.News
 }
 
 func newBrandViewData(brandInput *duoerlapi.BrandInput,
@@ -56,7 +57,7 @@ func Show(env Env) (status Status, headers Headers, body Body) {
 		panic(err)
 	}
 
-	apiProducts, err := services.BrandProducts(brandIdHex)
+	apiProducts, err := services.GetBrandProducts(brandIdHex)
 	if err != nil {
 		panic(err)
 	}
@@ -66,7 +67,12 @@ func Show(env Env) (status Status, headers Headers, body Body) {
 		panic(err)
 	}
 
-	apiReviews, err := services.ShowReviewsInBrand(brandIdHex)
+	apiReviews, err := services.GetReviewsInBrand(brandIdHex)
+	if err != nil {
+		panic(err)
+	}
+
+	apiNews, err := services.GetNewsInBrand(brandIdHex)
 	if err != nil {
 		panic(err)
 	}
@@ -76,6 +82,7 @@ func Show(env Env) (status Status, headers Headers, body Body) {
 		ApiProducts:    apiProducts,
 		BrandFollowers: brandFollowers,
 		ApiReviews:     apiReviews,
+		ApiNews:        apiNews,
 	}
 
 	mangotemplate.ForRender(env, "brands/show", brandViewData)

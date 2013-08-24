@@ -69,6 +69,7 @@ func UpdateBrand(input *duoerlapi.BrandInput) (originInput *duoerlapi.BrandInput
 	return
 }
 
+// Need to be cached
 func AllBrands() (apiBrands []*duoerlapi.Brand, err error) {
 
 	dbBrands, err := brands.FindAll(bson.M{})

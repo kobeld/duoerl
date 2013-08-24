@@ -1,0 +1,14 @@
+{{ define "news/show" }}
+<!-- Passing NewsViewData in -->
+
+<div class="row">
+	<h3>{{ .ApiNews.Title }}</h3>
+	<hr>
+	<div class="span5">
+		{{ .ApiNews.Content }}
+	</div>
+
+</div>
+
+{{ end }}
+

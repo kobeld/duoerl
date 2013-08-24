@@ -68,7 +68,7 @@ func CreateReview(input *duoerlapi.ReviewInput) (originInput *duoerlapi.ReviewIn
 	return
 }
 
-func ShowReviewsInProduct(productIdHex string) (apiReviews []*duoerlapi.Review, err error) {
+func GetReviewsInProduct(productIdHex string) (apiReviews []*duoerlapi.Review, err error) {
 
 	productId, err := utils.ToObjectId(productIdHex)
 	if err != nil {
@@ -91,7 +91,7 @@ func ShowReviewsInProduct(productIdHex string) (apiReviews []*duoerlapi.Review, 
 	return
 }
 
-func ShowReviewsInBrand(brandIdHex string) (apiReviews []*duoerlapi.Review, err error) {
+func GetReviewsInBrand(brandIdHex string) (apiReviews []*duoerlapi.Review, err error) {
 
 	brandId, err := utils.ToObjectId(brandIdHex)
 	if err != nil {

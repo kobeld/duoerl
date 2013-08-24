@@ -73,7 +73,7 @@ func AllProducts() (apiProducts []*duoerlapi.Product, err error) {
 	return
 }
 
-func BrandProducts(brandId string) (apiProducts []*duoerlapi.Product, err error) {
+func GetBrandProducts(brandId string) (apiProducts []*duoerlapi.Product, err error) {
 
 	brandOId, err := utils.ToObjectId(brandId)
 	if err != nil {

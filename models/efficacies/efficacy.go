@@ -7,6 +7,7 @@ import (
 )
 
 type Efficacy struct {
+	Id                   bson.ObjectId `bson:"_id"`
 	attributes.Attribute `,inline`
 }
 

@@ -24,9 +24,8 @@ func FindByBrandId(brandId bson.ObjectId) (r []*Product, err error) {
 		err = global.InvalidIdError
 		return
 	}
-	query := bson.M{"brandid": brandId}
-	err = mgodb.FindAll(PRODUCTS, query, &r)
-	return
+
+	return FindAll(bson.M{"brandid": brandId})
 
 }
 
