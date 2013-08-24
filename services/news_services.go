@@ -121,10 +121,3 @@ func toApiNews(dbNews *news.News, brand *brands.Brand, author *users.User) *duoe
 
 	return apiNews
 }
-
-// Id        string
-// 	Title     string
-// 	Content   string
-// 	Author    *User
-// 	Brand     *Brand
-// 	CreatedAt string

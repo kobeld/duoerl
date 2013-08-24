@@ -12,6 +12,7 @@
 				{{ if .Layout.CurrentUser }}
 					<li class="dropdown">
 						<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+						<img src="{{.Layout.CurrentUser.Avatar}}" style="width:20px; height:20px">
 						<strong>{{ .Layout.CurrentUser.Name }}</strong> <b class="caret"></b></a>
 						<ul class="dropdown-menu">
                           <li><a href="{{.Layout.CurrentUser.Link }}">个人首页</a></li>

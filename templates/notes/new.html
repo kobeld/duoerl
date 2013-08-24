@@ -1,12 +1,12 @@
-{{ define "news/new" }}
+{{ define "notes/new" }}
 
-<form action="/news/create" method="post" class="form-horizontal">
+<form action="/note/create" method="post" class="form-horizontal">
 	<fieldset>
 		<div>
-			<legend><strong>添加新闻</strong></legend>
+			<legend><strong>添加日志</strong></legend>
 		</div>
 
-		{{ template "news/form" .}}
+		{{ template "notes/form" .}}
 
 		<div class="form-actions">
 			<button type="submit" class="btn btn-primary">保  存</button>

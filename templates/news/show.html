@@ -2,9 +2,16 @@
 <!-- Passing NewsViewData in -->
 
 <div class="row">
-	<h3>{{ .ApiNews.Title }}</h3>
-	<hr>
-	<div class="span5">
+
+	<div class="span9">
+		<h3>{{ .ApiNews.Title }}</h3>
+		<ul class="inline text-right">
+			<li class="muted">{{ .ApiNews.CreatedAt }}</li>
+			<li><span class="muted">by</span> <a href="{{ .ApiNews.Author.Link }}">{{ .ApiNews.Author.Name }}</a></li>
+		</ul>
+
+		<hr>
+
 		{{ .ApiNews.Content }}
 	</div>
 

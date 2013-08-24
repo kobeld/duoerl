@@ -5,12 +5,14 @@
 <div class="row">
 	<div class="span3">
 		<img src="{{.ApiUser.Avatar}}">
+		<p></p>
+		{{ if .IsCurrent }}
+			<a href="/user/edit">修改资料</a> |
+			<a href="/note/new">写日志</a>
+		{{ end }}
 	</div>
 	<div class="span6">
 		<h4>{{ .ApiUser.Name }}</h4>
-		{{ if .IsCurrent }}
-			<a href="/user/edit">编 辑</a>
-		{{ end }}
 
 		<dl class="dl-horizontal">
 			<dt>邮 件:</dt>
@@ -39,7 +41,23 @@
 			{{ end }}
 		</dl>
 	</div>
+
+	<hr>
 </div>
 
+<hr>
+
+<h4>{{.ApiUser.Name}}的日志</h4>
+<div class="row">
+	<div class="span9">
+		<ul class="unstyled">
+			{{ range .ApiNotes }}
+				<li><a href="{{ .Link }}">{{ .Title }}</a>
+					<span class="muted">{{ .CreatedAt }}</span>
+				</li>
+			{{ end }}
+		</ul>
+	</div>
+</div>
 
 {{ end }}

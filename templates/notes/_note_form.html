@@ -1,0 +1,31 @@
+{{ define "notes/form" }}
+
+<!-- Passing NoteInput in -->
+
+<div class="row">
+	<div class="span9">
+
+		<div class="control-group">
+			<label class="control-label">标  题</label>
+			<div class="controls">
+				<input type="text" name="Title" class="input-block-level" value="{{ .NoteInput.Title }}">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">内  容</label>
+			<div class="controls">
+				<div class="textare">
+					<textarea name="Content" class="input-block-level" rows="12">{{ .NoteInput.Content }}</textarea>
+				</div>
+			</div>
+		</div>
+
+	</div><!-- .span6 -->
+
+	<input name="Id" type="hidden" value="{{ .NoteInput.Id }}"/>
+
+</div>
+
+
+{{ end }}

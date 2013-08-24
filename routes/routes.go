@@ -8,6 +8,7 @@ import (
 	"github.com/kobeld/duoerl/handlers/feeds"
 	"github.com/kobeld/duoerl/handlers/followbrands"
 	"github.com/kobeld/duoerl/handlers/news"
+	"github.com/kobeld/duoerl/handlers/notes"
 	"github.com/kobeld/duoerl/handlers/ownitems"
 	"github.com/kobeld/duoerl/handlers/products"
 	"github.com/kobeld/duoerl/handlers/reviews"
@@ -74,6 +75,11 @@ func Mux() (mux *http.ServeMux) {
 	p.Get("/product/:id", mainStack.HandlerFunc(products.Show))
 	p.Get("/product/:id/edit", mainStack.HandlerFunc(products.Edit))
 	p.Post("/product/update", mainStack.HandlerFunc(products.Update))
+
+	// Notes
+	p.Get("/note/new", mainStack.HandlerFunc(notes.New))
+	p.Get("/note/:id", mainStack.HandlerFunc(notes.Show))
+	p.Post("/note/create", mainStack.HandlerFunc(notes.Create))
 
 	// Review
 	p.Post("/review/create", mainStack.HandlerFunc(reviews.Create))

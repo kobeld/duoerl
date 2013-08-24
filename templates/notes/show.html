@@ -1,0 +1,32 @@
+{{ define "notes/show" }}
+<!-- Passing NoteViewData in -->
+
+<div class="row">
+
+	<div class="span1">
+		<a href="{{ .ApiNote.Author.Link }}"><img src="{{ .ApiNote.Author.Avatar}}" style="width:50px; height:50px"></a>
+	</div>
+	<div class="span4">
+		<span class="lead">{{ .ApiNote.Author.Name }}的美丽日志</span><br>
+		<a href="{{ .ApiNote.Author.Link }}">{{ .ApiNote.Author.Name }}的主页</a>
+	</div>
+
+	<br>
+</div>
+
+<hr>
+
+<div class="row">
+	<div class="span9">
+		<h4>{{ .ApiNote.Title }}</h4>
+		<span class="muted">{{ .ApiNote.CreatedAt }}</span>
+		<p></p>
+		{{ .ApiNote.Content }}
+
+	</div>
+</div>
+
+
+
+
+{{ end }}
