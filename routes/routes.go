@@ -95,6 +95,8 @@ func Mux() (mux *http.ServeMux) {
 	// News
 	p.Get("/news/:id", mainStack.HandlerFunc(news.Show))
 	p.Post("/news/create", mainStack.HandlerFunc(news.Create))
+	p.Get("/news/:id/edit", mainStack.HandlerFunc(news.Edit))
+	p.Post("/news/update", mainStack.HandlerFunc(news.Update))
 
 	// For admin in the futrue
 	p.Get("/admin/categories", mainStack.HandlerFunc(categories.Index))

@@ -19,6 +19,62 @@ func NewNews() (newsInput *duoerlapi.NewsInput) {
 	return
 }
 
+func EditNews(user *users.User, newsIdHex string) (newsInput *duoerlapi.NewsInput, err error) {
+	newsId, err := utils.ToObjectId(newsIdHex)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	dbNews, err := news.FindById(newsId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	if dbNews.AuthorId != user.Id {
+		err = global.PermissionDeniedError
+		return
+	}
+
+	newsInput = toNewsInput(dbNews)
+
+	return
+}
+
+func UpdateNews(input *duoerlapi.NewsInput) (originInput *duoerlapi.NewsInput, err error) {
+	originInput = input
+
+	newsId, err := utils.ToObjectId(input.Id)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	brandId, err := utils.ToObjectId(input.BrandId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	dbNews, err := news.FindById(newsId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	dbNews.BrandId = brandId
+	dbNews.Title = input.Title
+	dbNews.Content = input.Content
+
+	if err = dbNews.Save(); err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	return
+}
+
 func GetNewsInBrand(brandIdHex string) (apiNews []*duoerlapi.News, err error) {
 	brandId, err := utils.ToObjectId(brandIdHex)
 	if err != nil {
@@ -121,4 +177,16 @@ func toApiNews(dbNews *news.News, brand *brands.Brand, author *users.User) *duoe
 	}
 
 	return apiNews
+}
+
+func toNewsInput(dbNews *news.News) (newsInput *duoerlapi.NewsInput) {
+	newsInput = &duoerlapi.NewsInput{
+		Id:       dbNews.Id.Hex(),
+		AuthorId: dbNews.AuthorId.Hex(),
+		BrandId:  dbNews.BrandId.Hex(),
+		Title:    dbNews.Title,
+		Content:  dbNews.Content,
+	}
+
+	return
 }

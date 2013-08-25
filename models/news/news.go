@@ -22,3 +22,7 @@ func (this *News) MakeId() interface{} {
 func (this *News) Link() string {
 	return fmt.Sprintf("/news/%s", this.Id.Hex())
 }
+
+func (this *News) IsEditable(userId bson.ObjectId) bool {
+	return this.AuthorId == userId
+}

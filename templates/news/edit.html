@@ -1,0 +1,18 @@
+{{ define "news/edit" }}
+
+<form action="/news/update" method="post" class="form-horizontal">
+	<fieldset>
+		<div>
+			<legend><strong>编辑新闻</strong></legend>
+		</div>
+
+		{{ template "news/form" .}}
+
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary">保  存</button>
+			<button type="button" class="btn">取  消</button>
+		</div>
+	</fieldset>
+</form>
+
+{{ end }}

@@ -8,6 +8,7 @@
 		<ul class="inline text-right">
 			<li class="muted">{{ .ApiNews.CreatedAt }}</li>
 			<li><span class="muted">by</span> <a href="{{ .ApiNews.Author.Link }}">{{ .ApiNews.Author.Name }}</a></li>
+			<li><a href="/news/{{.ApiNews.Id}}/edit">编辑</a></li>
 		</ul>
 
 		<hr>

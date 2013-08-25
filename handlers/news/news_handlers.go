@@ -76,3 +76,47 @@ func Show(env Env) (status Status, headers Headers, body Body) {
 	mangotemplate.ForRender(env, "news/show", newsViewData)
 	return
 }
+
+func Edit(env Env) (status Status, headers Headers, body Body) {
+	newsId := env.Request().URL.Query().Get(":id")
+	currentUser := services.FetchUserFromEnv(env)
+
+	newsInput, err := services.EditNews(currentUser, newsId)
+	if err != nil {
+		panic(err)
+	}
+
+	apiBrands, err := services.AllBrands()
+	if err != nil {
+		panic(err)
+	}
+
+	newsViewData := &NewsViewData{
+		NewsInput: newsInput,
+		ApiBrands: apiBrands,
+	}
+
+	mangotemplate.ForRender(env, "news/edit", newsViewData)
+	return
+}
+
+func Update(env Env) (status Status, headers Headers, body Body) {
+	newsInput := new(duoerlapi.NewsInput)
+	formdata.UnmarshalByNames(env.Request().Request, &newsInput, newsFields)
+
+	result, err := services.UpdateNews(newsInput)
+	if validated, ok := err.(*govalidations.Validated); ok {
+		viewData := &NewsViewData{
+			NewsInput: newsInput,
+			Validated: validated,
+		}
+		mangotemplate.ForRender(env, "news/edit", viewData)
+		return
+	}
+
+	if err != nil {
+		panic(err)
+	}
+
+	return Redirect(http.StatusFound, "/news/"+result.Id)
+}
