@@ -8,6 +8,7 @@ import (
 	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerlapi"
 	"github.com/theplant/qortex/utils"
+	"html/template"
 	"labix.org/v2/mgo/bson"
 )
 
@@ -111,7 +112,7 @@ func toApiNews(dbNews *news.News, brand *brands.Brand, author *users.User) *duoe
 		apiNews = &duoerlapi.News{
 			Id:        dbNews.Id.Hex(),
 			Title:     dbNews.Title,
-			Content:   dbNews.Content,
+			Content:   template.HTML(dbNews.Content),
 			Brand:     toApiBrand(brand),
 			Author:    toApiUser(author),
 			Link:      dbNews.Link(),

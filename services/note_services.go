@@ -7,6 +7,7 @@ import (
 	"github.com/kobeld/duoerl/models/users"
 	"github.com/kobeld/duoerl/utils"
 	"github.com/kobeld/duoerlapi"
+	"html/template"
 	"labix.org/v2/mgo/bson"
 )
 
@@ -98,7 +99,7 @@ func toApiNote(note *notes.Note, author *users.User) *duoerlapi.Note {
 		apiNote = &duoerlapi.Note{
 			Id:        note.Id.Hex(),
 			Title:     note.Title,
-			Content:   note.Content,
+			Content:   template.HTML(note.Content),
 			Author:    toApiUser(author),
 			Link:      note.Link(),
 			CreatedAt: note.CreatedAt.Format(global.CREATED_AT_LONG),

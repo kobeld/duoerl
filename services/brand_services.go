@@ -97,6 +97,7 @@ func ShowBrand(brandId, userId string) (apiBrand *duoerlapi.Brand, err error) {
 	}
 
 	apiBrand = toApiBrand(brand)
+	apiBrand.BrandStats = getBrandStats(brandOId)
 
 	// Not login user
 	if userId == "" {
@@ -106,8 +107,6 @@ func ShowBrand(brandId, userId string) (apiBrand *duoerlapi.Brand, err error) {
 	if followBrand := GetFollowBrand(userId, brandId); followBrand != nil {
 		apiBrand.HasFollowed = true
 	}
-
-	apiBrand.BrandStats = getBrandStats(brandOId)
 
 	return
 }
