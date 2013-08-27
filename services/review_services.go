@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/kobeld/duoerl/global"
 	"github.com/kobeld/duoerl/models/products"
 	"github.com/kobeld/duoerl/models/reviews"
 	"github.com/kobeld/duoerl/models/users"
@@ -114,6 +115,43 @@ func GetReviewsInBrand(brandIdHex string) (apiReviews []*duoerlapi.Review, err e
 	return
 }
 
+func LikeReview(userIdHex, reviewIdHex string) (count int, err error) {
+	userId, err := utils.ToObjectId(userIdHex)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	reviewId, err := utils.ToObjectId(reviewIdHex)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	review, err := reviews.FindById(reviewId)
+	if err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	validated := review.ValidateLikeAction(userId)
+	if validated.HasError() {
+		count = len(review.LikedByIds)
+		err = validated.ToError()
+		return
+	}
+
+	review.LikedByIds = append(review.LikedByIds, userId)
+	if err = review.Save(); err != nil {
+		utils.PrintStackAndError(err)
+		return
+	}
+
+	count = len(review.LikedByIds)
+
+	return
+}
+
 // ------------- Private  ---------------
 
 func makeApiReviews(reviewz []*reviews.Review) (apiReviews []*duoerlapi.Review, err error) {
@@ -162,7 +200,9 @@ func toApiReview(dbReview *reviews.Review, dbProduct *products.Product, dbAuthor
 			Product:    toApiProduct(dbProduct, nil, dbAuthor),
 			Author:     toApiUser(dbAuthor),
 			Rating:     dbReview.Rating,
+			CreatedAt:  dbReview.CreatedAt.Format(global.CREATED_AT_LONG),
 			Efficacies: GetEfficaciesByIds(efficacyIds),
+			LikeCount:  len(dbReview.LikedByIds),
 		}
 	}
 	return apiReview

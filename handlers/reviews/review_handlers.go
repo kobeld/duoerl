@@ -1,6 +1,7 @@
 package reviews
 
 import (
+	"encoding/json"
 	"github.com/kobeld/duoerl/services"
 	"github.com/kobeld/duoerlapi"
 	. "github.com/paulbellamy/mango"
@@ -13,6 +14,11 @@ import (
 var (
 	reviewFields = []string{"Id", "ProductId", "Content", "Rating", "EfficacyIds"}
 )
+
+type ReviewViewData struct {
+	LikeCount int
+	Validated *govalidations.Validated
+}
 
 func Create(env Env) (status Status, headers Headers, body Body) {
 
@@ -31,4 +37,27 @@ func Create(env Env) (status Status, headers Headers, body Body) {
 	}
 
 	return Redirect(http.StatusFound, "/product/"+result.ProductId)
+}
+
+func Like(env Env) (status Status, headers Headers, body Body) {
+	reviewIdHex := env.Request().FormValue("rid")
+	userIdHex := services.FetchUserIdFromSession(env)
+
+	count, err := services.LikeReview(userIdHex, reviewIdHex)
+	viewData := &ReviewViewData{LikeCount: count}
+	if validated, ok := err.(*govalidations.Validated); ok {
+		viewData.Validated = validated
+		b, _ := json.Marshal(viewData)
+		body = Body(b)
+		return
+	}
+
+	if err != nil {
+		panic(err)
+	}
+
+	b, _ := json.Marshal(viewData)
+	body = Body(b)
+
+	return
 }

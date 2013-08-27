@@ -74,24 +74,25 @@
 			<h4>使用心得</h4>
 
 			{{ range .ApiReviews }}
-			<div class="row">
+			<div class="row review-item" data-review="{{ .Id }}">
 				<div class="span1">
+
 					<img src="{{.Author.Avatar}}" style="width:60px; height:60px">
 					<br>
-					<a href="{{ .Author.Link }}">{{ .Author.Name }}</a>
+					<a href="{{ .Author.Link }}">{{ .Author.Name }}</a> <br>
 				</div>
 				<div class="span4">
-					评 分：{{.Rating}}
-
-					<br>
-					{{ .Content }}
-					<br>
-
-					功 效:
+				<span class='muted'>{{.CreatedAt}}</span> &nbsp;
+					<a href="javascript:void(0);" class="review-like">赞 ({{ .LikeCount }})</a><br>
+					<strong>评 分:</strong> {{.Rating}}  <br>
+					<strong>功 效:</strong>
 					{{ range .Efficacies }}
 						<span>{{.Name}}</span>
-					{{ end }}
+					{{ end }}<br>
+					<strong>点 评:</strong> {{ .Content }}
+
 				</div>
+				<!-- <div class="span1">赞</div> -->
 			</div>
 			<p></p>
 			{{ end }}

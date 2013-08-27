@@ -63,4 +63,20 @@ $(function() {
 
 	});
 
+	// Like a review
+	$(".review-like").click(function(){
+
+		var self = this,
+			reviewId = $(this).closest(".review-item").data("review");
+
+		$.post('/review/like', {rid: reviewId})
+		.done(function(data){
+			if(data.Validated == null) {
+				$(self).html("赞 (" + data.LikeCount + ")");
+			} else {
+				alert(data.Validated.Errors[0].Message);
+			}
+		});
+	});
+
 });

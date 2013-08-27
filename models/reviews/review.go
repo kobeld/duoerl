@@ -14,6 +14,7 @@ type Review struct {
 	Rating      string
 	EfficacyIds []bson.ObjectId
 	CreatedAt   time.Time
+	LikedByIds  []bson.ObjectId
 }
 
 func (this *Review) MakeId() interface{} {

@@ -83,6 +83,7 @@ func Mux() (mux *http.ServeMux) {
 
 	// Review
 	p.Post("/review/create", mainStack.HandlerFunc(reviews.Create))
+	p.Post("/review/like", mainAjaxStack.HandlerFunc(reviews.Like))
 
 	// Wish Item
 	p.Post("/wish_item/add", mainAjaxStack.HandlerFunc(wishitems.Create))

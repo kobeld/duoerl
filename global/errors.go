@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	InvalidIdError        = errors.New("Invalid Id")
-	PermissionDeniedError = errors.New("Permission denied")
-	ObjectAlreadyExists   = errors.New("Object already exists")
+	InvalidIdError        = errors.New("E001")
+	PermissionDeniedError = errors.New("E002")
+	ObjectAlreadyExists   = errors.New("E003")
 )

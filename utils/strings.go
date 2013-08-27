@@ -40,3 +40,12 @@ func TurnObjectIdToPlainIds(ids []bson.ObjectId) (r []string) {
 	}
 	return
 }
+
+func IsInObjectIds(tragetId bson.ObjectId, ids []bson.ObjectId) bool {
+	for _, id := range ids {
+		if tragetId == id {
+			return true
+		}
+	}
+	return false
+}

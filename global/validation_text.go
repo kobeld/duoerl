@@ -25,3 +25,7 @@ const (
 	EFFICACY_01 = "Efficacy already exists"
 	EFFICACY_02 = "Name can't be blank"
 )
+
+const (
+	REVIEW_01 = "You already Liked this"
+)
