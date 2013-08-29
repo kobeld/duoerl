@@ -10,6 +10,7 @@ import (
 	"github.com/kobeld/duoerl/handlers/news"
 	"github.com/kobeld/duoerl/handlers/notes"
 	"github.com/kobeld/duoerl/handlers/ownitems"
+	"github.com/kobeld/duoerl/handlers/posts"
 	"github.com/kobeld/duoerl/handlers/products"
 	"github.com/kobeld/duoerl/handlers/reviews"
 	"github.com/kobeld/duoerl/handlers/sessions"
@@ -55,6 +56,9 @@ func Mux() (mux *http.ServeMux) {
 	p.Post("/user/update", hardAuthenStack.HandlerFunc(users.Update))
 	p.Get("/user/edit", hardAuthenStack.HandlerFunc(users.Edit))
 	p.Get("/user/:id", mainStack.HandlerFunc(users.Show))
+
+	// User post
+	p.Post("/post/create", mainAjaxStack.HandlerFunc(posts.Create))
 
 	// Brand
 	p.Get("/brands", mainStack.HandlerFunc(brands.Index))

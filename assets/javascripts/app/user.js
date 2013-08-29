@@ -9,4 +9,17 @@ $(function() {
 		fieldName: "Profile.Birthday",
 		defaultDate: birthday,
 	});
+
+	$(".post-btn").click(function(){
+		var self = this,
+			postId = $(this).data("post-id"),
+			content = $(".post-content").val();
+
+		$.post("/post/create", {Id: postId, Content: content})
+		.done(function(data){
+			console.log(data);
+		}).fail(function(err){
+			alert(err);
+		});
+	});
 });

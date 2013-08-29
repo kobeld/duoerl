@@ -7,6 +7,7 @@ import (
 	. "github.com/paulbellamy/mango"
 	"github.com/sunfmin/mangotemplate"
 	"github.com/theplant/formdata"
+	"labix.org/v2/mgo/bson"
 	"net/http"
 )
 
@@ -18,6 +19,8 @@ var (
 type UserViewData struct {
 	ApiUser            *duoerlapi.User
 	ApiNotes           []*duoerlapi.Note
+	ApiPosts           []*duoerlapi.Post
+	NewPostId          string
 	IsCurrent          bool
 	SkinTextureOptions map[string]string
 	HairTextureOptions map[string]string
@@ -38,9 +41,16 @@ func Show(env Env) (status Status, headers Headers, body Body) {
 		panic(err)
 	}
 
+	apiPosts, err := services.GetUserPosts(id)
+	if err != nil {
+		panic(err)
+	}
+
 	userViewData := &UserViewData{
 		ApiUser:   apiUser,
 		ApiNotes:  apiNotes,
+		ApiPosts:  apiPosts,
+		NewPostId: bson.NewObjectId().Hex(),
 		IsCurrent: services.IsCurrentUserWithId(env, id),
 	}
 

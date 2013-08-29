@@ -3,7 +3,7 @@
 {{ $profile := .ApiUser.Profile }}
 
 <div class="row">
-	<div class="span3">
+	<div class="span2">
 		<img src="{{.ApiUser.Avatar}}">
 		<p></p>
 		{{ if .IsCurrent }}
@@ -11,8 +11,18 @@
 			<a href="/note/new">写日志</a>
 		{{ end }}
 	</div>
+
 	<div class="span6">
-		<h4>{{ .ApiUser.Name }}</h4>
+		<h5>说点什么吧~</h5>
+		<div >
+			<textarea class="post-content" style="width:500px"></textarea>
+			<button data-post-id="{{.NewPostId}}" class="post-btn btn btn-primary">发 布</button>
+		</div>
+
+
+	</div>
+
+	<div class="span4">
 
 		<dl class="dl-horizontal">
 			<dt>邮 件:</dt>
@@ -41,11 +51,23 @@
 			{{ end }}
 		</dl>
 	</div>
-
-	<hr>
 </div>
 
 <hr>
+
+<h4>{{.ApiUser.Name}}的动态</h4>
+<div class="row">
+	<div class="span9">
+		<ul class="unstyled">
+			{{ range .ApiPosts }}
+				<li><span class="muted">{{ .CreatedAt }}</span> {{ .Content }}</li>
+			{{ end }}
+		</ul>
+	</div>
+</div>
+
+<hr>
+
 
 <h4>{{.ApiUser.Name}}的日志</h4>
 <div class="row">

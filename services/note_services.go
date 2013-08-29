@@ -26,13 +26,13 @@ func GetUserNotes(userIdHex string) (apiNotes []*duoerlapi.Note, err error) {
 		return
 	}
 
-	notes, err := notes.FindSomeByUserId(userId)
+	notez, err := notes.FindSomeByUserId(userId)
 	if err != nil {
 		utils.PrintStackAndError(err)
 		return
 	}
 
-	for _, note := range notes {
+	for _, note := range notez {
 		apiNotes = append(apiNotes, toApiNote(note, nil))
 	}
 
@@ -54,7 +54,7 @@ func CreateNote(input *duoerlapi.NoteInput) (originInput *duoerlapi.NoteInput, e
 		return
 	}
 
-	note := notes.Note{
+	note := &notes.Note{
 		Id:      noteId,
 		Article: *articles.NewArticle(input.Title, input.Content, authorId),
 	}

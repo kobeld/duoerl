@@ -76,7 +76,10 @@ $(function() {
 			} else {
 				alert(data.Validated.Errors[0].Message);
 			}
-		});
+		}).fail(function(){
+			alert(errorMsg);
+		})
+
 	});
 
 });
